@@ -5,10 +5,12 @@ Discussions occuring in UI/UX sub-forum in the [Scribus Forums](http://forums.sc
 
 ## Install
 Here is how you run it:  
-1. Download [QtCreator](http://www.qt.io/download-open-source/) and install  
-2. Clone the indigoDock repository to your local machine  
-3. Find and click on the TestLayout.pro which should invoke QtCreator  
-4. Build TestLayout by clicking on Build > Build Project "TestLayout"  
+1. **Download [QtCreator](http://www.qt.io/download-open-source/) and install**  
+2. **Clone the indigoDock repository to your local machine**  
+3. **Find and click on the TestLayout.pro which should invoke QtCreator**  
+![testlayout pro](https://cloud.githubusercontent.com/assets/4140247/10866360/21cef028-7ff9-11e5-8c4c-e0e86c682868.png)  
+4. **Build TestLayout by clicking on the green arrow OR Build > Build Project "TestLayout"**  
+![build-indigodock-in-qtcreator](https://cloud.githubusercontent.com/assets/4140247/10866388/01e7e67e-7ffa-11e5-852c-0176e022c647.jpg)  
 
 ## Features:
 * the whole dock is dockable on left or right side of main window  
