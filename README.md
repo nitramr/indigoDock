@@ -11,7 +11,7 @@ Experimental Qt Docking extension written for Scribus1.5>=
 For more details read the [indigoDock google slides proposal](https://goo.gl/T4gFd5). Discussions occuring @ UI/UX sub-forum in the [Scribus Forums](http://forums.scribus.net/index.php/topic,1617.0.html).  
 
 ## Install
-Here is how you run it: 
+Here is how you run it:  
 1. **Download [QtCreator](http://www.qt.io/download-open-source/) and install**  
 2. **Clone the indigoDock repository to your local machine**  
 3. **Find and click on the TestLayout.pro which should invoke QtCreator**  
