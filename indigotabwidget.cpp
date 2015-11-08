@@ -50,7 +50,7 @@ bool IndigoTabWidget::eventFilter(QObject *o, QEvent *e)
         int index = currentIndex();
 
         activeWidget = this->widget(currentIndex());
-        qDebug() << "TabIndexChange" << activeWidget << " index: " << index << endl;
+        qDebug() << "TabIndexChange: " << activeWidget << " in tab index: " << index << endl;
 
     }
     return QTabWidget::eventFilter(o, e);

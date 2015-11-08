@@ -26,7 +26,8 @@ SOURCES += main.cpp\
     indigo2panel.cpp \
     indigo2dock.cpp \
     indigo2tabbar.cpp \
-    indigodropzone.cpp
+    indigodropzone.cpp \
+    indigo2panelhandle.cpp
 
 HEADERS  += mainwindow.h \
     colorswatch.h \
@@ -36,7 +37,8 @@ HEADERS  += mainwindow.h \
     indigo2panel.h \
     indigo2dock.h \
     indigo2tabbar.h \
-    indigodropzone.h
+    indigodropzone.h \
+    indigo2panelhandle.h
 
 FORMS    += mainwindow.ui
 

@@ -3,14 +3,23 @@
 #include "indigotabwidget.h"
 #include <QtGui>
 
+/**
+ *
+ * If an IndigoPanel drops in the DropZone the DropZone search in parent TabBar for active DropZone and set these as parent for the dropped IndigoPanel.
+ *
+ *
+ * @brief IndigoDropZone::IndigoDropZone
+ * @param parent
+ */
 
+static IndigoPanel * iPan = NULL;
 
 IndigoDropZone::IndigoDropZone(QWidget *parent) :
     QMainWindow(parent)
 {
     setDockNestingEnabled(true);
     setCentralWidget(0);
-    setMouseTracking(true);
+    //setMouseTracking(true);
 
     setStyleSheet(
                 "IndigoDropZone::separator"
@@ -53,24 +62,23 @@ bool IndigoDropZone::eventFilter( QObject * watched, QEvent * event )
                     if (this->rect().contains(cursor) ) {
 
                         if(IndigoTabWidget *tab = qobject_cast<IndigoTabWidget*>(parent()->parent())) {
-                            //qDebug() << "DropZone Parent " << tab << endl;
+                            qDebug() << "DropZone Parent: " << tab << endl;
 
-                            IndigoDropZone *zone = qobject_cast<IndigoDropZone*>(tab->activeWidget);
+                            if(IndigoDropZone *zone = qobject_cast<IndigoDropZone*>(tab->activeWidget)){
+                                qDebug() << "DropZone: " << zone << endl;
 
-                           // qDebug() << "Panel Parent: " << pan->parent() << endl;
+                                qDebug() << "Panel Parent old: " << pan->parent() << endl;
 
-                            if (pan->parent() == zone) break;
-                            //IndigoDropZone *panParent = qobject_cast<IndigoDropZone*>(pan->parent());
-                            //panParent->removeDockWidget(pan);
+                                iPan = pan;
 
-
-                            // BUG: if a dockwidget is redocking in an previous one App is crashing
-                            zone->addDockWidget(Qt::RightDockWidgetArea, pan);
-
-                            qDebug() << "Panel: " << pan << " in DropZone: " << zone << endl;
-                        }else{
-                            qDebug() << "DropZone parent is not type of IndigoTabWidget, parent is: " << parent()->parent() << endl;
-                        }
+                                if (iPan && iPan->parent() != zone){
+                                    // BUG: if a dockwidget is redocking in an previous DropZone App is crashing
+                                    zone->addDockWidget(Qt::RightDockWidgetArea, iPan);
+                                    iPan = NULL;
+                                    qDebug() << "Panel: " << iPan << " in DropZone: " << zone << endl;
+                                }
+                            }else qDebug() << "DropZone has no active Widget" << endl;
+                        }else qDebug() << "DropZone parent is not type of IndigoTabWidget, parent is: " << parent()->parent() << endl;
 
                     }
 
@@ -78,7 +86,7 @@ bool IndigoDropZone::eventFilter( QObject * watched, QEvent * event )
                 }
                 default:
                     break;
-                };
+                }
     }
 
 

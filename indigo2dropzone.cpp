@@ -1,19 +1,30 @@
 #include "indigo2dropzone.h"
 
+/* TODO:
+ *
+ * - add better splitter widget (low prio)
+ *
+ */
+
 Indigo2DropZone::Indigo2DropZone(QWidget *parent) :
    QWidget(parent)
 {
 
     QPalette palette;
-    palette.setColor( QPalette::Background, QColor( 250, 250, 255 ) );
+    palette.setColor( QPalette::Background, QColor( 153, 153, 153 ) );
     setPalette( palette );
     setAutoFillBackground( true );
 
+    padding = 6;
+
+    splitter = new QSplitter();
+    splitter->setHandleWidth(padding);
+    splitter->setOrientation(Qt::Vertical);
+    splitter->setStretchFactor(1, 1);
+    splitter->move(this->pos());
 
     layout = new QVBoxLayout;
-    layout->setSpacing(0);
-    layout->setMargin(0);
-    layout->setContentsMargins(0,0,0,0);
+    layout->setMargin(padding);
     setLayout(layout);
 
     // Demo Panels
@@ -26,7 +37,7 @@ void Indigo2DropZone::createPanel()
 {
     Indigo2Panel * pan = new Indigo2Panel(this);
     this->connect(pan, SIGNAL(mouseReleased()), this, SLOT(dropPanel()));
-    layout->addWidget(pan);
+    addPanel(pan);
 
 }
 
@@ -39,19 +50,15 @@ void Indigo2DropZone::dropPanel()
         Indigo2Panel *pan = qobject_cast<Indigo2Panel *>(sender());
 
         if(Indigo2Tabbar *tab = qobject_cast<Indigo2Tabbar*>(parent()->parent())) {
-            qDebug() << "DropZone Parent " << tab << endl;
+           //qDebug() << "DropZone Parent " << tab << endl;
 
             Indigo2DropZone *zone = qobject_cast<Indigo2DropZone*>(tab->activeWidget);
 
-            //pan->setParent(this);
-            pan->setParent(zone);
-            pan->move(this->pos());
+            pan->setParent(zone);            
 
-            // add panel in Layout Container
-            zone->layout->addWidget(pan);
+            zone->addPanel(pan);
+            //qDebug() << "Pan2 In Dock2 " << pan << " in " << zone << endl;
 
-            pan->show();
-            qDebug() << "Pan2 In Dock2 " << pan << " in " << zone << endl;
         }else{
             qDebug() << "DropZone parent is not type of IndigoTabbar" << endl;
         }
@@ -59,34 +66,12 @@ void Indigo2DropZone::dropPanel()
     }
 }
 
+void Indigo2DropZone::addPanel (Indigo2Panel * panel){
 
-bool Indigo2DropZone::event ( QEvent * event )
-{
-    switch ( event->type() ) {
-        case QEvent::HoverEnter:{
+    splitter->addWidget(panel);
+    layout->addWidget(splitter);
 
-           /* if(ip && ip->parent() != this)
-              {
+    splitter->show();
+    panel->show();
 
-                addDockWidget(Qt::RightDockWidgetArea, ip);
-                ip = NULL;
-
-            }*/
-
-            qDebug() << "hoverEnter" << endl;
-            break;
-        }
-        case QEvent::HoverLeave:{
-             qDebug() << "hoverLeave" << endl;
-             //ip = NULL;
-            break;
-        }
-        case QEvent::HoverMove:  {
-            //qDebug() << "hoverMove" << endl;
-              break;
-        }
-        default:
-           break;
-    }
-    return QWidget::event(event);
 }

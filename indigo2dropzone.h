@@ -4,19 +4,22 @@
 #include <QWidget>
 #include <QFrame>
 #include <QVBoxLayout>
-#include "indigo2panel.h"
+#include <indigo2panel.h>
 #include "indigo2tabbar.h"
+#include <QSplitter>
 
 class Indigo2DropZone : public QWidget
 {
     Q_OBJECT
 public:
     Indigo2DropZone(QWidget* parent = 0);
-    QVBoxLayout *layout;
+    void addPanel (Indigo2Panel * panel);
 protected:
-    void createPanel();
-    bool event ( QEvent * event );
+    void createPanel(); 
 private:
+    QVBoxLayout *layout;
+    QSplitter *splitter;
+    int padding;
 
 signals:
 

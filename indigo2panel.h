@@ -4,7 +4,8 @@
 #include <QWidget>
 #include <QtGui>
 #include <QFrame>
-#include <indigo2dropzone.h>
+#include <QLayout>
+#include <indigo2panelhandle.h>
 
 class Indigo2Panel : public QFrame
 {
@@ -13,13 +14,10 @@ class Indigo2Panel : public QFrame
 public:
     Indigo2Panel(QWidget* parent = 0);
 
-protected:
-   // bool event ( QEvent * event );
-    void mousePressEvent(QMouseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
-    void mouseReleaseEvent ( QMouseEvent * event );
-
+protected:   
+    bool eventFilter(QObject *o, QEvent *e);
 private:
+    QHBoxLayout *contentArea;
     QPoint oldPos;
     int relative_x;
     int relative_y;

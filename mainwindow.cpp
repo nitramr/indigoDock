@@ -60,8 +60,8 @@ MainWindow::MainWindow(QWidget *parent) :
     indigoTab->addTab(indigoContainer, QIcon(":/icons/icons/placeholder.png"), "");
     indigoTab->addTab(indigoContainer2, QIcon(":/icons/icons/placeholder.png"), "");
     indigoTab->addTab(indigoContainer3, QIcon(":/icons/icons/placeholder.png"), "");
-
 */
+
 
 
     /*******************

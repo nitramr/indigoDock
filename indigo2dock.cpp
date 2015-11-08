@@ -16,26 +16,20 @@ void Indigo2Dock::init(){
     QVBoxLayout *layout = new QVBoxLayout();
     layout->setSpacing(0);
     layout->setMargin(0);
-    layout->setContentsMargins(0,0,0,0);
     setLayout(layout);
 
 
     layout->addWidget(indigoTab);
 
     // Demo Tabs
-    addTab();
-    addTab();
+    addTab(QIcon(":/icons/icons/placeholder.png"));
+    addTab(QIcon(":/icons/icons/placeholder.png"));
+    addTab(QIcon(":/icons/icons/placeholder.png"));
 
 }
 
-void Indigo2Dock::addTab(){
+void Indigo2Dock::addTab(QIcon icon){
     Indigo2DropZone * dropzone = new Indigo2DropZone(0);
-    indigoTab->addTab(dropzone, QIcon(":/icons/icons/placeholder.png"), "");
+    indigoTab->addTab(dropzone, icon, "");
 
 }
-
-/*void Indigo2Dock::currentTab(){
-    int index = indigoTab->currentIndex();
-
-
-}*/
