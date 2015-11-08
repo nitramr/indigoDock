@@ -20,25 +20,19 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     colorswatch.cpp \
-    indigotabwidget.cpp \
+    indigodock.cpp \
+    indigotabbar.cpp \
+    indigopanelhandle.cpp \
     indigopanel.cpp \
-    indigo2dropzone.cpp \
-    indigo2panel.cpp \
-    indigo2dock.cpp \
-    indigo2tabbar.cpp \
-    indigodropzone.cpp \
-    indigo2panelhandle.cpp
+    indigodropzone.cpp
 
 HEADERS  += mainwindow.h \
     colorswatch.h \
-    indigotabwidget.h \
+    indigodock.h \
+    indigotabbar.h \
+    indigopanelhandle.h \
     indigopanel.h \
-    indigo2dropzone.h \
-    indigo2panel.h \
-    indigo2dock.h \
-    indigo2tabbar.h \
-    indigodropzone.h \
-    indigo2panelhandle.h
+    indigodropzone.h
 
 FORMS    += mainwindow.ui
 

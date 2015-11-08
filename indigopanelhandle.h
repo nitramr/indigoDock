@@ -1,5 +1,5 @@
-#ifndef INDIGO2PANELHANDLE_H
-#define INDIGO2PANELHANDLE_H
+#ifndef INDIGOPANELHANDLE_H
+#define INDIGOPANELHANDLE_H
 
 #include <QWidget>
 #include <QtGui>
@@ -7,11 +7,11 @@
 #include <QLabel>
 #include <QPushButton>
 
-class Indigo2PanelHandle : public QWidget
+class IndigoPanelHandle : public QWidget
 {
         Q_OBJECT
 public:
-    Indigo2PanelHandle(QWidget* parent = 0);
+    IndigoPanelHandle(QWidget* parent = 0);
     void setTitle(const QString &title);
     void setBackgroundColor(const QColor &bgColor);
 
@@ -27,4 +27,4 @@ signals:
 public slots:
 };
 
-#endif // INDIGO2PANELHANDLE_H
+#endif // INDIGOPANELHANDLE_H

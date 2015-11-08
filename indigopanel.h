@@ -1,30 +1,37 @@
 #ifndef INDIGOPANEL_H
 #define INDIGOPANEL_H
 
-#include <QApplication>
 #include <QWidget>
-#include <QDockWidget>
-#include <QMouseEvent>
-#include <QEvent>
-#include <QLabel>
-#include <QDrag>
-#include <QMimeData>
-#include "indigodropzone.h"
+#include <QtGui>
+#include <QFrame>
+#include <QLayout>
+#include <indigopanelhandle.h>
 
-class IndigoPanel : public QDockWidget
+class IndigoPanel : public QFrame
 {
     Q_OBJECT
+
 public:
     IndigoPanel(QWidget* parent = 0);
+    IndigoPanelHandle * handle;
+    void setBackgroundColor(const QColor &bgColor);
+    void addWidget(QWidget *content);
 
-protected:
+protected:   
+    bool eventFilter(QObject *o, QEvent *e);
 
-signals:   
+private:
+    QPalette palette;
+    QHBoxLayout *contentArea;
+    QPoint oldPos;
+    int relative_x;
+    int relative_y;
 
-private:  
+signals:
+    void mouseReleased();
 
 public slots:
-
+    void close(bool * exit);
 };
 
 #endif // INDIGOPANEL_H

@@ -1,16 +1,16 @@
-#include "indigo2dock.h"
+#include "indigodock.h"
 
-Indigo2Dock::Indigo2Dock(QWidget *parent) : QWidget(parent)
+IndigoDock::IndigoDock(QWidget *parent) : QWidget(parent)
 {
     init();
 
 }
 
-void Indigo2Dock::init(){
+void IndigoDock::init(){
 
     // Setup Tabbar
-    indigoTab = new Indigo2Tabbar;
-    indigoTab->setTabPosition(Indigo2Tabbar::East);
+    indigoTab = new IndigoTabbar;
+    indigoTab->setTabPosition(IndigoTabbar::East);
     indigoTab->setMovable(true);
 
     QVBoxLayout *layout = new QVBoxLayout();
@@ -32,8 +32,8 @@ void Indigo2Dock::init(){
 
 }
 
-void Indigo2Dock::addTab(const QString &title, QIcon icon, QWidget *widget){
-    Indigo2DropZone * dropzone = new Indigo2DropZone(0);
+void IndigoDock::addTab(const QString &title, QIcon icon, QWidget *widget){
+    IndigoDropZone * dropzone = new IndigoDropZone(0);
     dropzone->createPanel(title, widget);
     indigoTab->addTab(dropzone, icon, "");
 

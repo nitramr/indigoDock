@@ -1,4 +1,4 @@
-#include "indigo2panelhandle.h"
+#include "indigopanelhandle.h"
 
 
 /* TODO:
@@ -7,7 +7,7 @@
  *
  */
 
-Indigo2PanelHandle::Indigo2PanelHandle(QWidget *parent) :
+IndigoPanelHandle::IndigoPanelHandle(QWidget *parent) :
     QWidget(parent)
 {
 
@@ -28,11 +28,11 @@ Indigo2PanelHandle::Indigo2PanelHandle(QWidget *parent) :
 
 }
 
-void Indigo2PanelHandle::setTitle(const QString &title){
+void IndigoPanelHandle::setTitle(const QString &title){
     lblTitle->setText(title);
 }
 
-void Indigo2PanelHandle::setBackgroundColor(const QColor &bgColor){
+void IndigoPanelHandle::setBackgroundColor(const QColor &bgColor){
      palette.setColor( QPalette::Background, bgColor );
      setPalette( palette );
 }

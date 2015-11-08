@@ -1,26 +1,32 @@
-#ifndef INDIGOCONTAINER_H
-#define INDIGOCONTAINER_H
+#ifndef INDIGODROPZONE_H
+#define INDIGODROPZONE_H
 
-#include <QMainWindow>
-#include <QListWidget>
-#include <QDockWidget>
-#include "indigopanel.h"
+#include <QWidget>
+#include <QFrame>
+#include <QVBoxLayout>
+#include <indigopanel.h>
+#include <indigotabbar.h>
+#include <QSplitter>
 
-class IndigoDropZone: public QMainWindow
+class IndigoDropZone : public QWidget
 {
     Q_OBJECT
 public:
-    void createIndigoPanel(QString title);
-
     IndigoDropZone(QWidget* parent = 0);
-    ~IndigoDropZone();
-protected:  
-    bool eventFilter( QObject * watched, QEvent * event );
+    void addPanel (IndigoPanel * panel);
+    void createPanel(const QString &title, QWidget *widget);
+
+protected:
 
 private:
+    QVBoxLayout *layout;
+    QSplitter *splitter;
+    int padding;
+
 signals:
 
 public slots:
+    void dropPanel();
 };
 
-#endif // INDIGOCONTAINER_H
+#endif // INDIGODROPZONE_H

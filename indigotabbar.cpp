@@ -1,11 +1,12 @@
-#include "indigo2tabbar.h"
+#include "indigotabbar.h"
 #include <QDebug>
 
-Indigo2Tabbar::Indigo2Tabbar(QWidget *parent) :
+IndigoTabbar::IndigoTabbar(QWidget *parent) :
     QTabWidget(parent)
 {
 
     this->setObjectName("indigoTab");
+
 
     // watch active tab change event
     this->tabBar()->installEventFilter(this);
@@ -29,14 +30,14 @@ Indigo2Tabbar::Indigo2Tabbar(QWidget *parent) :
                        );
 }
 
-void Indigo2Tabbar::addTab( QWidget * child, const QString & label ){
+void IndigoTabbar::addTab( QWidget * child, const QString & label ){
 
       QTabWidget::addTab(child, label);
       activeWidget = this->widget(currentIndex());
 
 }
 
-void Indigo2Tabbar::addTab ( QWidget * child, const QIcon & icon, const QString & label ){
+void IndigoTabbar::addTab ( QWidget * child, const QIcon & icon, const QString & label ){
 
     QIcon ricon = icon;
     QSize sz;
@@ -66,7 +67,7 @@ void Indigo2Tabbar::addTab ( QWidget * child, const QIcon & icon, const QString 
 }
 
 
-bool Indigo2Tabbar::eventFilter(QObject *o, QEvent *e)
+bool IndigoTabbar::eventFilter(QObject *o, QEvent *e)
 {
     if (o == tabBar() && e->type() == QEvent::MouseButtonRelease) {
 
