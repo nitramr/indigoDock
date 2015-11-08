@@ -1,21 +1,11 @@
 #include "indigo2panel.h"
 #include <QPushButton>
 
-
-/* TODO:
- *
- * - hide TopLevelWindows in taskbar
- * - bind TopLevelWindows to close event of MainWindow
- * - solve flickering by first drag
- *
- */
-
-
 Indigo2Panel::Indigo2Panel(QWidget *parent) :
    QFrame(parent)
 {
 
-    QPalette palette;
+
     palette.setColor( QPalette::Background, QColor( 200, 200, 200 ) );
     setPalette( palette );
     setAutoFillBackground( true );
@@ -23,9 +13,11 @@ Indigo2Panel::Indigo2Panel(QWidget *parent) :
      //connect(qApp, SIGNAL(close(bool)) , this, SLOT(close(bool)));
 
     // Dummy Widget as handleBar
-    Indigo2PanelHandle * handle = new Indigo2PanelHandle();
+    handle = new Indigo2PanelHandle();
     handle->installEventFilter(this);
     handle->setFixedHeight(30);
+    //handle->setTitle("Property"); // set panel title
+    //handle->setBackgroundColor(QColor( 240, 240, 240 )); // set bg color for title bar
 
     // Content Widget
     contentArea = new QHBoxLayout;
@@ -57,6 +49,7 @@ bool Indigo2Panel::eventFilter(QObject *o, QEvent *event)
                 QPoint point = QCursor::pos();
 
                 QPoint xy = mapToGlobal(QPoint(0,0));
+
                 // mouse press relative position
                 relative_x = point.x() - xy.x();
                 relative_y = point.y() - xy.y();
@@ -68,7 +61,7 @@ bool Indigo2Panel::eventFilter(QObject *o, QEvent *event)
                    qDebug() << "Pan2 Parent != 0" << endl;
 
                    setParent(0);
-                   setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint| Qt::FramelessWindowHint);
+                   setWindowFlags(windowFlags() |Qt::ToolTip | Qt::FramelessWindowHint);
                    move(xy);
                    show();
 

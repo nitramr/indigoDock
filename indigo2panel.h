@@ -13,14 +13,18 @@ class Indigo2Panel : public QFrame
 
 public:
     Indigo2Panel(QWidget* parent = 0);
+    Indigo2PanelHandle * handle;
 
 protected:   
     bool eventFilter(QObject *o, QEvent *e);
+
 private:
+    QPalette palette;
     QHBoxLayout *contentArea;
     QPoint oldPos;
     int relative_x;
     int relative_y;
+
 signals:
     void mouseReleased();
 

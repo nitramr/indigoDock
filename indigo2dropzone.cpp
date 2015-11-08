@@ -37,6 +37,7 @@ void Indigo2DropZone::createPanel()
 {
     Indigo2Panel * pan = new Indigo2Panel(this);
     this->connect(pan, SIGNAL(mouseReleased()), this, SLOT(dropPanel()));
+    pan->handle->setTitle("Property");
     addPanel(pan);
 
 }

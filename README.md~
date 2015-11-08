@@ -31,7 +31,6 @@ Here is how you run it:
 * automatic tab orientation switch by docking on left site
 * automatic tab creation by drag a panel on it
 * styling of the features
-* closing of single panels via close button
 
 ## Code base:
 * DockWidget is a normal QDockWidget  
