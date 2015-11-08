@@ -6,24 +6,21 @@
 #include <QDockWidget>
 #include "indigopanel.h"
 
-class IndigoDock: public QMainWindow
+class IndigoDropZone: public QMainWindow
 {
     Q_OBJECT
 public:
     void createIndigoPanel(QString title);
-    //void addIndigoPanel(IndigoPanel* panel);
 
-    IndigoDock(QWidget* parent = 0);
-    ~IndigoDock();
-protected:
-    bool event ( QEvent * event );
+    IndigoDropZone(QWidget* parent = 0);
+    ~IndigoDropZone();
+protected:  
     bool eventFilter( QObject * watched, QEvent * event );
 
 private:
 signals:
 
 public slots:
-    void dragEnded();
 };
 
 #endif // INDIGOCONTAINER_H

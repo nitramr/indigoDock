@@ -1,15 +1,15 @@
-#ifndef INDIGOTABWIDGET_H
-#define INDIGOTABWIDGET_H
+#ifndef INDIGO2TABBAR_H
+#define INDIGO2TABBAR_H
 
 #include <QTabWidget>
 #include <QIcon>
 #include "indigodropzone.h"
 
-class IndigoTabWidget : public QTabWidget
+class Indigo2Tabbar : public QTabWidget
 {
     Q_OBJECT
 public:
-    IndigoTabWidget(QWidget* parent = 0);
+    Indigo2Tabbar(QWidget* parent = 0);
     void addTab ( QWidget * child, const QString & label );
     void addTab ( QWidget * child, const QIcon & icon, const QString & label );
     QWidget * activeWidget;
@@ -20,6 +20,7 @@ protected:
 signals:
 
 public slots:
+
 };
 
-#endif // INDIGOTABWIDGET_H
+#endif // INDIGO2TABBAR_H

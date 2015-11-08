@@ -24,7 +24,10 @@ public:
     ~MainWindow();
 
 protected:
+    void closeEvent(QCloseEvent *event);
 
+signals:
+    void close(bool);
 
 private:
     Ui::MainWindow *ui;

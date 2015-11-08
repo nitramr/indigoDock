@@ -9,7 +9,7 @@
 #include <QLabel>
 #include <QDrag>
 #include <QMimeData>
-#include "indigodock.h"
+#include "indigodropzone.h"
 
 class IndigoPanel : public QDockWidget
 {
@@ -18,13 +18,10 @@ public:
     IndigoPanel(QWidget* parent = 0);
 
 protected:
-   bool eventFilter( QObject * watched, QEvent * event );
 
-signals:
-    void panelMove(bool isMove);
+signals:   
 
-private:
-   QPoint dragStartPosition;
+private:  
 
 public slots:
 
