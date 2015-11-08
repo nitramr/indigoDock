@@ -2,7 +2,7 @@
 
 /* TODO:
  *
- * - add better splitter widget (low prio)
+ * - add better splitter widget (redocking within a dropzone
  *
  */
 
@@ -28,16 +28,19 @@ Indigo2DropZone::Indigo2DropZone(QWidget *parent) :
     setLayout(layout);
 
     // Demo Panels
-    createPanel();
+    //createPanel();
 
 }
 
 
-void Indigo2DropZone::createPanel()
+void Indigo2DropZone::createPanel(const QString &title, QWidget *widget)
 {
     Indigo2Panel * pan = new Indigo2Panel(this);
     this->connect(pan, SIGNAL(mouseReleased()), this, SLOT(dropPanel()));
-    pan->handle->setTitle("Property");
+    pan->handle->setTitle(title);
+    pan->addWidget(widget);
+    //pan->setBackgroundColor(QColor( 204, 204, 204 ));
+    //pan->handle->setBackgroundColor(QColor( 204, 204, 204 ));
     addPanel(pan);
 
 }
@@ -67,6 +70,11 @@ void Indigo2DropZone::dropPanel()
     }
 }
 
+/**
+ * Add Panel in Splitter
+ * @brief Indigo2DropZone::addPanel
+ * @param panel
+ */
 void Indigo2DropZone::addPanel (Indigo2Panel * panel){
 
     splitter->addWidget(panel);

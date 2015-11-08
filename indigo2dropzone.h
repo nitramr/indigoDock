@@ -14,8 +14,10 @@ class Indigo2DropZone : public QWidget
 public:
     Indigo2DropZone(QWidget* parent = 0);
     void addPanel (Indigo2Panel * panel);
+    void createPanel(const QString &title, QWidget *widget);
+
 protected:
-    void createPanel(); 
+
 private:
     QVBoxLayout *layout;
     QSplitter *splitter;

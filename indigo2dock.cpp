@@ -21,15 +21,20 @@ void Indigo2Dock::init(){
 
     layout->addWidget(indigoTab);
 
+
+    // Demo Content
+    QWidget * widget = new QWidget;
+
     // Demo Tabs
-    addTab(QIcon(":/icons/icons/placeholder.png"));
-    addTab(QIcon(":/icons/icons/placeholder.png"));
-    addTab(QIcon(":/icons/icons/placeholder.png"));
+    addTab("Properties", QIcon(":/icons/icons/placeholder.png"),widget);
+    addTab("Page", QIcon(":/icons/icons/placeholder.png"),widget);
+    addTab("Text", QIcon(":/icons/icons/placeholder.png"),widget);
 
 }
 
-void Indigo2Dock::addTab(QIcon icon){
+void Indigo2Dock::addTab(const QString &title, QIcon icon, QWidget *widget){
     Indigo2DropZone * dropzone = new Indigo2DropZone(0);
+    dropzone->createPanel(title, widget);
     indigoTab->addTab(dropzone, icon, "");
 
 }

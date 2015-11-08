@@ -5,9 +5,6 @@ Indigo2Panel::Indigo2Panel(QWidget *parent) :
    QFrame(parent)
 {
 
-
-    palette.setColor( QPalette::Background, QColor( 200, 200, 200 ) );
-    setPalette( palette );
     setAutoFillBackground( true );
 
      //connect(qApp, SIGNAL(close(bool)) , this, SLOT(close(bool)));
@@ -61,7 +58,7 @@ bool Indigo2Panel::eventFilter(QObject *o, QEvent *event)
                    qDebug() << "Pan2 Parent != 0" << endl;
 
                    setParent(0);
-                   setWindowFlags(windowFlags() |Qt::ToolTip | Qt::FramelessWindowHint);
+                   setWindowFlags(windowFlags() |Qt::ToolTip /*|Qt::WindowStaysOnTopHint*/| Qt::FramelessWindowHint);
                    move(xy);
                    show();
 
@@ -101,4 +98,13 @@ void Indigo2Panel::close(bool * exit){
         qDebug() << "Close" << endl;
     }
 
+}
+
+void Indigo2Panel::setBackgroundColor(const QColor &bgColor){
+     palette.setColor( QPalette::Background, bgColor );
+     setPalette( palette );
+}
+
+void Indigo2Panel::addWidget(QWidget *content){
+     contentArea->addWidget(content);
 }

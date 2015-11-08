@@ -11,9 +11,11 @@ class Indigo2Dock : public QWidget
 public:
     explicit Indigo2Dock(QWidget *parent = 0);
     Indigo2Tabbar *indigoTab;
-    void addTab(QIcon icon);
+    void addTab(const QString &title, QIcon icon, QWidget *widget);
+
 private:
     void init();
+
 signals:
 
 public slots:

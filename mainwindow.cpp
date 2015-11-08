@@ -76,6 +76,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // Container
     mainLayout = new QGridLayout();
+    mainLayout->setMargin(0);
     mainLayout->addWidget(indigoDock, 0, 0);
     QWidget *containerRight = new QWidget;
     containerRight->setLayout(mainLayout);

@@ -8,7 +8,25 @@ Indigo2Tabbar::Indigo2Tabbar(QWidget *parent) :
     this->setObjectName("indigoTab");
 
     // watch active tab change event
-    tabBar()->installEventFilter(this);
+    this->tabBar()->installEventFilter(this);
+
+    this->tabBar()->setFocusPolicy(Qt::NoFocus);
+    this->tabBar()->setIconSize(QSize(32,32));
+    this->setStyleSheet("QTabWidget::pane { /* The tab widget frame */"
+                        "border: 0px solid transparent;"
+                        "}"
+                        "QTabBar::tab {"
+                        "text-align: center;"
+                        "border: 0px solid transparent;"
+                        "border-radius: 0px;"
+                        "width: 32px;"
+                        "height: 32px;"
+                        "padding: 0px;"
+                        "}"
+                        "QTabBar::tab:selected {"
+                        "background-color: rgb(153,153,153);"
+                        "}"
+                       );
 }
 
 void Indigo2Tabbar::addTab( QWidget * child, const QString & label ){
@@ -36,6 +54,8 @@ void Indigo2Tabbar::addTab ( QWidget * child, const QIcon & icon, const QString 
     trans.rotate(+90);
 
     pix = pix.transformed(trans);
+    pix = pix.scaledToWidth( 32 );
+    pix = pix.scaledToHeight( 32 );
     ricon = QIcon(pix);
 
     // use normal addTab function

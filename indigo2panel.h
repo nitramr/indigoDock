@@ -14,6 +14,8 @@ class Indigo2Panel : public QFrame
 public:
     Indigo2Panel(QWidget* parent = 0);
     Indigo2PanelHandle * handle;
+    void setBackgroundColor(const QColor &bgColor);
+    void addWidget(QWidget *content);
 
 protected:   
     bool eventFilter(QObject *o, QEvent *e);
