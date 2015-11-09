@@ -17,14 +17,19 @@ public:
     void createPanel(const QString &title, QWidget *widget);
     void setBackgroundColor(const QColor &bgColor);
 
+    bool isHighlight;
+
 protected:
+    void paintEvent(QPaintEvent*);
 
 private:
     QVBoxLayout *layout;
     QSplitter *splitter;
     int padding;
+    int borderHighlight;
     QPalette palette;
     QColor colorHighlight;
+    QColor colorHighlightAlpha;
     QColor colorNormal;
 
 signals:

@@ -1,12 +1,5 @@
 #include "indigopanelhandle.h"
 
-
-/* TODO:
- *
- * - add functional close button
- *
- */
-
 IndigoPanelHandle::IndigoPanelHandle(QWidget *parent) :
     QWidget(parent)
 {

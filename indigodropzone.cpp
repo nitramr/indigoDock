@@ -13,7 +13,8 @@ IndigoDropZone::IndigoDropZone(QWidget *parent) :
     setMouseTracking(true);
 
     colorNormal = QColor( 153, 153, 153 );
-    colorHighlight = QColor( 101, 201, 243 );
+    colorHighlight = QColor( 0, 179, 255 );
+    colorHighlightAlpha = QColor( 140, 155, 161); // Linux don't support alpha channel
 
 
     palette.setColor( QPalette::Background, colorNormal );
@@ -21,6 +22,8 @@ IndigoDropZone::IndigoDropZone(QWidget *parent) :
     setAutoFillBackground( true );
 
     padding = 6;
+    borderHighlight = 3;
+    isHighlight = false;
 
     splitter = new QSplitter();
     splitter->setHandleWidth(padding);
@@ -59,17 +62,8 @@ void IndigoDropZone::hoverZone(){
 
             IndigoDropZone *zone = qobject_cast<IndigoDropZone*>(tab->activeWidget);
 
-            zone->setBackgroundColor(colorHighlight);
-
-            //Paint Highlighter
-           /* QPainter painter(zone);
-
-            int width = size().width();
-            int height = size().height();
-
-            painter.fillRect(0, 0, width, height, colorHighlight);
-            painter.fillRect(4, 4, width - 8, height-8, colorNormal);*/
-
+            zone->isHighlight = true;
+            zone->update();
         }
 
     }else{
@@ -77,16 +71,8 @@ void IndigoDropZone::hoverZone(){
 
             IndigoDropZone *zone = qobject_cast<IndigoDropZone*>(tab->activeWidget);
 
-            zone->setBackgroundColor(colorNormal);
-            /*//Paint Highlighter
-            QPainter painter(zone);
-
-            int width = size().width();
-            int height = size().height();
-
-            painter.fillRect(0, 0, width, height, colorNormal);*/
-
-
+            zone->isHighlight = false;
+            zone->update();
         }
     }
 
@@ -108,7 +94,9 @@ void IndigoDropZone::dropPanel()
             pan->setLastParent(zone);
 
             zone->addPanel(pan);
-            zone->setBackgroundColor(colorNormal); // de-highlight
+
+            zone->isHighlight = false;
+            zone->update();//zone->setBackgroundColor(colorNormal); // defocus
 
 
         }else{
@@ -137,4 +125,26 @@ void IndigoDropZone::setBackgroundColor(const QColor &bgColor){
      palette.setColor( QPalette::Background, bgColor );
      setPalette( palette );
 }
+
+void IndigoDropZone::paintEvent(QPaintEvent*) {
+    QPainter painter(this);
+
+    if(isHighlight){
+
+        int width = size().width() - (padding*2);
+        int height = size().height() - (padding*2);
+
+        painter.fillRect(padding, padding, width, height, colorHighlight);
+        painter.fillRect(padding + borderHighlight, padding + borderHighlight, width -(borderHighlight*2), height -(borderHighlight*2),colorHighlightAlpha);
+
+    }else{
+
+        int width = size().width();
+        int height = size().height();
+
+        painter.fillRect(0, 0, width, height, colorNormal);
+    }
+
+}
+
 
