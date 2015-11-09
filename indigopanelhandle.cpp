@@ -26,6 +26,10 @@ IndigoPanelHandle::IndigoPanelHandle(QWidget *parent) :
     mainLayout->addStretch(1);
     mainLayout->addWidget(btnClose);
 
+    // Actions
+    connect(btnClose, SIGNAL (clicked()), parent, SLOT (hide()));
+
+
 }
 
 void IndigoPanelHandle::setTitle(const QString &title){

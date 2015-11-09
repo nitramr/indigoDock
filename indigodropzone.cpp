@@ -10,8 +10,13 @@ IndigoDropZone::IndigoDropZone(QWidget *parent) :
    QWidget(parent)
 {
 
-    QPalette palette;
-    palette.setColor( QPalette::Background, QColor( 153, 153, 153 ) );
+    setMouseTracking(true);
+
+    colorNormal = QColor( 153, 153, 153 );
+    colorHighlight = QColor( 101, 201, 243 );
+
+
+    palette.setColor( QPalette::Background, colorNormal );
     setPalette( palette );
     setAutoFillBackground( true );
 
@@ -27,8 +32,6 @@ IndigoDropZone::IndigoDropZone(QWidget *parent) :
     layout->setMargin(padding);
     setLayout(layout);
 
-    // Demo Panels
-    //createPanel();
 
 }
 
@@ -37,6 +40,7 @@ void IndigoDropZone::createPanel(const QString &title, QWidget *widget)
 {
     IndigoPanel * pan = new IndigoPanel(this);
     this->connect(pan, SIGNAL(mouseReleased()), this, SLOT(dropPanel()));
+    this->connect(pan, SIGNAL(mouseMove()), this, SLOT(hoverZone()));
     pan->handle->setTitle(title);
     pan->addWidget(widget);
     //pan->setBackgroundColor(QColor( 204, 204, 204 ));
@@ -45,23 +49,67 @@ void IndigoDropZone::createPanel(const QString &title, QWidget *widget)
 
 }
 
+void IndigoDropZone::hoverZone(){
+
+    QPoint cursor = this->mapFromGlobal(QCursor::pos());
+
+    if (this->rect().contains(cursor) ) {
+
+        if(IndigoTabbar *tab = qobject_cast<IndigoTabbar*>(parent()->parent())) {
+
+            IndigoDropZone *zone = qobject_cast<IndigoDropZone*>(tab->activeWidget);
+
+            zone->setBackgroundColor(colorHighlight);
+
+            //Paint Highlighter
+           /* QPainter painter(zone);
+
+            int width = size().width();
+            int height = size().height();
+
+            painter.fillRect(0, 0, width, height, colorHighlight);
+            painter.fillRect(4, 4, width - 8, height-8, colorNormal);*/
+
+        }
+
+    }else{
+        if(IndigoTabbar *tab = qobject_cast<IndigoTabbar*>(parent()->parent())) {
+
+            IndigoDropZone *zone = qobject_cast<IndigoDropZone*>(tab->activeWidget);
+
+            zone->setBackgroundColor(colorNormal);
+            /*//Paint Highlighter
+            QPainter painter(zone);
+
+            int width = size().width();
+            int height = size().height();
+
+            painter.fillRect(0, 0, width, height, colorNormal);*/
+
+
+        }
+    }
+
+}
+
+
 void IndigoDropZone::dropPanel()
 {
     QPoint cursor = this->mapFromGlobal(QCursor::pos());
 
     if (this->rect().contains(cursor) ) {
 
-        IndigoPanel *pan = qobject_cast<IndigoPanel *>(sender());
-
         if(IndigoTabbar *tab = qobject_cast<IndigoTabbar*>(parent()->parent())) {
-           //qDebug() << "DropZone Parent " << tab << endl;
 
             IndigoDropZone *zone = qobject_cast<IndigoDropZone*>(tab->activeWidget);
 
-            pan->setParent(zone);            
+            IndigoPanel *pan = qobject_cast<IndigoPanel *>(sender());
+            pan->setParent(zone);
+            pan->setLastParent(zone);
 
             zone->addPanel(pan);
-            //qDebug() << "Pan2 In Dock2 " << pan << " in " << zone << endl;
+            zone->setBackgroundColor(colorNormal); // de-highlight
+
 
         }else{
             qDebug() << "DropZone parent is not type of IndigoTabbar" << endl;
@@ -84,3 +132,9 @@ void IndigoDropZone::addPanel (IndigoPanel * panel){
     panel->show();
 
 }
+
+void IndigoDropZone::setBackgroundColor(const QColor &bgColor){
+     palette.setColor( QPalette::Background, bgColor );
+     setPalette( palette );
+}
+

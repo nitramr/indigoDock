@@ -16,6 +16,8 @@ public:
     IndigoPanelHandle * handle;
     void setBackgroundColor(const QColor &bgColor);
     void addWidget(QWidget *content);
+    void setLastParent(QWidget * dropzone);
+    QWidget * lastParent();
 
 protected:   
     bool eventFilter(QObject *o, QEvent *e);
@@ -26,12 +28,14 @@ private:
     QPoint oldPos;
     int relative_x;
     int relative_y;
+    QWidget *lastParentWidget;
 
 signals:
     void mouseReleased();
+    void mouseMove();
 
 public slots:
-    void close(bool * exit);
+    void hide();
 };
 
 #endif // INDIGOPANEL_H

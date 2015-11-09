@@ -8,7 +8,7 @@ IndigoPanel::IndigoPanel(QWidget *parent) :
     setAutoFillBackground( true );
 
     // Dummy Widget as handleBar
-    handle = new IndigoPanelHandle();
+    handle = new IndigoPanelHandle(this);
     handle->installEventFilter(this);
     handle->setFixedHeight(30);
     //handle->setTitle("Property"); // set panel title
@@ -25,6 +25,9 @@ IndigoPanel::IndigoPanel(QWidget *parent) :
     mainLayout->addWidget(handle);
     mainLayout->addLayout(contentArea);
     mainLayout->addStretch(1);
+
+    // lastParent
+    lastParentWidget = parent;
 
 }
 
@@ -77,6 +80,7 @@ bool IndigoPanel::eventFilter(QObject *o, QEvent *event)
         {
                 QPoint point = QCursor::pos();
                 move(QPoint(point.x() - relative_x, point.y() - relative_y));
+                emit mouseMove();
                 break;
         }
 
@@ -90,14 +94,6 @@ bool IndigoPanel::eventFilter(QObject *o, QEvent *event)
 }
 
 
-void IndigoPanel::close(bool * exit){
-
-    if(exit){
-        qDebug() << "Close" << endl;
-    }
-
-}
-
 void IndigoPanel::setBackgroundColor(const QColor &bgColor){
      palette.setColor( QPalette::Background, bgColor );
      setPalette( palette );
@@ -105,4 +101,20 @@ void IndigoPanel::setBackgroundColor(const QColor &bgColor){
 
 void IndigoPanel::addWidget(QWidget *content){
      contentArea->addWidget(content);
+}
+
+void IndigoPanel::hide(){
+     qDebug() << "Pan hide" << endl;
+
+    // TODO: set entry in WatchList to show this again
+
+     QFrame::hide();
+}
+
+void IndigoPanel::setLastParent(QWidget *dropzone){
+    //lastParentWidget = dropzone; // unused
+}
+
+QWidget *IndigoPanel::lastParent(){
+    return lastParentWidget;
 }
