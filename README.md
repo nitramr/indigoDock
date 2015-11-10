@@ -26,7 +26,7 @@ Here is how you run it:
 * tab body highlighting by panel hovering
 
 ## Issues:
-* not known  
+* Panel flickering by mouse move on multi screens with different screen height
 
 ## ToDo's
 * automatic tab orientation switch by docking on left site

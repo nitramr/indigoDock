@@ -23,12 +23,23 @@ public:
     MainWindow(QWidget* parent = 0);
     ~MainWindow();
 
-protected:
+   /* static MainWindow* getInstance()
+      {
+        if(!instance)
+        {
+          instance = new MainWindow();
+        }
+        return instance;
+      }
+*/
 
+protected:
+   // MainWindow(QWidget* = NULL);
 signals:  
 
 private:
     Ui::MainWindow *ui;
+    //static MainWindow* instance;
 };
 
 

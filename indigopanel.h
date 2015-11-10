@@ -29,6 +29,7 @@ private:
     int relative_x;
     int relative_y;
     QWidget *lastParentWidget;
+    QWidget *mainWindow;
 
 signals:
     void mouseReleased();

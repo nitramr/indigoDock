@@ -22,7 +22,8 @@ Here is how you run it:
 ## Features:
 * the whole dock is dockable on left or right side of main window  
 * the dock contains a tabbar with sortable tabs  
-* within the single tabs you can add/remove/arrange single panels (more than one) 
+* within the single tabs you can add/remove/arrange single panels (more than one)
+* tab body highlighting by panel hovering
 
 ## Issues:
 * not known  
@@ -31,7 +32,10 @@ Here is how you run it:
 * automatic tab orientation switch by docking on left site
 * automatic tab creation by drag a panel on it
 * styling of the features
-* closing of single panels via close button
+* better arranging single panels within a tab
+* if a special panel was called set focus to parent tab (in case of shortcut keys)
+* context menu for setting custom icons for tabs
+* context menu for tab body to show hidden panels
 
 ## Code base:
 * DockWidget is a normal QDockWidget  
