@@ -14,7 +14,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     setMouseTracking(true);
 
-
     /*******************
      *
      * QDockWidget Setup

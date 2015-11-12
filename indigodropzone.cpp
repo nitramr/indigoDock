@@ -96,7 +96,7 @@ void IndigoDropZone::dropPanel()
             zone->addPanel(pan);
 
             zone->isHighlight = false;
-            zone->update();//zone->setBackgroundColor(colorNormal); // defocus
+            zone->update(); // defocus
 
 
         }else{
@@ -121,14 +121,21 @@ void IndigoDropZone::addPanel (IndigoPanel * panel){
 
 }
 
+
 void IndigoDropZone::setBackgroundColor(const QColor &bgColor){
-     palette.setColor( QPalette::Background, bgColor );
-     setPalette( palette );
+
+    colorNormal = bgColor;
+
+    /*palette.setColor( QPalette::Background, bgColor );
+    setPalette( palette );*/
 }
 
+
 void IndigoDropZone::paintEvent(QPaintEvent*) {
+
     QPainter painter(this);
 
+    // Draw highlight
     if(isHighlight){
 
         int width = size().width() - (padding*2);
@@ -137,6 +144,7 @@ void IndigoDropZone::paintEvent(QPaintEvent*) {
         painter.fillRect(padding, padding, width, height, colorHighlight);
         painter.fillRect(padding + borderHighlight, padding + borderHighlight, width -(borderHighlight*2), height -(borderHighlight*2),colorHighlightAlpha);
 
+    // Reset highlight (normal view)
     }else{
 
         int width = size().width();

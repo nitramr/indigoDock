@@ -1,11 +1,11 @@
 #include "indigopanel.h"
 #include <QPushButton>
 #include "qapplication.h"
+#include <QDrag>
 
 /*
  * TODO:
  * - Create a WidgetList and store all undocked Panels in it (in IndigoDock).
- * - fix panel flickering by mous move on multi-screens with different screen height
  */
 
 IndigoPanel::IndigoPanel(QWidget *parent) :
@@ -13,6 +13,7 @@ IndigoPanel::IndigoPanel(QWidget *parent) :
 {
 
     setAutoFillBackground( true );
+    setMouseTracking(true);
 
     // Dummy Widget as handleBar
     handle = new IndigoPanelHandle(this);
@@ -61,22 +62,23 @@ bool IndigoPanel::eventFilter(QObject *o, QEvent *event)
 
             if (me->buttons() == Qt::LeftButton) {
 
-                QPoint point = QCursor::pos();
-
-                QPoint xy = mapToGlobal(QPoint(0,0));
-
-                // mouse press relative position
-                relative_x = point.x() - xy.x();
-                relative_y = point.y() - xy.y();
 
                 // undock Panel if not already undocked
                 if(parent() != mainWindow){
 
+                    QPoint point = me->globalPos();//QCursor::pos();
+
+                    QPoint xy = this->mapToGlobal(QPoint(0,0));
+
+                    // mouse press relative position
+                    relative_x = point.x() - xy.x();
+                    relative_y = point.y() - xy.y();
+
                     qDebug() << "Panel is undocked: Panel Parent == MainWindow" << endl;
                     setParent(mainWindow);
 
-                    // flickering can be solved by change window type to tooltip, but no window resizing possible
-                    setWindowFlags(windowFlags() |Qt::Tool /*|Qt::ToolTip*/ /*|Qt::WindowStaysOnTopHint*/| Qt::FramelessWindowHint);
+                    //setWindowFlags(windowFlags() |Qt::ToolTip/*|Qt::WindowStaysOnTopHint*/|Qt::FramelessWindowHint);
+                    setWindowFlags(Qt::ToolTip|Qt::FramelessWindowHint); // avoid flickering by moving
 
                     move(xy);
                     show();
@@ -90,6 +92,11 @@ bool IndigoPanel::eventFilter(QObject *o, QEvent *event)
 
         case QEvent::MouseButtonRelease:
         {
+
+                setWindowFlags(Qt::Tool|Qt::FramelessWindowHint); // set back to a resizeable window type
+
+                show();
+
                 emit mouseReleased(); // activate reparenting in DropZone
                 break;
         }
@@ -97,11 +104,16 @@ bool IndigoPanel::eventFilter(QObject *o, QEvent *event)
         case QEvent::MouseMove:
         {
 
-                QPoint point = QCursor::pos();
-                move(QPoint(point.x() - relative_x, point.y() - relative_y));
 
-                emit mouseMove(); // activate DropZone hover
-                break;
+            QMouseEvent *me = static_cast<QMouseEvent *>(event);
+
+            QPoint point = me->globalPos();//QCursor::pos();
+
+            move(QPoint(point.x() - relative_x, point.y() - relative_y));
+
+
+            emit mouseMove(); // activate DropZone hover
+            break;
         }
 
         default:
