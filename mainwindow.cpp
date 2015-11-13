@@ -3,6 +3,7 @@
 #include <QtGui>
 #include "indigopanel.h"
 #include "indigodropzone.h"
+#include "indigomenubar.h"
 #include "indigodock.h"
 
 
@@ -49,6 +50,10 @@ MainWindow::MainWindow(QWidget *parent) :
     // set Layouted Widget to DockPanel
     dockright->setWidget(containerRight);
 
+    IndigoMenuBar *menuBar = new IndigoMenuBar();
+    setMenuBar(menuBar);
+
+    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q), this, SLOT(close()));
 
 }
 
