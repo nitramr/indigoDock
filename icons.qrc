@@ -1,5 +1,7 @@
 <RCC>
-    <qresource lang="de" prefix="/icons">
+    <qresource prefix="/icons" lang="de">
         <file>icons/placeholder.png</file>
+        <file>icons/close.png</file>
+        <file>icons/open.png</file>
     </qresource>
 </RCC>

@@ -24,7 +24,7 @@ protected:
 
 private:
     QPalette palette;
-    QHBoxLayout *contentArea;
+    QVBoxLayout *contentArea;
     QPoint oldPos;
     int relative_x;
     int relative_y;

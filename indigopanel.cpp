@@ -2,6 +2,7 @@
 #include <QPushButton>
 #include "qapplication.h"
 #include <QDrag>
+#include <indigogroupbox.h>
 
 /*
  * TODO:
@@ -23,7 +24,7 @@ IndigoPanel::IndigoPanel(QWidget *parent) :
     //handle->setBackgroundColor(QColor( 240, 240, 240 )); // set bg color for title bar
 
     // Content Widget
-    contentArea = new QHBoxLayout;
+    contentArea = new QVBoxLayout;
 
     // Main LayoutContainer
     QVBoxLayout * mainLayout = new QVBoxLayout;
@@ -46,6 +47,11 @@ IndigoPanel::IndigoPanel(QWidget *parent) :
     }
 
 
+    // Add dummy content
+    IndigoGroupBox *group = new IndigoGroupBox();
+    IndigoGroupBox *group2 = new IndigoGroupBox();
+    contentArea->addWidget(group);
+    contentArea->addWidget(group2);
 
 }
 

@@ -147,9 +147,6 @@ void IndigoDropZone::removePlaceholder (){
 void IndigoDropZone::setBackgroundColor(const QColor &bgColor){
 
     colorNormal = bgColor;
-
-    /*palette.setColor( QPalette::Background, bgColor );
-    setPalette( palette );*/
 }
 
 

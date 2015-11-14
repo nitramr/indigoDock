@@ -22,6 +22,11 @@ IndigoPanelHandle::IndigoPanelHandle(QWidget *parent) :
     // Actions
     connect(btnClose, SIGNAL (clicked()), parent, SLOT (hide()));
 
+    lblTitle->setStyleSheet("QLabel {"
+                            "font-weight: bold;"
+                            "font-size:10pt;"
+                        "}"
+                       );
 
 }
 
