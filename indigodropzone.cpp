@@ -35,6 +35,8 @@ IndigoDropZone::IndigoDropZone(QWidget *parent) :
     layout->setMargin(padding);
     setLayout(layout);
 
+    placeholder = new QWidget(this);
+
 
 }
 
@@ -63,7 +65,9 @@ void IndigoDropZone::hoverZone(){
             IndigoDropZone *zone = qobject_cast<IndigoDropZone*>(tab->activeWidget);
 
             zone->isHighlight = true;
+            zone->addPlaceholder();
             zone->update();
+
         }
 
     }else{
@@ -72,7 +76,9 @@ void IndigoDropZone::hoverZone(){
             IndigoDropZone *zone = qobject_cast<IndigoDropZone*>(tab->activeWidget);
 
             zone->isHighlight = false;
+            zone->removePlaceholder();
             zone->update();
+
         }
     }
 
@@ -96,6 +102,7 @@ void IndigoDropZone::dropPanel()
             zone->addPanel(pan);
 
             zone->isHighlight = false;
+            zone->removePlaceholder();
             zone->update(); // defocus
 
 
@@ -121,6 +128,21 @@ void IndigoDropZone::addPanel (IndigoPanel * panel){
 
 }
 
+void IndigoDropZone::addPlaceholder (){
+
+    splitter->addWidget(placeholder);
+    layout->addWidget(splitter);
+
+    splitter->show();
+
+}
+
+void IndigoDropZone::removePlaceholder (){
+
+    placeholder->setParent(this);
+
+}
+
 
 void IndigoDropZone::setBackgroundColor(const QColor &bgColor){
 
@@ -138,11 +160,18 @@ void IndigoDropZone::paintEvent(QPaintEvent*) {
     // Draw highlight
     if(isHighlight){
 
-        int width = size().width() - (padding*2);
-        int height = size().height() - (padding*2);
+        QPoint pRect = placeholder->mapToParent(QPoint(padding,padding));
 
-        painter.fillRect(padding, padding, width, height, colorHighlight);
-        painter.fillRect(padding + borderHighlight, padding + borderHighlight, width -(borderHighlight*2), height -(borderHighlight*2),colorHighlightAlpha);
+        int width = placeholder->width();
+        int height = placeholder->height();
+
+        int x = pRect.x();
+        int y = pRect.y();
+
+        int offset = borderHighlight;
+
+        painter.fillRect(x, y, width, height, colorHighlight);
+        painter.fillRect(x + offset, y + offset, width -(offset*2), height -(offset*2),colorHighlightAlpha);
 
     // Reset highlight (normal view)
     }else{

@@ -18,6 +18,8 @@ public:
     void setBackgroundColor(const QColor &bgColor);
 
     bool isHighlight;
+    void addPlaceholder ();
+    void removePlaceholder ();
 
 protected:
     void paintEvent(QPaintEvent*);
@@ -31,6 +33,7 @@ private:
     QColor colorHighlight;
     QColor colorHighlightAlpha;
     QColor colorNormal;
+    QWidget * placeholder;
 
 signals:
 
