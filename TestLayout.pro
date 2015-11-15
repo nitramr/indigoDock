@@ -22,7 +22,6 @@ SOURCES += main.cpp\
     colorswatch.cpp \
     indigodock.cpp \
     indigotabbar.cpp \
-    indigopanelhandle.cpp \
     indigopanel.cpp \
     indigodropzone.cpp \
     indigoexpandergroup.cpp
@@ -31,7 +30,6 @@ HEADERS  += mainwindow.h \
     colorswatch.h \
     indigodock.h \
     indigotabbar.h \
-    indigopanelhandle.h \
     indigopanel.h \
     indigodropzone.h \
     indigoexpandergroup.h

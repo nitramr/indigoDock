@@ -29,6 +29,7 @@ signals:
 public slots:
 };
 
+/*******************************************************/
 
 class IndigoExpanderGroup : public QWidget
 {
@@ -40,8 +41,8 @@ public:
 
 private:
     QPalette palette;
-    QVBoxLayout *contentArea;
-    IndigoExpanderLabel * handle;
+    QVBoxLayout *m_contentArea;
+    IndigoExpanderLabel * m_handle;
     QWidget * m_widget;
 
 signals:

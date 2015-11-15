@@ -10,7 +10,7 @@ class IndigoDock : public QWidget
     Q_OBJECT
 public:
     explicit IndigoDock(QWidget *parent = 0);
-    IndigoTabbar *indigoTab;
+    IndigoTabbar *m_indigoTab;
     void addTab(const QString &title, QIcon icon, QWidget *widget);
 
 private:

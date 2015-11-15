@@ -78,7 +78,7 @@ void IndigoExpanderLabel::paintEvent(QPaintEvent *e)
    //QLabel::paintEvent(e);
 }
 
-
+/********************************************************************************************/
 
 IndigoExpanderGroup::IndigoExpanderGroup(QWidget *parent) : QWidget(parent)
 {
@@ -87,15 +87,15 @@ IndigoExpanderGroup::IndigoExpanderGroup(QWidget *parent) : QWidget(parent)
     setAutoFillBackground( true );
 
     // set handleBar
-    handle = new IndigoExpanderLabel(this);
-    handle->installEventFilter(this);
-    handle->setFixedHeight(22);
-    connect(handle,SIGNAL(stateSwitch(bool)),this,SLOT(stateSwitch(bool)));
+    m_handle = new IndigoExpanderLabel(this);
+    m_handle->installEventFilter(this);
+    m_handle->setFixedHeight(22);
+    connect(m_handle,SIGNAL(stateSwitch(bool)),this,SLOT(stateSwitch(bool)));
 
     // Content Widget
-    contentArea = new QVBoxLayout;
-    contentArea->setContentsMargins(15,0,0,0);
-    contentArea->setSpacing(0);
+    m_contentArea = new QVBoxLayout;
+    m_contentArea->setContentsMargins(15,0,0,0);
+    m_contentArea->setSpacing(0);
 
     // Main LayoutContainer
     QVBoxLayout * mainLayout = new QVBoxLayout;
@@ -103,8 +103,8 @@ IndigoExpanderGroup::IndigoExpanderGroup(QWidget *parent) : QWidget(parent)
     mainLayout->setSpacing(0);
     setLayout(mainLayout);
 
-    mainLayout->addWidget(handle);
-    mainLayout->addLayout(contentArea);
+    mainLayout->addWidget(m_handle);
+    mainLayout->addLayout(m_contentArea);
     mainLayout->addStretch(1);
 
     m_widget = NULL;
@@ -131,13 +131,13 @@ void IndigoExpanderGroup::addWidget(QWidget * widget){
 
     m_widget = widget;
     m_widget->setParent(this);
-    contentArea->addWidget(m_widget,0, Qt::AlignTop);
+    m_contentArea->addWidget(m_widget,0, Qt::AlignTop);
 }
 
 
 void IndigoExpanderGroup::setCaption(const QString &text){
 
-    handle->setText(text);
+    m_handle->setText(text);
 }
 
 
@@ -147,10 +147,10 @@ void IndigoExpanderGroup::stateSwitch(bool collapse){
 
     if(!collapse){
         m_widget->show();
-        handle->collapsed(false);
+        m_handle->collapsed(false);
     }else{
         m_widget->hide();
-        handle->collapsed(true);
+        m_handle->collapsed(true);
     }
 
 }

@@ -25,15 +25,15 @@ protected:
     void paintEvent(QPaintEvent*);
 
 private:
-    QVBoxLayout *layout;
-    QSplitter *splitter;
+    QVBoxLayout *m_layout;
+    QSplitter *m_splitter;
     int padding;
     int borderHighlight;
     QPalette palette;
     QColor colorHighlight;
     QColor colorHighlightAlpha;
     QColor colorNormal;
-    QWidget * placeholder;
+    QWidget * m_placeholder;
 
 signals:
 

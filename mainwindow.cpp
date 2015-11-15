@@ -21,10 +21,10 @@ MainWindow::MainWindow(QWidget *parent) :
      ******************/
 
     // add right dock container
-    dockright = new QDockWidget(this);
-    dockright->setAllowedAreas(Qt::RightDockWidgetArea | Qt::LeftDockWidgetArea);
+    m_dockright = new QDockWidget(this);
+    m_dockright->setAllowedAreas(Qt::RightDockWidgetArea | Qt::LeftDockWidgetArea);
    // dockright->setStyleSheet("background-color: lightgrey");
-    this->addDockWidget(Qt::RightDockWidgetArea, dockright);
+    this->addDockWidget(Qt::RightDockWidgetArea, m_dockright);
 
 
 
@@ -39,14 +39,14 @@ MainWindow::MainWindow(QWidget *parent) :
     IndigoDock *indigoDock = new IndigoDock;
 
     // Container
-    mainLayout = new QGridLayout();
-    mainLayout->setMargin(0);
-    mainLayout->addWidget(indigoDock, 0, 0);
+    m_mainLayout = new QGridLayout();
+    m_mainLayout->setMargin(0);
+    m_mainLayout->addWidget(indigoDock, 0, 0);
     QWidget *containerRight = new QWidget;
-    containerRight->setLayout(mainLayout);
+    containerRight->setLayout(m_mainLayout);
 
     // set Layouted Widget to DockPanel
-    dockright->setWidget(containerRight);
+    m_dockright->setWidget(containerRight);
 
 
 }

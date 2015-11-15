@@ -16,9 +16,9 @@ class MainWindow : public QMainWindow
 
 
 public:  
-    QDockWidget* dockleft;
-    QDockWidget* dockright;
-    QGridLayout* mainLayout;
+    QDockWidget* m_dockleft;
+    QDockWidget* m_dockright;
+    QGridLayout* m_mainLayout;
 
     MainWindow(QWidget* parent = 0);
     ~MainWindow();

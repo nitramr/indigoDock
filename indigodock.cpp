@@ -9,9 +9,9 @@ IndigoDock::IndigoDock(QWidget *parent) : QWidget(parent)
 void IndigoDock::init(){
 
     // Setup Tabbar
-    indigoTab = new IndigoTabbar;
-    indigoTab->setTabPosition(IndigoTabbar::East);
-    indigoTab->setMovable(true);
+    m_indigoTab = new IndigoTabbar;
+    m_indigoTab->setTabPosition(IndigoTabbar::East);
+    m_indigoTab->setMovable(true);
 
     QVBoxLayout *layout = new QVBoxLayout();
     layout->setSpacing(0);
@@ -19,7 +19,7 @@ void IndigoDock::init(){
     setLayout(layout);
 
 
-    layout->addWidget(indigoTab);
+    layout->addWidget(m_indigoTab);
 
 
     // Demo Content
@@ -35,6 +35,6 @@ void IndigoDock::init(){
 void IndigoDock::addTab(const QString &title, QIcon icon, QWidget *widget){
     IndigoDropZone * dropzone = new IndigoDropZone(0);
     dropzone->createPanel(title, widget);
-    indigoTab->addTab(dropzone, icon, "");
+    m_indigoTab->addTab(dropzone, icon, "");
 
 }

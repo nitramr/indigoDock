@@ -1,15 +1,12 @@
 #include "indigotabbar.h"
 #include <QDebug>
+#include <QWheelEvent>
 
 IndigoTabbar::IndigoTabbar(QWidget *parent) :
     QTabWidget(parent)
 {
 
     this->setObjectName("indigoTab");
-
-
-    // watch active tab change event
-    this->tabBar()->installEventFilter(this);
 
     this->tabBar()->setFocusPolicy(Qt::NoFocus);
     this->tabBar()->setIconSize(QSize(32,32));
@@ -28,13 +25,17 @@ IndigoTabbar::IndigoTabbar(QWidget *parent) :
                         "background-color: rgb(153,153,153);"
                         "}"
                        );
+
+    // watch active tab change event
+    connect(this->tabBar(), SIGNAL(currentChanged(int)), this, SLOT(setActiveTab(int)));
+
 }
 
 void IndigoTabbar::addTab( QWidget * child, const QString & label ){
 
       QTabWidget::addTab(child, label);
 
-          activeWidget = this->widget(currentIndex());
+          m_activeWidget = this->widget(currentIndex());
 
 
 }
@@ -65,21 +66,12 @@ void IndigoTabbar::addTab ( QWidget * child, const QIcon & icon, const QString &
     QTabWidget::addTab(child, ricon, label);
 
 
-        activeWidget = this->widget(currentIndex());
+        m_activeWidget = this->widget(currentIndex());
 
 }
 
 
-bool IndigoTabbar::eventFilter(QObject *o, QEvent *e)
-{
-    if (o == tabBar() && e->type() == QEvent::MouseButtonRelease) {
-
-        //int index = currentIndex();
-
-        activeWidget = this->widget(currentIndex());        
-
-        //qDebug() << "TabIndexChange" << activeWidget << " index: " << index << endl;
-
-    }
-    return QTabWidget::eventFilter(o, e);
+void IndigoTabbar::setActiveTab(int index){
+    m_activeWidget = this->widget(index);
+    //qDebug() << "TabIndexChange" << m_activeWidget << " index: " << index << endl;
 }

@@ -25,17 +25,17 @@ IndigoDropZone::IndigoDropZone(QWidget *parent) :
     borderHighlight = 3;
     isHighlight = false;
 
-    splitter = new QSplitter();
-    splitter->setHandleWidth(padding);
-    splitter->setOrientation(Qt::Vertical);
-    splitter->setStretchFactor(1, 1);
-    splitter->move(this->pos());
+    m_splitter = new QSplitter();
+    m_splitter->setHandleWidth(padding);
+    m_splitter->setOrientation(Qt::Vertical);
+    m_splitter->setStretchFactor(1, 1);
+    m_splitter->move(this->pos());
 
-    layout = new QVBoxLayout;
-    layout->setMargin(padding);
-    setLayout(layout);
+    m_layout = new QVBoxLayout;
+    m_layout->setMargin(padding);
+    setLayout(m_layout);
 
-    placeholder = new QWidget(this);
+    m_placeholder = new QWidget(this);
 
 
 }
@@ -46,7 +46,7 @@ void IndigoDropZone::createPanel(const QString &title, QWidget *widget)
     IndigoPanel * pan = new IndigoPanel(this);
     this->connect(pan, SIGNAL(mouseReleased()), this, SLOT(dropPanel()));
     this->connect(pan, SIGNAL(mouseMove()), this, SLOT(hoverZone()));
-    pan->handle->setTitle(title);
+    pan->m_handle->setTitle(title);
     pan->addWidget(widget);
     //pan->setBackgroundColor(QColor( 204, 204, 204 ));
     //pan->handle->setBackgroundColor(QColor( 204, 204, 204 ));
@@ -62,7 +62,7 @@ void IndigoDropZone::hoverZone(){
 
         if(IndigoTabbar *tab = qobject_cast<IndigoTabbar*>(parent()->parent())) {
 
-            IndigoDropZone *zone = qobject_cast<IndigoDropZone*>(tab->activeWidget);
+            IndigoDropZone *zone = qobject_cast<IndigoDropZone*>(tab->m_activeWidget);
 
             zone->isHighlight = true;
             zone->addPlaceholder();
@@ -73,7 +73,7 @@ void IndigoDropZone::hoverZone(){
     }else{
         if(IndigoTabbar *tab = qobject_cast<IndigoTabbar*>(parent()->parent())) {
 
-            IndigoDropZone *zone = qobject_cast<IndigoDropZone*>(tab->activeWidget);
+            IndigoDropZone *zone = qobject_cast<IndigoDropZone*>(tab->m_activeWidget);
 
             zone->isHighlight = false;
             zone->removePlaceholder();
@@ -93,7 +93,7 @@ void IndigoDropZone::dropPanel()
 
         if(IndigoTabbar *tab = qobject_cast<IndigoTabbar*>(parent()->parent())) {
 
-            IndigoDropZone *zone = qobject_cast<IndigoDropZone*>(tab->activeWidget);
+            IndigoDropZone *zone = qobject_cast<IndigoDropZone*>(tab->m_activeWidget);
 
             IndigoPanel *pan = qobject_cast<IndigoPanel *>(sender());
             pan->setParent(zone);
@@ -120,26 +120,26 @@ void IndigoDropZone::dropPanel()
  */
 void IndigoDropZone::addPanel (IndigoPanel * panel){
 
-    splitter->addWidget(panel);
-    layout->addWidget(splitter);
+    m_splitter->addWidget(panel);
+    m_layout->addWidget(m_splitter);
 
-    splitter->show();
+    m_splitter->show();
     panel->show();
 
 }
 
 void IndigoDropZone::addPlaceholder (){
 
-    splitter->addWidget(placeholder);
-    layout->addWidget(splitter);
+    m_splitter->addWidget(m_placeholder);
+    m_layout->addWidget(m_splitter);
 
-    splitter->show();
+    m_splitter->show();
 
 }
 
 void IndigoDropZone::removePlaceholder (){
 
-    placeholder->setParent(this);
+    m_placeholder->setParent(this);
 
 }
 
@@ -157,10 +157,10 @@ void IndigoDropZone::paintEvent(QPaintEvent*) {
     // Draw highlight
     if(isHighlight){
 
-        QPoint pRect = placeholder->mapToParent(QPoint(padding,padding));
+        QPoint pRect = m_placeholder->mapToParent(QPoint(padding,padding));
 
-        int width = placeholder->width();
-        int height = placeholder->height();
+        int width = m_placeholder->width();
+        int height = m_placeholder->height();
 
         int x = pRect.x();
         int y = pRect.y();
