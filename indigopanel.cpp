@@ -2,7 +2,6 @@
 #include <QPushButton>
 #include "qapplication.h"
 #include <QDrag>
-#include <indigogroupbox.h>
 #include <indigoexpandergroup.h>
 
 /*
