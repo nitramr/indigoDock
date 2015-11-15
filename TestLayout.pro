@@ -25,7 +25,7 @@ SOURCES += main.cpp\
     indigopanelhandle.cpp \
     indigopanel.cpp \
     indigodropzone.cpp \
-    indigogroupbox.cpp
+    indigoexpandergroup.cpp
 
 HEADERS  += mainwindow.h \
     colorswatch.h \
@@ -34,7 +34,7 @@ HEADERS  += mainwindow.h \
     indigopanelhandle.h \
     indigopanel.h \
     indigodropzone.h \
-    indigogroupbox.h
+    indigoexpandergroup.h
 
 FORMS    += mainwindow.ui
 

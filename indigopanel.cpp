@@ -3,6 +3,7 @@
 #include "qapplication.h"
 #include <QDrag>
 #include <indigogroupbox.h>
+#include <indigoexpandergroup.h>
 
 /*
  * TODO:
@@ -48,8 +49,8 @@ IndigoPanel::IndigoPanel(QWidget *parent) :
 
 
     // Add dummy content
-    IndigoGroupBox *group = new IndigoGroupBox();
-    IndigoGroupBox *group2 = new IndigoGroupBox();
+    IndigoExpanderGroup *group = new IndigoExpanderGroup();
+    IndigoExpanderGroup *group2 = new IndigoExpanderGroup();
     contentArea->addWidget(group);
     contentArea->addWidget(group2);
 
