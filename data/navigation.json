@@ -36,6 +36,14 @@
                     "name":"save-as",
                     "label":"&Save As",
                     "icon": "save.png"
+                },
+                {
+                    "type":"divider"
+                },
+                {
+                    "name":"quit",
+                    "label":"&Quit",
+                    "icon": "quit.png"
                 }
             ]
         },

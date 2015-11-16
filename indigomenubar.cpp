@@ -88,13 +88,6 @@ QMenu* IndigoMenuBar::getMenuItemFromJson(const QJsonObject json)
     QJsonArray children = json["children"].toArray();
     for (int i = 0; i < children.size(); i++) {
         QJsonObject child = children[i].toObject();
-        if (json.contains("type")) {
-            QString type = json["type"].toString();
-            if (type == "divider") {
-                menuItem->addSeparator();
-                continue;
-            }
-        }
         if (child.contains("children")) {
             menuItem->addMenu(this->getMenuItemFromJson(child));
         } else {
@@ -107,6 +100,12 @@ QMenu* IndigoMenuBar::getMenuItemFromJson(const QJsonObject json)
 QAction* IndigoMenuBar::getActionFromJson(const QJsonObject json, QObject* parent)
 {
     // TODO: make sure that label exists
+    if (json.contains("type")) {
+        QString type = json["type"].toString();
+        if (type == "divider") {
+            return qobject_cast<QMenu*>(parent)->addSeparator();
+        }
+    }
     QAction *action = new QAction(parent);
     qDebug() << "action" << json["label"].toString() << endl;
     action->setText(json["label"].toString());
