@@ -1,0 +1,48 @@
+{
+    "name": "menubar 1.5.0",
+    "menubar": [
+        {
+            "name":"file",
+            "label":"&File",
+            "children": [
+                {
+                    "name": "new",
+                    "label": "&New",
+                    "icon": "new.png"
+                },
+                {
+                    "name":"open",
+                    "label":"&Open",
+                    "icon": "open.png"
+                },
+                {
+                    "name":"open-recent",
+                    "label":"Open &Recent"
+                },
+                {
+                    "type":"divider"
+                },
+                {
+                    "name":"close",
+                    "label":"&Close",
+                    "icon": "close.png"
+                },
+                {
+                    "name":"save",
+                    "label":"&Save",
+                    "icon": "save.png"
+                },
+                {
+                    "name":"save-as",
+                    "label":"&Save As",
+                    "icon": "save.png"
+                }
+            ]
+        },
+        {
+            "name":"edit",
+            "label":"&Edit"
+        }
+    ]
+}
+

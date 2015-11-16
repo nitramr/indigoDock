@@ -10,6 +10,7 @@
 
 IndigoMenuBar::IndigoMenuBar()
 {
+    /*
     QMenu *menuWindow = this->addMenu(tr("&Window"));
     QAction *addNew = new QAction(menuWindow);
     addNew->setText(tr("Add new"));
@@ -18,6 +19,7 @@ IndigoMenuBar::IndigoMenuBar()
     quit->setText(tr("&Quit"));
     menuWindow->addAction(quit);
     connect(quit, SIGNAL(triggered()), this, SLOT(close()));
+    */
     // connect(addNew, SIGNAL(triggered()), this, SLOT(onAddNew()));
 
     loadSettings();
@@ -45,14 +47,6 @@ bool IndigoMenuBar::loadSettings()
         qDebug() << "error at" << QTextCodec::codecForMib(106)->toUnicode(data).mid(jerror.offset - 1, 20) << endl;
         return false;
     }
-    /*
-    QJsonDocument jdoc= QJsonDocument::fromJson(file.readAll(),&jerror);
-
-    if(jerror.error() != QJsonParserError::NoError)
-        return false;
-    QJsonObject obj = jdoc.object();
-    */
-
     read(loadDoc.object());
     return true;
 }
@@ -61,22 +55,60 @@ void IndigoMenuBar::read(const QJsonObject &json)
 {
     qDebug() << "json" << json << endl;
     qDebug() << "name" << json["name"].toString();
-    // QList<Level> mLevels;
-    // QJsonObject player = json["player"].toObject();
-    // mPlayer.read(player);
+    // TODO: check that menubar exists
+    this->fill(json["menubar"].toArray());
+}
 
-    /* read()
-    mName = json["name"].toString();
-    mLevel = json["level"].toDouble();
-    */
-
-/*
-    QJsonArray levelArray = json["levels"].toArray();
-    for (int levelIndex = 0; levelIndex < levelArray.size(); ++levelIndex) {
-        QJsonObject levelObject = levelArray[levelIndex].toObject();
-        Level level;
-        level.read(levelObject);
-        mLevels.append(level);
+void IndigoMenuBar::fill(const QJsonArray menuMainEntries)
+{
+    for (int i = 0; i < menuMainEntries.size(); i++) {
+        QJsonObject child = menuMainEntries[i].toObject();
+        if (child.contains("children")) {
+            this->addMenu(this->getMenuItemFromJson(child));
+        } else {
+            this->addAction(this->getActionFromJson(child, this));
+        }
     }
-*/
+    /*
+    QMenu *menuWindow = this->addMenu(tr("&Window"));
+    QAction *addNew = new QAction(menuWindow);
+    addNew->setText(tr("Add new"));
+    menuWindow->addAction(addNew);
+    QAction *quit = new QAction(menuWindow);
+    quit->setText(tr("&Quit"));
+    menuWindow->addAction(quit);
+    connect(quit, SIGNAL(triggered()), this, SLOT(close()));
+    */
+}
+
+QMenu* IndigoMenuBar::getMenuItemFromJson(const QJsonObject json)
+{
+    // TODO: make sure that label exists
+    QMenu *menuItem = new QMenu(json["label"].toString());
+    QJsonArray children = json["children"].toArray();
+    for (int i = 0; i < children.size(); i++) {
+        QJsonObject child = children[i].toObject();
+        if (json.contains("type")) {
+            QString type = json["type"].toString();
+            if (type == "divider") {
+                menuItem->addSeparator();
+                continue;
+            }
+        }
+        if (child.contains("children")) {
+            menuItem->addMenu(this->getMenuItemFromJson(child));
+        } else {
+            menuItem->addAction(this->getActionFromJson(child, menuItem));
+        }
+    }
+    return menuItem;
+}
+
+QAction* IndigoMenuBar::getActionFromJson(const QJsonObject json, QObject* parent)
+{
+    // TODO: make sure that label exists
+    QAction *action = new QAction(parent);
+    qDebug() << "action" << json["label"].toString() << endl;
+    action->setText(json["label"].toString());
+    return action;
 }

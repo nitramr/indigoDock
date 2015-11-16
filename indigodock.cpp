@@ -26,9 +26,12 @@ void IndigoDock::init(){
     QWidget * widget = new QWidget;
 
     // Demo Tabs
-    addTab("Properties", QIcon(":/icons/icons/placeholder.png"),widget);
-    addTab("Page", QIcon(":/icons/icons/placeholder.png"),widget);
-    addTab("Text", QIcon(":/icons/icons/placeholder.png"),widget);
+    QIcon theIcon = QIcon(":/icons/placeholder.png");
+    qDebug() << "is null" << theIcon.isNull();
+    qDebug() << "exists" << QFile(":/icons/placeholder.png").exists();
+    addTab("Properties", QIcon(":/icons/placeholder.png"),widget);
+    addTab("Page", QIcon(":/icons/placeholder.png"),widget);
+    addTab("Text", QIcon(":/icons/placeholder.png"),widget);
 
 }
 
