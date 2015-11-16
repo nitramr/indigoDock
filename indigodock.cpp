@@ -38,3 +38,5 @@ void IndigoDock::addTab(const QString &title, QIcon icon, QWidget *widget){
     m_indigoTab->addTab(dropzone, icon, "");
 
 }
+
+

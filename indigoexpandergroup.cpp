@@ -117,7 +117,7 @@ IndigoExpanderGroup::IndigoExpanderGroup(QWidget *parent) : QWidget(parent)
     QLabel * lbl = new QLabel("Place Widgets here!");
     lbl->setFont(font);
 
-    addWidget(lbl);
+   // addWidget(lbl);
     setCaption("Label");
 
 

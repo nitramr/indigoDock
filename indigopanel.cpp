@@ -4,6 +4,7 @@
 #include <QDrag>
 #include <QStyle>
 #include <indigoexpandergroup.h> // tmp include for demo elements
+#include "colorswatch.h"
 
 IndigoPanelHandle::IndigoPanelHandle(QWidget *parent) :
     QWidget(parent)
@@ -97,6 +98,8 @@ IndigoPanel::IndigoPanel(QWidget *parent) :
     // Add dummy content
     IndigoExpanderGroup *group = new IndigoExpanderGroup();
     IndigoExpanderGroup *group2 = new IndigoExpanderGroup();
+    ColorSwatch * colSwatch = new ColorSwatch();
+    group->addWidget(colSwatch);
     m_contentArea->addWidget(group);
     m_contentArea->addWidget(group2);
 

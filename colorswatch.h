@@ -7,17 +7,17 @@
 
 class ColorSwatch : public QWidget
 {
-     Q_OBJECT
-     Q_ENUMS(ColorMode)
+    Q_OBJECT
 public:
     ColorSwatch(QWidget *parent = 0);
-    enum ColorMode{ Stroke, Fill };
 
-    ColorMode getColorMode();
-    void setColorMode(ColorMode colormode);
+    void setContourBrush(QBrush brush);
+    void setFillBrush(QBrush brush);
 
-private:
-    ColorMode colormode;
+private:  
+    void paintEvent(QPaintEvent*);
+    QBrush br_contour;
+    QBrush br_fill;
 
 signals:
 
