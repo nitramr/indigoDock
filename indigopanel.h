@@ -6,7 +6,7 @@
 #include <QFrame>
 #include <QLayout>
 #include <QLabel>
-#include <QPushButton>
+#include <QToolButton>
 
 class IndigoPanelHandle : public QWidget
 {
@@ -20,7 +20,8 @@ protected:
 
 private:
     QLabel * m_lblTitle;
-    QPushButton * m_btnClose;
+    QToolButton * m_btnClose;
+    QToolButton * m_btnFloat;
     QPalette palette;
 
 signals:
@@ -60,6 +61,7 @@ signals:
 
 public slots:
     void hide();
+    void dock();
 };
 
 #endif // INDIGOPANEL_H

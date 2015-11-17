@@ -16,6 +16,9 @@ public:
     QWidget * m_activeWidget;
 
 protected:
+    QIcon rotateIcon(const QIcon &icon);
+private:
+    int iconScale;
 
 signals:
 

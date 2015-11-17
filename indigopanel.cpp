@@ -5,6 +5,7 @@
 #include <QStyle>
 #include <indigoexpandergroup.h> // tmp include for demo elements
 #include "colorswatch.h"
+#include "QStyleOptionDockWidget"
 
 IndigoPanelHandle::IndigoPanelHandle(QWidget *parent) :
     QWidget(parent)
@@ -14,8 +15,20 @@ IndigoPanelHandle::IndigoPanelHandle(QWidget *parent) :
 
     // Objects
     m_lblTitle = new QLabel("");
-    m_btnClose = new QPushButton(this);
-    m_btnClose->setFixedSize(16,16);
+
+    m_btnClose = new QToolButton(this);
+    m_btnClose->setFixedSize(16,18);
+    m_btnClose->setAutoRaise(true);
+    m_btnClose->setFocusPolicy(Qt::NoFocus);
+
+   /* m_btnFloat = new QToolButton(this);
+    m_btnFloat->setFixedSize(16,18);
+    m_btnFloat->setAutoRaise(true);
+    m_btnFloat->setFocusPolicy(Qt::NoFocus);*/
+
+    QStyleOptionDockWidget opt;
+    m_btnClose->setIcon(style()->standardIcon(QStyle::SP_TitleBarCloseButton, &opt, this));
+   // m_btnFloat->setIcon(style()->standardIcon(QStyle::SP_TitleBarNormalButton, &opt, this));
 
     // Styles
     m_lblTitle->setStyleSheet("QLabel {"
@@ -24,7 +37,7 @@ IndigoPanelHandle::IndigoPanelHandle(QWidget *parent) :
                         "}"
                        );
 
-    m_btnClose->setIcon(style()->standardIcon(QStyle::SP_TitleBarCloseButton));
+
 
 
 
@@ -35,10 +48,12 @@ IndigoPanelHandle::IndigoPanelHandle(QWidget *parent) :
 
     mainLayout->addWidget(m_lblTitle);
     mainLayout->addStretch(1);
+   // mainLayout->addWidget(m_btnFloat);
     mainLayout->addWidget(m_btnClose);
 
     // Actions
     connect(m_btnClose, SIGNAL (clicked()), parent, SLOT (hide()));
+   // connect(m_btnFloat, SIGNAL (clicked()), parent, SLOT (dock()));
 
 
 }
@@ -197,6 +212,14 @@ void IndigoPanel::hide(){
     // TODO: set entry in WatchList to show this again
 
      QFrame::hide();
+}
+
+void IndigoPanel::dock(){
+     qDebug() << "Pan dock" << endl;
+
+    // TODO: set entry in WatchList to show this again
+
+
 }
 
 void IndigoPanel::setLastParent(QWidget *dropzone){

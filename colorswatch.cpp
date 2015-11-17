@@ -10,7 +10,7 @@
 ColorSwatch::ColorSwatch(QWidget *parent)
     : QWidget(parent)
 {
-    setFixedHeight(40);
+    setFixedHeight(44);
     setFixedWidth(70);
 
     setAutoFillBackground(true);
@@ -39,8 +39,8 @@ void ColorSwatch::paintEvent(QPaintEvent*) {
     QPainter painter(this);
 
     int conSize = this->height();
-    int conWidth = 6;
-    int spacer = 2;
+    int conWidth = 9;
+    int spacer = 1;
     int valveWidth = 6;
     int valveHeight = 4;
 
