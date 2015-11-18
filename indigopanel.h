@@ -37,8 +37,12 @@ class IndigoPanel : public QFrame
 
 public:
     IndigoPanel(QWidget* parent = 0);
-    IndigoPanelHandle * m_handle;
+
+
     void setBackgroundColor(const QColor &bgColor);
+    void setCaption(const QString &title);
+    void setIcon(QIcon icon);
+    QIcon Icon();
     void addWidget(QWidget *content);
     void setLastParent(QWidget * dropzone);
     QWidget * lastParent();
@@ -49,12 +53,13 @@ protected:
 private:
     QPalette palette;
     QVBoxLayout *m_contentArea;
+    IndigoPanelHandle * m_handle;
     QPoint oldPos;
     int relative_x;
     int relative_y;
     QWidget *m_lastParentWidget;
     QWidget *m_mainWindow;
-
+    QIcon m_icon;
 signals:
     void mouseReleased();
     void mouseMove();

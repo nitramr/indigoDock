@@ -11,7 +11,7 @@ class IndigoDock : public QWidget
 public:
     explicit IndigoDock(QWidget *parent = 0);
     IndigoTabbar *m_indigoTab;
-    void addTab(const QString &title, QIcon icon, QWidget *widget);
+    void addIndigoPanel(IndigoPanel *panel, int tabIndex = -1);
 
 private:
     void init();

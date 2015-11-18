@@ -86,6 +86,9 @@ IndigoPanel::IndigoPanel(QWidget *parent) :
     m_handle->installEventFilter(this);
     m_handle->setFixedHeight(30);
 
+    // Icon
+    //m_icon = new QIcon();
+
     // Content Widget
     m_contentArea = new QVBoxLayout;
 
@@ -201,6 +204,19 @@ void IndigoPanel::setBackgroundColor(const QColor &bgColor){
      palette.setColor( QPalette::Background, bgColor );
      setPalette( palette );
 }
+
+void IndigoPanel::setCaption(const QString &title){
+    m_handle->setTitle(title);
+}
+
+void IndigoPanel::setIcon(QIcon icon){
+    m_icon = icon;
+}
+
+QIcon IndigoPanel::Icon(){
+    return m_icon;
+}
+
 
 void IndigoPanel::addWidget(QWidget *content){
      m_contentArea->addWidget(content);

@@ -67,10 +67,60 @@ void IndigoTabbar::addTab ( QWidget * child, const QIcon & icon, const QString &
 }
 
 
+void IndigoTabbar::addIndigoPanel(IndigoPanel *panel, int tabIndex ){
+
+    IndigoDropZone * zone = new IndigoDropZone(0);
+    zone->addPanel(panel);
+
+    static const QIcon &icon = panel->Icon();
+
+    // new tab
+    if (tabIndex == -1){
+
+        this->connect(panel, SIGNAL(mouseReleased()), zone, SLOT(dropPanel()));
+        this->connect(panel, SIGNAL(mouseMove()), zone, SLOT(hoverZone()));
+
+
+        addTab ( zone, icon, "" );
+
+
+    // exsisting tab
+    }else{
+
+        if(tabIndex >= 0 && tabIndex <= this->count() - 1){
+
+            QWidget * widget = this->widget(tabIndex);
+
+            IndigoDropZone *zone = qobject_cast<IndigoDropZone*>(widget);
+
+            if(!zone) return;
+
+            zone->addPanel(panel);
+
+            this->connect(panel, SIGNAL(mouseReleased()), zone, SLOT(dropPanel()));
+            this->connect(panel, SIGNAL(mouseMove()), zone, SLOT(hoverZone()));
+
+           // m_activeWidget = this->widget(currentIndex()); // not need for exsisting tabs
+        }
+
+    }
+
+
+
+}
+
+
 void IndigoTabbar::setActiveTab(int index){
     m_activeWidget = this->widget(index);
     //qDebug() << "TabIndexChange" << m_activeWidget << " index: " << index << endl;
 }
+
+
+/******************
+ *
+ * Helper
+ *
+ * ***************/
 
 QIcon IndigoTabbar::rotateIcon(const QIcon &icon){
 
