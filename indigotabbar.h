@@ -15,10 +15,12 @@ public:
     void addTab ( QWidget * child, const QString & label );
     void addTab ( QWidget * child, const QIcon & icon, const QString & label );
     void addIndigoPanel(IndigoPanel *panel, int tabIndex = -1 );
+    void setTabPosition(TabPosition tabPos);
     QWidget * m_activeWidget;
 
 protected:
-    QIcon rotateIcon(const QIcon &icon);
+    QIcon rotateIcon(const QIcon &icon, TabPosition tabPos = QTabWidget::North);
+
 private:
     int iconScale;
 

@@ -21,15 +21,38 @@ void IndigoDock::init(){
 
     layout->addWidget(m_indigoTab);
 
+
+
 }
 
 void IndigoDock::addIndigoPanel(IndigoPanel *panel, int tabIndex){
 
     m_indigoTab->addIndigoPanel(panel, tabIndex );
 
-    QWidget * widget = new QWidget();
-    m_indigoTab->addTab(widget,QIcon(":/icons/icons/placeholder.png") ,"");
 
+    // Add some invalid content to test exceptions
+    QWidget * widget = new QWidget();
+    m_indigoTab->addTab(widget,QIcon(":/icons/icons/open.png") ,"");
+
+
+}
+
+void IndigoDock::updateTabWidget(Qt::DockWidgetArea area){
+
+        switch(area){
+        case Qt::LeftDockWidgetArea:{
+            m_indigoTab->setTabPosition(IndigoTabbar::West);
+            break;
+        }
+        case Qt::RightDockWidgetArea:{
+             m_indigoTab->setTabPosition(IndigoTabbar::East);
+            break;
+        }
+        default:
+
+            break;
+
+        }
 
 }
 

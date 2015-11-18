@@ -92,7 +92,6 @@ void IndigoTabbar::addIndigoPanel(IndigoPanel *panel, int tabIndex ){
             QWidget * widget = this->widget(tabIndex);
 
             IndigoDropZone *zone = qobject_cast<IndigoDropZone*>(widget);
-
             if(!zone) return;
 
             zone->addPanel(panel);
@@ -116,13 +115,33 @@ void IndigoTabbar::setActiveTab(int index){
 }
 
 
+void IndigoTabbar::setTabPosition(TabPosition tabPos){
+
+
+    // Rotate icons in right direction
+    for(int i=0;i<count();i++)
+    {
+        QIcon icon = this->tabBar()->tabIcon(i);
+
+        icon = rotateIcon(icon, tabPos);
+
+        this->tabBar()->setTabIcon(i, icon);
+
+    }
+
+    // set new tab position
+    QTabWidget::setTabPosition(tabPos);
+
+}
+
+
 /******************
  *
  * Helper
  *
  * ***************/
 
-QIcon IndigoTabbar::rotateIcon(const QIcon &icon){
+QIcon IndigoTabbar::rotateIcon(const QIcon &icon, TabPosition tabPos){
 
     QSize sz;
 
@@ -135,11 +154,36 @@ QIcon IndigoTabbar::rotateIcon(const QIcon &icon){
 
     switch(this->tabPosition()){
     case QTabWidget::East:{
-        trans.rotate(-90);
+        switch(tabPos){
+            case QTabWidget::West:{
+                trans.rotate(180);
+                break;
+            }
+            case QTabWidget::North:{
+                trans.rotate(-90);
+                break;
+            }
+            default:
+                break;
+        }
+
+
         break;
     }
     case QTabWidget::West:{
-        trans.rotate(+90);
+        switch(tabPos){
+
+            case QTabWidget::East:{
+                trans.rotate(180);
+                break;
+            }
+            case QTabWidget::North:{
+                trans.rotate(+90);
+                break;
+            }
+            default:
+                break;
+        }
         break;
     }
     default:

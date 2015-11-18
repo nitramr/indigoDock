@@ -44,6 +44,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // TabWidget
     IndigoDock *indigoDock_r = new IndigoDock;
 
+
     // Container
     m_mainLayout_r = new QGridLayout();
     m_mainLayout_r->setMargin(0);
@@ -53,6 +54,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // set Layouted Widget to DockPanel
     m_dockright->setWidget(containerRight);
+    connect(m_dockright, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), indigoDock_r, SLOT(updateTabWidget(Qt::DockWidgetArea)));
 
 
 
@@ -69,6 +71,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // set Layouted Widget to DockPanel
     m_dockleft->setWidget(containerLeft);
+    connect(m_dockleft, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), indigoDock_l, SLOT(updateTabWidget(Qt::DockWidgetArea)));
 
 
 
