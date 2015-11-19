@@ -3,6 +3,7 @@
 #include <QtGui>
 #include "indigopanel.h"
 #include "indigodropzone.h"
+#include "indigomenubar.h"
 #include "indigodock.h"
 
 
@@ -75,6 +76,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
 
+    IndigoMenuBar *menuBar = new IndigoMenuBar();
+    setMenuBar(menuBar);
+
+    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q), this, SLOT(close()));
+ 
     // right dock
     IndigoPanel *panel = new IndigoPanel(this);
     panel->setCaption("Properties");
