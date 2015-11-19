@@ -5,6 +5,7 @@
 #include <QTabWidget>
 #include <QIcon>
 #include "indigodropzone.h"
+#include "indigopanel.h"
 
 class IndigoTabbar : public QTabWidget
 {
@@ -13,15 +14,20 @@ public:
     IndigoTabbar(QWidget* parent = 0);
     void addTab ( QWidget * child, const QString & label );
     void addTab ( QWidget * child, const QIcon & icon, const QString & label );
-    QWidget * activeWidget;
+    void addIndigoPanel(IndigoPanel *panel, int tabIndex = -1 );
+    void setTabPosition(TabPosition tabPos);
+    QWidget * m_activeWidget;
 
 protected:
-    bool eventFilter(QObject *o, QEvent *e);
+    QIcon rotateIcon(const QIcon &icon, TabPosition tabPos = QTabWidget::North);
+
+private:
+    int iconScale;
 
 signals:
 
 public slots:
-
+    void setActiveTab(int);
 };
 
 #endif // INDIGOTABBAR_H

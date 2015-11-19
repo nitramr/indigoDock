@@ -10,8 +10,8 @@ class IndigoDock : public QWidget
     Q_OBJECT
 public:
     explicit IndigoDock(QWidget *parent = 0);
-    IndigoTabbar *indigoTab;
-    void addTab(const QString &title, QIcon icon, QWidget *widget);
+    IndigoTabbar *m_indigoTab;
+    void addIndigoPanel(IndigoPanel *panel, int tabIndex = -1);
 
 private:
     void init();
@@ -19,6 +19,7 @@ private:
 signals:
 
 public slots:
+    void updateTabWidget(Qt::DockWidgetArea area);
 };
 
 #endif // INDIGODOCK_H

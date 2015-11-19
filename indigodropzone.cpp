@@ -11,44 +11,34 @@ IndigoDropZone::IndigoDropZone(QWidget *parent) :
 {
 
     setMouseTracking(true);
+    setAutoFillBackground( true );
 
     colorNormal = QColor( 153, 153, 153 );
     colorHighlight = QColor( 0, 179, 255 );
-    colorHighlightAlpha = QColor( 140, 155, 161); // Linux don't support alpha channel
+    transparency = 0.1; // 10%
+    colorHighlightAlpha = blendColor(colorNormal,colorHighlight, transparency);
 
 
     palette.setColor( QPalette::Background, colorNormal );
     setPalette( palette );
-    setAutoFillBackground( true );
+
 
     padding = 6;
     borderHighlight = 3;
     isHighlight = false;
 
-    splitter = new QSplitter();
-    splitter->setHandleWidth(padding);
-    splitter->setOrientation(Qt::Vertical);
-    splitter->setStretchFactor(1, 1);
-    splitter->move(this->pos());
+    m_splitter = new QSplitter();
+    m_splitter->setHandleWidth(padding);
+    m_splitter->setOrientation(Qt::Vertical);
+    m_splitter->setStretchFactor(1, 1);
+    m_splitter->move(this->pos());
 
-    layout = new QVBoxLayout;
-    layout->setMargin(padding);
-    setLayout(layout);
+    m_layout = new QVBoxLayout;
+    m_layout->setMargin(padding);
+    setLayout(m_layout);
 
+    m_placeholder = new QWidget(this);
 
-}
-
-
-void IndigoDropZone::createPanel(const QString &title, QWidget *widget)
-{
-    IndigoPanel * pan = new IndigoPanel(this);
-    this->connect(pan, SIGNAL(mouseReleased()), this, SLOT(dropPanel()));
-    this->connect(pan, SIGNAL(mouseMove()), this, SLOT(hoverZone()));
-    pan->handle->setTitle(title);
-    pan->addWidget(widget);
-    //pan->setBackgroundColor(QColor( 204, 204, 204 ));
-    //pan->handle->setBackgroundColor(QColor( 204, 204, 204 ));
-    addPanel(pan);
 
 }
 
@@ -58,21 +48,26 @@ void IndigoDropZone::hoverZone(){
 
     if (this->rect().contains(cursor) ) {
 
+        // TODO: Add Global Tabwidget list; use for each loop to search in every tabbwidget for active docks;
+
         if(IndigoTabbar *tab = qobject_cast<IndigoTabbar*>(parent()->parent())) {
 
-            IndigoDropZone *zone = qobject_cast<IndigoDropZone*>(tab->activeWidget);
+            if(IndigoDropZone *zone = qobject_cast<IndigoDropZone*>(tab->m_activeWidget)){
+                zone->isHighlight = true;
+                zone->addPlaceholder();
+                zone->update();
+            }
 
-            zone->isHighlight = true;
-            zone->update();
         }
 
     }else{
         if(IndigoTabbar *tab = qobject_cast<IndigoTabbar*>(parent()->parent())) {
 
-            IndigoDropZone *zone = qobject_cast<IndigoDropZone*>(tab->activeWidget);
-
-            zone->isHighlight = false;
-            zone->update();
+            if(IndigoDropZone *zone = qobject_cast<IndigoDropZone*>(tab->m_activeWidget)){
+                zone->isHighlight = false;
+                zone->addPlaceholder();
+                zone->update();
+            }
         }
     }
 
@@ -87,16 +82,20 @@ void IndigoDropZone::dropPanel()
 
         if(IndigoTabbar *tab = qobject_cast<IndigoTabbar*>(parent()->parent())) {
 
-            IndigoDropZone *zone = qobject_cast<IndigoDropZone*>(tab->activeWidget);
+            IndigoDropZone *zone = qobject_cast<IndigoDropZone*>(tab->m_activeWidget);
+            if (!zone) return;
 
             IndigoPanel *pan = qobject_cast<IndigoPanel *>(sender());
+            if (!pan) return;
+
             pan->setParent(zone);
             pan->setLastParent(zone);
 
             zone->addPanel(pan);
 
             zone->isHighlight = false;
-            zone->update();//zone->setBackgroundColor(colorNormal); // defocus
+            zone->removePlaceholder();
+            zone->update(); // defocus
 
 
         }else{
@@ -113,30 +112,58 @@ void IndigoDropZone::dropPanel()
  */
 void IndigoDropZone::addPanel (IndigoPanel * panel){
 
-    splitter->addWidget(panel);
-    layout->addWidget(splitter);
+    m_splitter->addWidget(panel);
+    m_layout->addWidget(m_splitter);
 
-    splitter->show();
+    m_splitter->show();
     panel->show();
 
 }
 
-void IndigoDropZone::setBackgroundColor(const QColor &bgColor){
-     palette.setColor( QPalette::Background, bgColor );
-     setPalette( palette );
+void IndigoDropZone::addPlaceholder (){
+
+    m_splitter->addWidget(m_placeholder);
+    m_layout->addWidget(m_splitter);
+
+    m_splitter->show();
+
 }
 
+void IndigoDropZone::removePlaceholder (){
+
+    m_placeholder->setParent(this);
+
+}
+
+
+void IndigoDropZone::setBackgroundColor(const QColor &bgColor){
+
+    colorNormal = bgColor;
+    colorHighlightAlpha = blendColor(colorNormal,colorHighlight, transparency);
+}
+
+
 void IndigoDropZone::paintEvent(QPaintEvent*) {
+
     QPainter painter(this);
 
+    // Draw highlight
     if(isHighlight){
 
-        int width = size().width() - (padding*2);
-        int height = size().height() - (padding*2);
+        QPoint pRect = m_placeholder->mapToParent(QPoint(padding,padding));
 
-        painter.fillRect(padding, padding, width, height, colorHighlight);
-        painter.fillRect(padding + borderHighlight, padding + borderHighlight, width -(borderHighlight*2), height -(borderHighlight*2),colorHighlightAlpha);
+        int width = m_placeholder->width();
+        int height = m_placeholder->height();
 
+        int x = pRect.x();
+        int y = pRect.y();
+
+        int offset = borderHighlight;
+
+        painter.fillRect(x, y, width, height, colorHighlight);
+        painter.fillRect(x + offset, y + offset, width -(offset*2), height -(offset*2),colorHighlightAlpha);
+
+    // Reset highlight (normal view)
     }else{
 
         int width = size().width();
@@ -147,4 +174,24 @@ void IndigoDropZone::paintEvent(QPaintEvent*) {
 
 }
 
+
+/***********************+
+ *
+ * Helper
+ *
+ * *********************/
+
+QColor IndigoDropZone::blendColor(QColor color1, QColor color2, double ratio){
+
+    if(ratio < 0 && ratio > 1){
+        ratio = 0;
+    }
+
+   return QColor(
+    color1.red()* (1-ratio) + color2.red()*ratio,
+    color1.green()* (1-ratio) + color2.green()*ratio,
+    color1.blue()* (1-ratio) + color2.blue()*ratio,
+    255);
+
+}
 
