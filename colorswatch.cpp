@@ -38,11 +38,11 @@ void ColorSwatch::paintEvent(QPaintEvent*) {
 
     QPainter painter(this);
 
-    int conSize = this->height();
-    int conWidth = 9;
-    int spacer = 1;
-    int valveWidth = 6;
-    int valveHeight = 4;
+    int conSize = this->height(); // square width and height without valves
+    int conWidth = 9; // countour thickness
+    int spacer = 1; // spacer between countour and fill
+    int valveWidth = 6; // valve width
+    int valveHeight = 4; // valve height
 
     // Contour Points
     int conX1 = 0;
@@ -142,8 +142,10 @@ void ColorSwatch::paintEvent(QPaintEvent*) {
 
 void ColorSwatch::setContourBrush(QBrush brush){
     br_contour = brush;
+    update();
 }
 
 void ColorSwatch::setFillBrush(QBrush brush){
     br_fill = brush;
+    update();
 }

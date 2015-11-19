@@ -55,7 +55,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // set Layouted Widget to DockPanel
     m_dockright->setWidget(containerRight);
-    connect(m_dockright, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), indigoDock_r, SLOT(updateTabWidget(Qt::DockWidgetArea)));
+    connect(m_dockright, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), indigoDock_r, SLOT(updateTabPosition(Qt::DockWidgetArea)));
 
 
 
@@ -72,7 +72,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // set Layouted Widget to DockPanel
     m_dockleft->setWidget(containerLeft);
-    connect(m_dockleft, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), indigoDock_l, SLOT(updateTabWidget(Qt::DockWidgetArea)));
+    connect(m_dockleft, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), indigoDock_l, SLOT(updateTabPosition(Qt::DockWidgetArea)));
 
 
 

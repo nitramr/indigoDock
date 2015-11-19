@@ -1,5 +1,12 @@
 #include "indigodock.h"
 
+/***********************
+ *
+ * TODO: Install List for sibling IndigoDocks (communication between multiple dock widgets)
+ *
+ * *******************/
+
+
 IndigoDock::IndigoDock(QWidget *parent) : QWidget(parent)
 {
     init();
@@ -31,13 +38,13 @@ void IndigoDock::addIndigoPanel(IndigoPanel *panel, int tabIndex){
 
 
     // Add some invalid content to test exceptions
-    QWidget * widget = new QWidget();
-    m_indigoTab->addTab(widget,QIcon(":/icons/icons/open.png") ,"");
+    //QWidget * widget = new QWidget();
+   // m_indigoTab->addTab(widget,QIcon(":/icons/icons/open.png") ,"");
 
 
 }
 
-void IndigoDock::updateTabWidget(Qt::DockWidgetArea area){
+void IndigoDock::updateTabPosition(Qt::DockWidgetArea area){
 
         switch(area){
         case Qt::LeftDockWidgetArea:{

@@ -37,7 +37,7 @@ class IndigoExpanderGroup : public QWidget
 public:
     explicit IndigoExpanderGroup(QWidget *parent = 0);
     void addWidget(QWidget * widget);
-    void setCaption(const QString &text);
+    void setCaption(const QString text);
 
 private:
     QPalette palette;

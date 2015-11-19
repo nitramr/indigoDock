@@ -16,6 +16,7 @@ IndigoTabbar::IndigoTabbar(QWidget *parent) :
 
    // QPainter painter(this);
     //style()->drawControl(QStyle::CT_TabBarTab, QStyleOptionTab, painter,this->tabBar());
+
     QString styleSheet("QTabWidget::pane {"
                             "border: 0px solid transparent;"
                         "}"
@@ -44,14 +45,16 @@ IndigoTabbar::IndigoTabbar(QWidget *parent) :
 
 }
 
+
 void IndigoTabbar::addTab( QWidget * child, const QString & label ){
 
       QTabWidget::addTab(child, label);
 
-          m_activeWidget = this->widget(currentIndex());
+      m_activeWidget = this->widget(currentIndex());
 
 
 }
+
 
 void IndigoTabbar::addTab ( QWidget * child, const QIcon & icon, const QString & label ){
 
@@ -163,6 +166,10 @@ QIcon IndigoTabbar::rotateIcon(const QIcon &icon, TabPosition tabPos){
                 trans.rotate(-90);
                 break;
             }
+            case QTabWidget::South:{
+                trans.rotate(+90);
+                break;
+            }
             default:
                 break;
         }
@@ -179,6 +186,10 @@ QIcon IndigoTabbar::rotateIcon(const QIcon &icon, TabPosition tabPos){
             }
             case QTabWidget::North:{
                 trans.rotate(+90);
+                break;
+            }
+            case QTabWidget::South:{
+                trans.rotate(-90);
                 break;
             }
             default:

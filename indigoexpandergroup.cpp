@@ -135,7 +135,7 @@ void IndigoExpanderGroup::addWidget(QWidget * widget){
 }
 
 
-void IndigoExpanderGroup::setCaption(const QString &text){
+void IndigoExpanderGroup::setCaption(const QString text){
 
     m_handle->setText(text);
 }

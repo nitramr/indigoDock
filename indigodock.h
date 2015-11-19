@@ -19,7 +19,7 @@ private:
 signals:
 
 public slots:
-    void updateTabWidget(Qt::DockWidgetArea area);
+    void updateTabPosition(Qt::DockWidgetArea area);
 };
 
 #endif // INDIGODOCK_H

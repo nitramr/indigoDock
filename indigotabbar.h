@@ -12,11 +12,11 @@ class IndigoTabbar : public QTabWidget
     Q_OBJECT
 public:
     IndigoTabbar(QWidget* parent = 0);
-    void addTab ( QWidget * child, const QString & label );
-    void addTab ( QWidget * child, const QIcon & icon, const QString & label );
+    void addTab (QWidget * child, const QString &label );
+    void addTab ( QWidget * child, const QIcon &icon, const QString &label );
     void addIndigoPanel(IndigoPanel *panel, int tabIndex = -1 );
     void setTabPosition(TabPosition tabPos);
-    QWidget * m_activeWidget;
+    QWidget *m_activeWidget;
 
 protected:
     QIcon rotateIcon(const QIcon &icon, TabPosition tabPos = QTabWidget::North);

@@ -15,5 +15,6 @@ private:
     void fill(const QJsonArray menuMainEntries);
     QMenu* getMenuItemFromJson(const QJsonObject json);
     QAction* getActionFromJson(const QJsonObject json, QObject* parent);
+    const QString iconPath = "icons/";
 };
 #endif // INDIGOMENUBAR_H

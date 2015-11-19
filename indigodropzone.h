@@ -14,7 +14,7 @@ class IndigoDropZone : public QWidget
 public:
     IndigoDropZone(QWidget* parent = 0);
     void addPanel (IndigoPanel * panel);
-    void setBackgroundColor(const QColor &bgColor);
+    void setBackgroundColor(const QColor bgColor);
 
     bool isHighlight;
     void addPlaceholder ();

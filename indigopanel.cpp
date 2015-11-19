@@ -200,12 +200,12 @@ bool IndigoPanel::eventFilter(QObject *o, QEvent *event)
 }
 
 
-void IndigoPanel::setBackgroundColor(const QColor &bgColor){
+void IndigoPanel::setBackgroundColor(const QColor bgColor){
      palette.setColor( QPalette::Background, bgColor );
      setPalette( palette );
 }
 
-void IndigoPanel::setCaption(const QString &title){
+void IndigoPanel::setCaption(const QString title){
     m_handle->setTitle(title);
 }
 

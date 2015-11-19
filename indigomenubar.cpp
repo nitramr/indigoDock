@@ -28,6 +28,8 @@ IndigoMenuBar::IndigoMenuBar()
 
 bool IndigoMenuBar::loadSettings()
 {
+
+
     QFile loadFile(QStringLiteral("data/navigation.json"));
 
     if (!loadFile.open(QIODevice::ReadOnly)) {
@@ -107,7 +109,8 @@ QAction* IndigoMenuBar::getActionFromJson(const QJsonObject json, QObject* paren
         }
     }
     QAction *action = new QAction(parent);
-    qDebug() << "action" << json["label"].toString() << endl;
+    qDebug() << "action" << json["label"].toString() <<  iconPath + json["icon"].toString() << endl;
     action->setText(json["label"].toString());
+    action->setIcon(QIcon(iconPath + json["icon"].toString()));
     return action;
 }

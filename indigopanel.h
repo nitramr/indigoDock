@@ -39,8 +39,8 @@ public:
     IndigoPanel(QWidget* parent = 0);
 
 
-    void setBackgroundColor(const QColor &bgColor);
-    void setCaption(const QString &title);
+    void setBackgroundColor(const QColor bgColor);
+    void setCaption(const QString title);
     void setIcon(QIcon icon);
     QIcon Icon();
     void addWidget(QWidget *content);

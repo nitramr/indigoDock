@@ -65,7 +65,7 @@ void IndigoDropZone::hoverZone(){
 
             if(IndigoDropZone *zone = qobject_cast<IndigoDropZone*>(tab->m_activeWidget)){
                 zone->isHighlight = false;
-                zone->addPlaceholder();
+                zone->removePlaceholder();
                 zone->update();
             }
         }
@@ -91,10 +91,9 @@ void IndigoDropZone::dropPanel()
             pan->setParent(zone);
             pan->setLastParent(zone);
 
-            zone->addPanel(pan);
-
             zone->isHighlight = false;
             zone->removePlaceholder();
+            zone->addPanel(pan);
             zone->update(); // defocus
 
 
@@ -136,7 +135,7 @@ void IndigoDropZone::removePlaceholder (){
 }
 
 
-void IndigoDropZone::setBackgroundColor(const QColor &bgColor){
+void IndigoDropZone::setBackgroundColor(const QColor bgColor){
 
     colorNormal = bgColor;
     colorHighlightAlpha = blendColor(colorNormal,colorHighlight, transparency);
