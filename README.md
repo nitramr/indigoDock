@@ -1,4 +1,5 @@
-# indigoDock
+[![Join the chat at https://gitter.im/nitramr/indigoDock](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/nitramr/indigoDock?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+# indigoDock 
 Experimental Qt Docking extension written for Scribus1.5>= 
 
 ## Proposal Mockups
