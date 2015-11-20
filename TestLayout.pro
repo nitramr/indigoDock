@@ -13,6 +13,9 @@ greaterThan(QT_MAJOR_VERSION, 4) {
     CONFIG += designer
 }
 
+# OSX: Xcode 7.1.x doesn't support macosx10.10 sdk
+QMAKE_MAC_SDK = macosx10.11
+
 TARGET = TestLayout
 TEMPLATE = app
 
