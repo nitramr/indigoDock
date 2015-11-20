@@ -4,9 +4,9 @@ IndigoExpanderLabel::IndigoExpanderLabel(QWidget *parent) : QLabel(parent),colla
 {
     //this->setStyleSheet("QLabel{background-color:#99cdef;}");
 
-    margin_left = 3;
-    spacing = 4;
-    icon_size = 8;
+    margin_left = 3; // left margin of icon
+    spacing = 4; // space around text label
+    icon_size = 8; // icon dimensions
 
 }
 
@@ -108,19 +108,6 @@ IndigoExpanderGroup::IndigoExpanderGroup(QWidget *parent) : QWidget(parent)
     mainLayout->addStretch(1);
 
     m_widget = NULL;
-
-
-    // Add dummy content
-    QFont font;
-    font.setPointSize(8);
-
-    QLabel * lbl = new QLabel("Place Widgets here!");
-    lbl->setFont(font);
-
-   // addWidget(lbl);
-    setCaption("Label");
-
-
 
 }
 

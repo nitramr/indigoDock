@@ -7,6 +7,7 @@
 #include <QString>
 #include <QFile>
 #include <QDebug>
+#include <QGraphicsColorizeEffect>
 
 IndigoMenuBar::IndigoMenuBar()
 {
@@ -23,6 +24,7 @@ IndigoMenuBar::IndigoMenuBar()
     // connect(addNew, SIGNAL(triggered()), this, SLOT(onAddNew()));
 
     loadSettings();
+
 
 }
 
@@ -109,8 +111,34 @@ QAction* IndigoMenuBar::getActionFromJson(const QJsonObject json, QObject* paren
         }
     }
     QAction *action = new QAction(parent);
+
+    QIcon icon = QIcon(iconPath + json["icon"].toString());
+    icon = tintIcon(icon);
+
     qDebug() << "action" << json["label"].toString() <<  iconPath + json["icon"].toString() << endl;
     action->setText(json["label"].toString());
-    action->setIcon(QIcon(iconPath + json["icon"].toString()));
+    action->setIcon(icon);
     return action;
 }
+
+/******************************
+ *
+ * Helper
+ *
+ ******************************/
+
+QIcon IndigoMenuBar::tintIcon(const QIcon &icon){
+
+    QSize sz;
+
+    for (int var = 0; var < icon.availableSizes().count(); ++var) {
+        if (icon.availableSizes().at(var).width() > sz.width())
+        sz = icon.availableSizes().at(var);
+    }
+
+    QImage image = icon.pixmap(sz).toImage();
+    image.invertPixels();
+
+    return QIcon(QPixmap::fromImage(image));
+}
+

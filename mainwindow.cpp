@@ -5,7 +5,8 @@
 #include "indigodropzone.h"
 #include "indigomenubar.h"
 #include "indigodock.h"
-
+#include "indigoexpandergroup.h"
+#include "colorswatch.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -14,6 +15,12 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     setMouseTracking(true);
+
+    IndigoMenuBar *menuBar = new IndigoMenuBar();
+    setMenuBar(menuBar);
+
+    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q), this, SLOT(close()));
+
 
     /*******************
      *
@@ -76,11 +83,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
 
-    IndigoMenuBar *menuBar = new IndigoMenuBar();
-    setMenuBar(menuBar);
-
-    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q), this, SLOT(close()));
- 
     // right dock
     IndigoPanel *panel = new IndigoPanel(this);
     panel->setCaption("Properties");
@@ -103,6 +105,20 @@ MainWindow::MainWindow(QWidget *parent) :
     panel4->setCaption("Text");
     panel4->setIcon(QIcon(":/icons/icons/placeholder.png"));
     indigoDock_l->addIndigoPanel(panel4);
+
+
+
+
+
+    // Add dummy content
+    IndigoExpanderGroup *group = new IndigoExpanderGroup();
+    IndigoExpanderGroup *group2 = new IndigoExpanderGroup();
+    ColorSwatch * colSwatch = new ColorSwatch();
+    ColorSwatch * colSwatch2 = new ColorSwatch();
+    group->addWidget(colSwatch);
+    group2->addWidget(colSwatch2);
+    panel4->addWidget(group);
+    panel2->addWidget(group2);
 }
 
 

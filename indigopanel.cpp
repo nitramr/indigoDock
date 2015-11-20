@@ -3,8 +3,6 @@
 #include "qapplication.h"
 #include <QDrag>
 #include <QStyle>
-#include <indigoexpandergroup.h> // tmp include for demo elements
-#include "colorswatch.h"
 #include "QStyleOptionDockWidget"
 
 IndigoPanelHandle::IndigoPanelHandle(QWidget *parent) :
@@ -112,14 +110,6 @@ IndigoPanel::IndigoPanel(QWidget *parent) :
       }
     }
 
-
-    // Add dummy content
-    IndigoExpanderGroup *group = new IndigoExpanderGroup();
-    IndigoExpanderGroup *group2 = new IndigoExpanderGroup();
-    ColorSwatch * colSwatch = new ColorSwatch();
-    group->addWidget(colSwatch);
-    m_contentArea->addWidget(group);
-    m_contentArea->addWidget(group2);
 
 }
 

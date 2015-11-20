@@ -10,10 +10,31 @@
 ColorSwatch::ColorSwatch(QWidget *parent)
     : QWidget(parent)
 {
-    setFixedHeight(44);
-    setFixedWidth(70);
+
 
     setAutoFillBackground(true);
+
+
+    conWidth = 9; // countour thickness
+    spacer = 1; // spacer between countour and fill
+    valveWidth = 4; // valve width
+    valveHeight = 4; // valve height
+    btnSize = 22; // button dimensions
+
+    setMinimumHeight(btnSize*2);
+
+    setFixedHeight(44);
+    setMinimumWidth(height() + valveWidth + btnSize);
+
+    conSize = this->height(); // square width and height without valves
+
+    // Placeholder Buttons
+    btn_Contour = new QPushButton(this);
+    btn_Fill = new QPushButton(this);
+
+    // place buttons
+    placeContourButton();
+    placeFillButton();
 
     // set default brush
     br_fill = QBrush(Qt::black);
@@ -31,6 +52,7 @@ ColorSwatch::ColorSwatch(QWidget *parent)
 
     setFillBrush(QBrush(gradient));
 
+
 }
 
 
@@ -38,11 +60,7 @@ void ColorSwatch::paintEvent(QPaintEvent*) {
 
     QPainter painter(this);
 
-    int conSize = this->height(); // square width and height without valves
-    int conWidth = 9; // countour thickness
-    int spacer = 1; // spacer between countour and fill
-    int valveWidth = 6; // valve width
-    int valveHeight = 4; // valve height
+
 
     // Contour Points
     int conX1 = 0;
@@ -149,3 +167,29 @@ void ColorSwatch::setFillBrush(QBrush brush){
     br_fill = brush;
     update();
 }
+
+void ColorSwatch::setContourButton(QPushButton *btnContour){
+    btn_Contour = btnContour;
+    placeContourButton();
+}
+
+void ColorSwatch::setFillButton(QPushButton *btnFill){
+    btn_Fill = btnFill;
+    placeFillButton();
+}
+
+void ColorSwatch::placeContourButton(){
+    if (!btn_Contour) return;
+
+    btn_Contour->setFixedSize(btnSize,btnSize);
+    btn_Contour->move(conSize + valveWidth, 0);
+
+}
+
+void ColorSwatch::placeFillButton(){
+    if(!btn_Fill) return;
+
+    btn_Fill->setFixedSize(btnSize,btnSize);
+    btn_Fill->move(conSize + valveWidth, conSize - btn_Fill->height());
+}
+
