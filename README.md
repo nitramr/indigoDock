@@ -14,7 +14,7 @@ For more details read the [indigoDock google slides proposal](https://goo.gl/T4g
 ## Install
 Here is how you run it:  
 1. **Download [QtCreator](http://www.qt.io/download-open-source/) and install**  
-2. **Clone the indigoDock repository to your local machine**  
+2. **Clone the indigoDock repository to your local machine** ```git clone git://github.com/nitramr/indigoDock```
 3. **Find and click on the TestLayout.pro which should invoke QtCreator**  
 ![testlayout pro](https://cloud.githubusercontent.com/assets/4140247/10866360/21cef028-7ff9-11e5-8c4c-e0e86c682868.png)  
 4. **Build TestLayout by clicking on the green arrow OR Build > Build Project "TestLayout"**  
