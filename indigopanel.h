@@ -36,7 +36,7 @@ class IndigoPanel : public QFrame
     Q_OBJECT
 
 public:
-    IndigoPanel(QWidget* parent = 0);
+    IndigoPanel(QString name, QWidget* parent = 0);
 
 
     void setBackgroundColor(const QColor bgColor);
@@ -44,8 +44,8 @@ public:
     void setIcon(QIcon icon);
     QIcon Icon();
     void addWidget(QWidget *content);
-    void setLastParent(QWidget * dropzone);
-    QWidget * lastParent();
+    int Index();
+    void setIndex(int index);
 
 protected:   
     bool eventFilter(QObject *o, QEvent *e);
@@ -59,10 +59,14 @@ private:
     int relative_y;
     QWidget *m_lastParentWidget;
     QWidget *m_mainWindow;
-    QIcon m_icon;
+    QIcon m_icon;    
+    int m_index;
+
 signals:
     void mouseReleased();
-    void mouseMove();
+    void mouseMove(int height);
+    void isFloating(int index);
+    void isDock();
 
 public slots:
     void hide();

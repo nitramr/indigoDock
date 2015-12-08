@@ -1,12 +1,14 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QtGui>
-#include "indigopanel.h"
 #include "indigodropzone.h"
 #include "indigomenubar.h"
 #include "indigodock.h"
 #include "indigoexpandergroup.h"
+
 #include "colorswatch.h"
+#include "anglepicker.h"
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -14,9 +16,40 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+
+    // Style start
+    qApp->setStyle(QStyleFactory::create("Fusion"));
+    //"Fusion" "Windows". Depending on the platform, "WindowsXP" or "Macintosh" may be available.
+
+    // Style: https://gist.github.com/QuantumCD/6245215
+
+    QPalette darkPalette;
+    darkPalette.setColor(QPalette::Window, QColor(53,53,53));
+    darkPalette.setColor(QPalette::WindowText, Qt::white);
+    darkPalette.setColor(QPalette::Base, QColor(25,25,25));
+    darkPalette.setColor(QPalette::AlternateBase, QColor(53,53,53));
+    darkPalette.setColor(QPalette::ToolTipBase, Qt::white);
+    darkPalette.setColor(QPalette::ToolTipText, Qt::white);
+    darkPalette.setColor(QPalette::Text, Qt::white);
+    darkPalette.setColor(QPalette::Button, QColor(53,53,53));
+    darkPalette.setColor(QPalette::ButtonText, Qt::white);
+    darkPalette.setColor(QPalette::Disabled, QPalette::Text, Qt::darkGray);
+    darkPalette.setColor(QPalette::Disabled, QPalette::ButtonText, Qt::darkGray);
+    darkPalette.setColor(QPalette::BrightText, Qt::red);
+    darkPalette.setColor(QPalette::Link, QColor(42, 130, 218));
+    darkPalette.setColor(QPalette::Highlight, QColor(42, 130, 218));
+    darkPalette.setColor(QPalette::HighlightedText, Qt::black);
+
+    qApp->setPalette(darkPalette);
+    invert = true;
+    // Style End
+
+
+
     setMouseTracking(true);
 
     IndigoMenuBar *menuBar = new IndigoMenuBar();
+    menuBar->setNativeMenuBar(true);
     setMenuBar(menuBar);
 
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q), this, SLOT(close()));
@@ -31,15 +64,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // add right dock container
     m_dockright = new QDockWidget(this);
     m_dockright->setAllowedAreas(Qt::RightDockWidgetArea | Qt::LeftDockWidgetArea);
-   // dockright->setStyleSheet("background-color: lightgrey");
     this->addDockWidget(Qt::RightDockWidgetArea, m_dockright);
-
-    // add left dock container
-    m_dockleft = new QDockWidget(this);
-    m_dockleft->setAllowedAreas(Qt::RightDockWidgetArea | Qt::LeftDockWidgetArea);
-   // dockright->setStyleSheet("background-color: lightgrey");
-    this->addDockWidget(Qt::LeftDockWidgetArea, m_dockleft);
-
 
 
     /*******************
@@ -50,75 +75,105 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     // TabWidget
-    IndigoDock *indigoDock_r = new IndigoDock;
-
+    IndigoDock *indigoDock = new IndigoDock;
 
     // Container
     m_mainLayout_r = new QGridLayout();
     m_mainLayout_r->setMargin(0);
-    m_mainLayout_r->addWidget(indigoDock_r, 0, 0);
+    m_mainLayout_r->addWidget(indigoDock, 0, 0);
     QWidget *containerRight = new QWidget;
     containerRight->setLayout(m_mainLayout_r);
 
     // set Layouted Widget to DockPanel
     m_dockright->setWidget(containerRight);
-    connect(m_dockright, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), indigoDock_r, SLOT(updateTabPosition(Qt::DockWidgetArea)));
+    connect(m_dockright, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), indigoDock, SLOT(updateTabPosition(Qt::DockWidgetArea)));
+
+
+    // Panel Setup
+    IndigoPanel *pan_page = new IndigoPanel("PanPage", this);
+    pan_page->setCaption("Page");
+    pan_page->setIcon(iconInvert(QIcon(iconPath + "pan-page.png"), invert));
+    indigoDock->addIndigoPanel(pan_page);
+
+    IndigoPanel *pan_image = new IndigoPanel("PanImage", this);
+    pan_image->setCaption("Image");
+    pan_image->setIcon(iconInvert(QIcon(iconPath + "pan-image.png"), invert));
+    indigoDock->addIndigoPanel(pan_image);
+
+    IndigoPanel *pan_text = new IndigoPanel("PanText",this);
+    pan_text->setCaption("Text");
+    pan_text->setIcon(iconInvert(QIcon(iconPath + "pan-text.png"),invert));
+    indigoDock->addIndigoPanel(pan_text);
 
 
 
-    // TabWidget
-    IndigoDock *indigoDock_l = new IndigoDock;
-    indigoDock_l->m_indigoTab->setTabPosition(IndigoTabbar::West);
+    // Add panel content
+    textPanel(pan_text);
+}
 
-    // Container
-    m_mainLayout_l = new QGridLayout();
-    m_mainLayout_l->setMargin(0);
-    m_mainLayout_l->addWidget(indigoDock_l, 0, 0);
-    QWidget *containerLeft = new QWidget;
-    containerLeft->setLayout(m_mainLayout_l);
+QIcon MainWindow::iconInvert(const QIcon &icon, bool invert){
 
-    // set Layouted Widget to DockPanel
-    m_dockleft->setWidget(containerLeft);
-    connect(m_dockleft, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), indigoDock_l, SLOT(updateTabPosition(Qt::DockWidgetArea)));
+    QSize sz;
+
+    for (int var = 0; var < icon.availableSizes().count(); ++var) {
+        if (icon.availableSizes().at(var).width() > sz.width())
+        sz = icon.availableSizes().at(var);
+    }
+    QPixmap pix = icon.pixmap(sz);
+
+    if(invert){
+        QImage image = pix.toImage();
+        image.invertPixels();
+        pix = pix.fromImage(image);
+    }
+
+    return pix;
+
+}
+
+void MainWindow::textPanel(IndigoPanel *parent){
+
+    IndigoExpanderGroup *grFont = new IndigoExpanderGroup();
+    IndigoExpanderGroup *grAlignment = new IndigoExpanderGroup();
+    IndigoExpanderGroup *grStyles = new IndigoExpanderGroup();
+    IndigoExpanderGroup *grChars = new IndigoExpanderGroup();
+    IndigoExpanderGroup *grParagraph = new IndigoExpanderGroup();
+    IndigoExpanderGroup *grLists = new IndigoExpanderGroup();
+    IndigoExpanderGroup *grColumns = new IndigoExpanderGroup();
+
+    grFont->setCaption("Font");
+    grAlignment->setCaption("Alignment");
+    grStyles->setCaption("Styles");
+    grChars->setCaption("Character");
+    grParagraph->setCaption("Paragraph");
+    grLists->setCaption("Lists & Effects");
+    grColumns->setCaption("Columns & Distances");
+
+    // Font
+    QComboBox *comboFont = new QComboBox(0);
+    comboFont->addItem("Ubuntu");
+
+    AnglePicker * anglePicker = new AnglePicker();
+    ColorSwatch * colorSwatch = new ColorSwatch();
 
 
-
-    // right dock
-    IndigoPanel *panel = new IndigoPanel(this);
-    panel->setCaption("Properties");
-    panel->setIcon(QIcon(":/icons/icons/placeholder.png"));
-    indigoDock_r->addIndigoPanel(panel);
-
-    IndigoPanel *panel2 = new IndigoPanel(this);
-    panel2->setCaption("Page");
-    panel2->setIcon(QIcon(":/icons/icons/placeholder.png"));
-    indigoDock_r->addIndigoPanel(panel2, 0);
+    QHBoxLayout *layoutFont = new QHBoxLayout();
+    layoutFont->addWidget(comboFont);
 
 
-    // left dock
-    IndigoPanel *panel3 = new IndigoPanel(this);
-    panel3->setCaption("Preflight");
-    panel3->setIcon(QIcon(":/icons/icons/placeholder.png"));
-    indigoDock_l->addIndigoPanel(panel3);
-
-    IndigoPanel *panel4 = new IndigoPanel(this);
-    panel4->setCaption("Text");
-    panel4->setIcon(QIcon(":/icons/icons/placeholder.png"));
-    indigoDock_l->addIndigoPanel(panel4);
+    grFont->addWidget(comboFont);
+    grAlignment->addWidget(anglePicker);
+    grStyles->addWidget(colorSwatch);
 
 
+    parent->addWidget(grFont);
+    parent->addWidget(grAlignment);
+    parent->addWidget(grStyles);
+    parent->addWidget(grChars);
+    parent->addWidget(grParagraph);
+    parent->addWidget(grLists);
+    parent->addWidget(grColumns);
 
-
-
-    // Add dummy content
-    IndigoExpanderGroup *group = new IndigoExpanderGroup();
-    IndigoExpanderGroup *group2 = new IndigoExpanderGroup();
-    ColorSwatch * colSwatch = new ColorSwatch();
-    ColorSwatch * colSwatch2 = new ColorSwatch();
-    group->addWidget(colSwatch);
-    group2->addWidget(colSwatch2);
-    panel4->addWidget(group);
-    panel2->addWidget(group2);
 }
 
 

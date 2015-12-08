@@ -4,30 +4,43 @@
 #include <QtWidgets>
 #include <QTabWidget>
 #include <QIcon>
-#include "indigodropzone.h"
-#include "indigopanel.h"
 
-class IndigoTabbar : public QTabWidget
+class IndigoTabBar : public QTabBar
 {
     Q_OBJECT
 public:
-    IndigoTabbar(QWidget* parent = 0);
-    void addTab (QWidget * child, const QString &label );
-    void addTab ( QWidget * child, const QIcon &icon, const QString &label );
-    void addIndigoPanel(IndigoPanel *panel, int tabIndex = -1 );
-    void setTabPosition(TabPosition tabPos);
-    QWidget *m_activeWidget;
+
+    enum Orientation{
+        East,
+        West,
+        North,
+        South
+    };
+
+
+
+    IndigoTabBar(QWidget* parent = 0);
+    void setTabPosition(Orientation tabOrientation);
+    void addTab(QIcon &icon);
+    void insertTab(int index, QIcon &icon);
+    int oldTabIndex();
+    int newTabIndex();
 
 protected:
-    QIcon rotateIcon(const QIcon &icon, TabPosition tabPos = QTabWidget::North);
 
 private:
-    int iconScale;
+   int int_iconScale;
+   int int_oldIndex;
+   int int_newIndex;
+   QIcon rotateIcon(const QIcon &icon, Orientation tabOrientation = North);
+   void mousePressEvent(QMouseEvent*event);
+   void mouseReleaseEvent(QMouseEvent*event); 
 
 signals:
+   void moveTab();
 
 public slots:
-    void setActiveTab(int);
+
 };
 
 #endif // INDIGOTABBAR_H

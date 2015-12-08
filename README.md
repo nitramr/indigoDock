@@ -14,35 +14,29 @@ For more details read the [indigoDock google slides proposal](https://goo.gl/T4g
 ## Install
 Here is how you run it:  
 1. **Download [QtCreator](http://www.qt.io/download-open-source/) and install**  
-2. **Clone the indigoDock repository to your local machine** ```git clone git://github.com/nitramr/indigoDock```
-3. **Find and click on the TestLayout.pro which should invoke QtCreator**  
-![testlayout pro](https://cloud.githubusercontent.com/assets/4140247/10866360/21cef028-7ff9-11e5-8c4c-e0e86c682868.png)  
+2. **Clone the indigoDock repository to your local machine ```git clone git://github.com/nitramr/indigoDock```**
+3. **Find and click on the TestLayout.pro which should invoke QtCreator** 
+ 
+![testlayout pro](https://cloud.githubusercontent.com/assets/4140247/10866360/21cef028-7ff9-11e5-8c4c-e0e86c682868.png) 
+ 
 4. **Build TestLayout by clicking on the green arrow OR Build > Build Project "TestLayout"**  
+
 ![build-indigodock-in-qtcreator](https://cloud.githubusercontent.com/assets/4140247/10866388/01e7e67e-7ffa-11e5-852c-0176e022c647.jpg)  
 
 ## Features:
 * the whole dock is dockable on left or right side of main window  
 * the dock contains a tabbar with sortable tabs  
-* within the single tabs you can add/remove/arrange single panels (more than one)
-* tab body highlighting by panel hovering
+* within the container you can add/remove/arrange single panels (more than one)
+* container highlighting by panel hovering
 
 ## Current Visuals
-![indigo-dock-tester](https://cloud.githubusercontent.com/assets/15112256/11169549/85470258-8bbb-11e5-83d5-ba577290c9f3.png)
+![indigodock tester_002](https://cloud.githubusercontent.com/assets/15112256/11666883/e7e91a14-9dee-11e5-9c43-4b0a2c84af70.png)
 
 ## Issues:
 * not known
 
 ## ToDo's
 * automatic tab orientation switch by docking on left site
-* automatic tab creation by drag a panel on it
-* styling of the features
-* better arranging single panels within a tab
+* better arranging single panels within a tab (Drag 'n' Drop)
 * if a special panel was called set focus to parent tab (in case of shortcut keys)
-* context menu for setting custom icons for tabs
-* context menu for tab body to show hidden panels
-
-## Code base:
-* DockWidget is a normal QDockWidget  
-* IndigoTabWidget is a custom QTabWidget  
-* IndigoDropZone is a custom QWidget (tab body)  
-* IndigoPanel is a custom QFrame  
+* panel mode (normal/advanced)

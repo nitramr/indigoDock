@@ -127,7 +127,7 @@ QAction* IndigoMenuBar::getActionFromJson(const QJsonObject json, QObject* paren
  *
  ******************************/
 
-QIcon IndigoMenuBar::tintIcon(const QIcon &icon){
+QIcon IndigoMenuBar::tintIcon(const QIcon &icon, int min, int max){
 
     QSize sz;
 
@@ -137,8 +137,53 @@ QIcon IndigoMenuBar::tintIcon(const QIcon &icon){
     }
 
     QImage image = icon.pixmap(sz).toImage();
-    image.invertPixels();
+    //image.invertPixels();
+
+
+    // new color Processor
+
+  /*  max = 120;
+
+        for(int y = 0; y < image.height(); y++) {
+            for(int x = 0; x < image.width(); x++) {
+                QRgb pixel = image.pixel(QPoint(x,y));
+
+                int red = qRed(pixel);
+                int green = qGreen(pixel);
+                int blue = qBlue(pixel);
+
+                //int small = smallest(red, green, blue);
+                //red -= small;
+                //green -= small;
+                //blue -= small;
+
+                int big = biggest(red, green, blue);
+                if (big > max) max = big;
+                red += max - big;
+                green += max - big;
+                blue += max - big;
+
+
+                pixel = qRgba(red, green, blue, qAlpha(pixel));
+                image.setPixel(x,y, pixel) ;
+
+            }
+        }*/
+
+
+
+
 
     return QIcon(QPixmap::fromImage(image));
+}
+
+int IndigoMenuBar::smallest(int r, int g, int b)
+{
+    return std::min(std::min(r, g), b);
+}
+
+int IndigoMenuBar::biggest(int r, int g, int b)
+{
+    return std::max(std::max(r, g), b);
 }
 

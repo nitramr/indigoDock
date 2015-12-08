@@ -3,139 +3,135 @@
 #include <QWheelEvent>
 #include <QStyle>
 
-IndigoTabbar::IndigoTabbar(QWidget *parent) :
-    QTabWidget(parent)
+IndigoTabBar::IndigoTabBar(QWidget *parent) :
+    QTabBar(parent)
 {
 
-    iconScale = 32;
+    int_iconScale = 32;
+    QColor c_bg = /*QColor( 153, 153, 153 );*/this->palette().color(QPalette::Base);
 
-    this->setObjectName("indigoTab");
+    QString styleSheetTab(  "QTabBar{"
+                                "border: 0px solid transparent;"
+                            "}"
+                            "QTabBar::tab {"
+                                "alignment: left;"
+                                "text-align: center;"
+                                "border: 0px solid transparent;"
+                                "border-radius: 0px;"
+                                "width: %1 px;"
+                                "height: %1 px;"
+                                "padding: 0px;"
+                                "margin: 0px;"
+                            "}"
+                            "QTabBar::tab:hover {"
+                                "background-color: rgb(%2,%3,%4);"
+                            "}"
+            );
 
-    this->tabBar()->setFocusPolicy(Qt::NoFocus);
-    this->tabBar()->setIconSize(QSize(iconScale,iconScale));
-
-   // QPainter painter(this);
-    //style()->drawControl(QStyle::CT_TabBarTab, QStyleOptionTab, painter,this->tabBar());
-
-    QString styleSheet("QTabWidget::pane {"
-                            "border: 0px solid transparent;"
-                        "}"
-                        "QTabWidget::tab-bar{"
-                            "alignment: left;"
-                        "}"
-                        "QTabBar::tab {"
-                            "text-align: center;"
-                            "border: 0px solid transparent;"
-                            "border-radius: 0px;"
-                            "width: %1 px;"
-                            "height: %1 px;"
-                            "padding: 0px;"
-                        "}"
-                        "QTabBar::tab:selected {"
-                            "background-color: rgb(153,153,153);"
-                        "}"
-                       );
-
-    this->setStyleSheet( styleSheet.arg(iconScale) );
-
-    // watch active tab change event
-    connect(this->tabBar(), SIGNAL(currentChanged(int)), this, SLOT(setActiveTab(int)));
-
-
+    this->setStyleSheet( styleSheetTab.arg(int_iconScale).arg(c_bg.red()).arg(c_bg.green()).arg(c_bg.blue()) );
+    this->setMovable(true);
+    this->setShape(QTabBar::RoundedEast);
+    this->setFocusPolicy(Qt::NoFocus);
+    this->setIconSize(QSize(int_iconScale,int_iconScale));
+    this->setExpanding(false);
+    this->setSelectionBehaviorOnRemove(QTabBar::SelectPreviousTab);
+    this->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Expanding));
 
 }
 
 
-void IndigoTabbar::addTab( QWidget * child, const QString & label ){
 
-      QTabWidget::addTab(child, label);
+void IndigoTabBar::mousePressEvent(QMouseEvent*event){
 
-      m_activeWidget = this->widget(currentIndex());
+    QTabBar::mousePressEvent(event);
+    int_oldIndex = this->currentIndex();
+}
 
+
+
+
+void IndigoTabBar::mouseReleaseEvent(QMouseEvent*event){
+
+    int_newIndex = this->currentIndex();
+    emit moveTab();
+
+    QTabBar::mouseReleaseEvent(event);
 
 }
 
 
-void IndigoTabbar::addTab ( QWidget * child, const QIcon & icon, const QString & label ){
+int IndigoTabBar::oldTabIndex(){
 
-    // rotate icon if needed
-    QIcon ricon = rotateIcon(icon);
-
-    // use normal addTab function
-    QTabWidget::addTab(child, ricon, label);
+    return int_oldIndex;
+}
 
 
-    m_activeWidget = this->widget(currentIndex());
+
+int IndigoTabBar::newTabIndex(){
+
+    return int_newIndex;
+}
+
+
+
+void IndigoTabBar::addTab(QIcon &icon){
+
+    icon = rotateIcon(icon);
+
+    QTabBar::addTab(icon, "");
 
 }
 
 
-void IndigoTabbar::addIndigoPanel(IndigoPanel *panel, int tabIndex ){
 
-    IndigoDropZone * zone = new IndigoDropZone(0);
-    zone->addPanel(panel);
+void IndigoTabBar::insertTab(int index, QIcon &icon){
 
-    static const QIcon &icon = panel->Icon();
+    icon = rotateIcon(icon);
 
-    // new tab
-    if (tabIndex == -1){
-
-        this->connect(panel, SIGNAL(mouseReleased()), zone, SLOT(dropPanel()));
-        this->connect(panel, SIGNAL(mouseMove()), zone, SLOT(hoverZone()));
-
-
-        addTab ( zone, icon, "" );
-
-
-    // exsisting tab
-    }else{
-
-        if(tabIndex >= 0 && tabIndex <= this->count() - 1){
-
-            QWidget * widget = this->widget(tabIndex);
-
-            IndigoDropZone *zone = qobject_cast<IndigoDropZone*>(widget);
-            if(!zone) return;
-
-            zone->addPanel(panel);
-
-            this->connect(panel, SIGNAL(mouseReleased()), zone, SLOT(dropPanel()));
-            this->connect(panel, SIGNAL(mouseMove()), zone, SLOT(hoverZone()));
-
-           // m_activeWidget = this->widget(currentIndex()); // not need for exsisting tabs
-        }
-
-    }
-
-
-
+    QTabBar::insertTab(index, icon, "");
 }
 
 
-void IndigoTabbar::setActiveTab(int index){
-    m_activeWidget = this->widget(index);
-    //qDebug() << "TabIndexChange" << m_activeWidget << " index: " << index << endl;
-}
 
-
-void IndigoTabbar::setTabPosition(TabPosition tabPos){
+void IndigoTabBar::setTabPosition(Orientation tabOrientation){
 
 
     // Rotate icons in right direction
-    for(int i=0;i<count();i++)
+    for(int i=0;i<this->count();i++)
     {
-        QIcon icon = this->tabBar()->tabIcon(i);
+        QIcon icon = this->tabIcon(i);
 
-        icon = rotateIcon(icon, tabPos);
+        icon = rotateIcon(icon, tabOrientation);
 
-        this->tabBar()->setTabIcon(i, icon);
+        this->setTabIcon(i, icon);
 
     }
 
     // set new tab position
-    QTabWidget::setTabPosition(tabPos);
+    switch(tabOrientation){
+        case IndigoTabBar::East:{
+            this->setShape(QTabBar::RoundedEast);
+            break;
+        }
+        case IndigoTabBar::West:{
+            this->setShape(QTabBar::RoundedWest);
+            break;
+        }
+        case IndigoTabBar::North:{
+            this->setShape(QTabBar::RoundedNorth);
+            break;
+        }
+        case IndigoTabBar::South:{
+            this->setShape(QTabBar::RoundedSouth);
+            break;
+        }
+        default:
+            this->setShape(QTabBar::RoundedEast);
+            break;
+    }
 
 }
+
 
 
 /******************
@@ -144,7 +140,7 @@ void IndigoTabbar::setTabPosition(TabPosition tabPos){
  *
  * ***************/
 
-QIcon IndigoTabbar::rotateIcon(const QIcon &icon, TabPosition tabPos){
+QIcon IndigoTabBar::rotateIcon(const QIcon &icon, Orientation tabOrientation){
 
     QSize sz;
 
@@ -155,18 +151,18 @@ QIcon IndigoTabbar::rotateIcon(const QIcon &icon, TabPosition tabPos){
     QPixmap pix = icon.pixmap(sz);
     QTransform trans;
 
-    switch(this->tabPosition()){
-    case QTabWidget::East:{
-        switch(tabPos){
-            case QTabWidget::West:{
+    switch(this->shape()){
+    case QTabBar::RoundedEast:{
+        switch(tabOrientation){
+            case IndigoTabBar::West:{
                 trans.rotate(180);
                 break;
             }
-            case QTabWidget::North:{
+            case IndigoTabBar::North:{
                 trans.rotate(-90);
                 break;
             }
-            case QTabWidget::South:{
+            case IndigoTabBar::South:{
                 trans.rotate(+90);
                 break;
             }
@@ -177,18 +173,18 @@ QIcon IndigoTabbar::rotateIcon(const QIcon &icon, TabPosition tabPos){
 
         break;
     }
-    case QTabWidget::West:{
-        switch(tabPos){
+    case QTabBar::RoundedWest:{
+        switch(tabOrientation){
 
-            case QTabWidget::East:{
+            case IndigoTabBar::East:{
                 trans.rotate(180);
                 break;
             }
-            case QTabWidget::North:{
+            case IndigoTabBar::North:{
                 trans.rotate(+90);
                 break;
             }
-            case QTabWidget::South:{
+            case IndigoTabBar::South:{
                 trans.rotate(-90);
                 break;
             }
@@ -202,7 +198,9 @@ QIcon IndigoTabbar::rotateIcon(const QIcon &icon, TabPosition tabPos){
     }
 
     pix = pix.transformed(trans);
-    pix = pix.scaledToWidth( iconScale );
-    pix = pix.scaledToHeight( iconScale );
+    pix = pix.scaledToWidth( int_iconScale );
+    pix = pix.scaledToHeight( int_iconScale );
+
     return QIcon(pix);
 }
+

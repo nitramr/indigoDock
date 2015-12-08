@@ -11,6 +11,9 @@ IndigoPanelHandle::IndigoPanelHandle(QWidget *parent) :
 
     setAutoFillBackground( true );
 
+    //QColor bgColor = qApp->style()->standardPalette().brush(QPalette::Background).color();
+    //this->setBackgroundColor(bgColor);
+
     // Objects
     m_lblTitle = new QLabel("");
 
@@ -54,6 +57,7 @@ IndigoPanelHandle::IndigoPanelHandle(QWidget *parent) :
    // connect(m_btnFloat, SIGNAL (clicked()), parent, SLOT (dock()));
 
 
+
 }
 
 void IndigoPanelHandle::setTitle(const QString &title){
@@ -72,23 +76,29 @@ void IndigoPanelHandle::setBackgroundColor(const QColor &bgColor){
  * - Create a WidgetList and store all undocked Panels in it (in IndigoDock).
  */
 
-IndigoPanel::IndigoPanel(QWidget *parent) :
+IndigoPanel::IndigoPanel(QString name, QWidget *parent) :
    QFrame(parent)
 {
-
-    setAutoFillBackground( true );
     setMouseTracking(true);
+    setAutoFillBackground( true );
 
-    // Dummy Widget as handleBar
+     this->setObjectName(name);
+
+  //  QColor bgColor = qApp->style()->standardPalette().brush(QPalette::Background).color();
+   // this->setBackgroundColor(bgColor);
+
+
+    // setup handleBar
     m_handle = new IndigoPanelHandle(this);
     m_handle->installEventFilter(this);
     m_handle->setFixedHeight(30);
 
-    // Icon
-    //m_icon = new QIcon();
-
     // Content Widget
     m_contentArea = new QVBoxLayout;
+
+    m_index = -1;
+
+    setFixedWidth(220);
 
     // Main LayoutContainer
     QVBoxLayout * mainLayout = new QVBoxLayout;
@@ -98,9 +108,6 @@ IndigoPanel::IndigoPanel(QWidget *parent) :
     mainLayout->addWidget(m_handle);
     mainLayout->addLayout(m_contentArea);
     mainLayout->addStretch(1);
-
-    // lastParent
-    m_lastParentWidget = parent;
 
     // TODO: Replace MainWindow with WidgetList in IndigoDock
     foreach(QWidget *mWindow, QApplication::topLevelWidgets()) {
@@ -138,10 +145,11 @@ bool IndigoPanel::eventFilter(QObject *o, QEvent *event)
                     relative_x = point.x() - xy.x();
                     relative_y = point.y() - xy.y();
 
+                    emit isFloating(m_index);
+
                     qDebug() << "Panel is undocked: Panel Parent == MainWindow" << endl;
                     setParent(m_mainWindow);
 
-                    //setWindowFlags(windowFlags() |Qt::ToolTip/*|Qt::WindowStaysOnTopHint*/|Qt::FramelessWindowHint);
                     setWindowFlags(Qt::ToolTip|Qt::FramelessWindowHint); // avoid flickering by moving
 
                     move(xy);
@@ -156,9 +164,7 @@ bool IndigoPanel::eventFilter(QObject *o, QEvent *event)
 
         case QEvent::MouseButtonRelease:
         {
-
-                setWindowFlags(Qt::Tool|Qt::FramelessWindowHint); // set back to a resizeable window type
-
+                setWindowFlags(Qt::Tool|Qt::FramelessWindowHint);
                 show();
 
                 emit mouseReleased(); // activate reparenting in DropZone
@@ -176,7 +182,7 @@ bool IndigoPanel::eventFilter(QObject *o, QEvent *event)
             move(QPoint(point.x() - relative_x, point.y() - relative_y));
 
 
-            emit mouseMove(); // activate DropZone hover
+            emit mouseMove(this->height()); // activate DropZone hover
             break;
         }
 
@@ -207,6 +213,21 @@ QIcon IndigoPanel::Icon(){
     return m_icon;
 }
 
+/**
+ * @brief IndigoPanel::Index
+ * @return index in dropzone
+ */
+int IndigoPanel::Index(){
+    return m_index;
+}
+
+/**
+ * @brief IndigoPanel::setIndex
+ * @param index
+ */
+void IndigoPanel::setIndex(int index){
+     m_index = index;
+}
 
 void IndigoPanel::addWidget(QWidget *content){
      m_contentArea->addWidget(content);
@@ -226,12 +247,4 @@ void IndigoPanel::dock(){
     // TODO: set entry in WatchList to show this again
 
 
-}
-
-void IndigoPanel::setLastParent(QWidget *dropzone){
-    //lastParentWidget = dropzone; // unused
-}
-
-QWidget *IndigoPanel::lastParent(){
-    return m_lastParentWidget;
 }

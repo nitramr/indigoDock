@@ -5,6 +5,7 @@
 #include <QDockWidget>
 #include <QVBoxLayout>
 #include <QListWidget>
+#include "indigopanel.h"
 
 namespace Ui {
 class MainWindow;
@@ -40,7 +41,12 @@ signals:
 
 private:
     Ui::MainWindow *ui;
+    bool invert;
+    const QString iconPath = "icons/";
+    QIcon iconInvert(const QIcon &icon, bool invert = false);
     //static MainWindow* instance;
+
+    void textPanel(IndigoPanel *parent);
 };
 
 

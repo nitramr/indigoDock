@@ -1,4 +1,5 @@
-# indigoDock
+[![Join the chat at https://gitter.im/nitramr/indigoDock](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/nitramr/indigoDock?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+# indigoDock 
 Experimental Qt Docking extension written for Scribus1.5>= 
 
 ## Proposal Mockups
@@ -13,7 +14,7 @@ For more details read the [indigoDock google slides proposal](https://goo.gl/T4g
 ## Install
 Here is how you run it:  
 1. **Download [QtCreator](http://www.qt.io/download-open-source/) and install**  
-2. **Clone the indigoDock repository to your local machine**  
+2. **Clone the indigoDock repository to your local machine** ```git clone git://github.com/nitramr/indigoDock```
 3. **Find and click on the TestLayout.pro which should invoke QtCreator**  
 ![testlayout pro](https://cloud.githubusercontent.com/assets/4140247/10866360/21cef028-7ff9-11e5-8c4c-e0e86c682868.png)  
 4. **Build TestLayout by clicking on the green arrow OR Build > Build Project "TestLayout"**  
@@ -24,6 +25,9 @@ Here is how you run it:
 * the dock contains a tabbar with sortable tabs  
 * within the single tabs you can add/remove/arrange single panels (more than one)
 * tab body highlighting by panel hovering
+
+## Current Visuals
+![indigo-dock-tester](https://cloud.githubusercontent.com/assets/15112256/11169549/85470258-8bbb-11e5-83d5-ba577290c9f3.png)
 
 ## Issues:
 * not known
