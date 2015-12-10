@@ -19,7 +19,7 @@ Experimental Qt Docking extension written for Scribus1.5>=
 
 ## How to Install indigoDock
 Here is how you run it:  
-1. **Download [QtCreator](http://www.qt.io/download-open-source/) and install**
+1. **Download [QtCreator](http://www.qt.io/download-open-source/) and install**  
 2. **Clone the indigoDock repository to your local machine ```mkdir indigoDock; cd indigoDock/; git clone git://github.com/nitramr/indigoDock``` OR just download the indigoDock [.zip file](https://github.com/nitramr/indigoDock/archive/master.zip)**  
 3. **Find and click on the TestLayout.pro which should invoke QtCreator** 
 ![testlayout pro](https://cloud.githubusercontent.com/assets/4140247/10866360/21cef028-7ff9-11e5-8c4c-e0e86c682868.png)  
