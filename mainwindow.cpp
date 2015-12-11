@@ -8,6 +8,7 @@
 
 #include "colorswatch.h"
 #include "anglepicker.h"
+#include "stylefactory.h"
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -16,8 +17,36 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    invert = false;
 
-    // Style start
+    QFile f("data/qss/dark.qss");
+    if (!f.exists())
+    {
+        printf("Unable to set stylesheet, file not found\n");
+    }
+    else
+    {
+        f.open(QFile::ReadOnly | QFile::Text);
+        QTextStream ts(&f);
+
+        QString style = ts.readAll();
+       // qApp->setStyleSheet(ts.readAll());
+
+        StyleFactory *sf = new StyleFactory();
+        sf->parseString(style);
+
+         qDebug()<< "Style" << style << endl;
+        qApp->setStyleSheet(style);
+
+        if(sf->getTheme() == "dark") invert = true;
+
+        qApp->setPalette(sf->palette());
+    }
+
+
+    qApp->setStyle(QStyleFactory::create("Fusion"));
+
+  /*  // Style start
     qApp->setStyle(QStyleFactory::create("Fusion"));
     //"Fusion" "Windows". Depending on the platform, "WindowsXP" or "Macintosh" may be available.
 
@@ -41,8 +70,7 @@ MainWindow::MainWindow(QWidget *parent) :
     darkPalette.setColor(QPalette::HighlightedText, Qt::black);
 
     qApp->setPalette(darkPalette);
-    invert = true;
-    // Style End
+    // Style End*/
 
 
 
@@ -133,13 +161,13 @@ QIcon MainWindow::iconInvert(const QIcon &icon, bool invert){
 
 void MainWindow::textPanel(IndigoPanel *parent){
 
-    IndigoExpanderGroup *grFont = new IndigoExpanderGroup();
-    IndigoExpanderGroup *grAlignment = new IndigoExpanderGroup();
-    IndigoExpanderGroup *grStyles = new IndigoExpanderGroup();
-    IndigoExpanderGroup *grChars = new IndigoExpanderGroup();
-    IndigoExpanderGroup *grParagraph = new IndigoExpanderGroup();
-    IndigoExpanderGroup *grLists = new IndigoExpanderGroup();
-    IndigoExpanderGroup *grColumns = new IndigoExpanderGroup();
+    IndigoExpanderGroup *grFont = new IndigoExpanderGroup(false);
+    IndigoExpanderGroup *grAlignment = new IndigoExpanderGroup(false);
+    IndigoExpanderGroup *grStyles = new IndigoExpanderGroup(false);
+    IndigoExpanderGroup *grChars = new IndigoExpanderGroup(false);
+    IndigoExpanderGroup *grParagraph = new IndigoExpanderGroup(false);
+    IndigoExpanderGroup *grLists = new IndigoExpanderGroup(false);
+    IndigoExpanderGroup *grColumns = new IndigoExpanderGroup(false);
 
     grFont->setCaption("Font");
     grAlignment->setCaption("Alignment");

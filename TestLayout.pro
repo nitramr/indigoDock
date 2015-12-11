@@ -29,7 +29,8 @@ SOURCES += main.cpp\
     indigodropzone.cpp \
     indigoexpandergroup.cpp \
     indigomenubar.cpp \
-    anglepicker.cpp
+    anglepicker.cpp \
+    stylefactory.cpp
 
 HEADERS  += mainwindow.h \
     colorswatch.h \
@@ -39,7 +40,8 @@ HEADERS  += mainwindow.h \
     indigodropzone.h \
     indigoexpandergroup.h \
     indigomenubar.h \
-    anglepicker.h
+    anglepicker.h \
+    stylefactory.h
 
 FORMS    += mainwindow.ui
 

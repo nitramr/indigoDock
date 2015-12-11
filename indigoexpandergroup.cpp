@@ -2,11 +2,10 @@
 
 IndigoExpanderLabel::IndigoExpanderLabel(QWidget *parent) : QLabel(parent),collapse(false)
 {
-    //this->setStyleSheet("QLabel{background-color:#99cdef;}");
-
     margin_left = 3; // left margin of icon
     spacing = 4; // space around text label
     icon_size = 8; // icon dimensions
+    b_collapsable = true;
 
 }
 
@@ -15,6 +14,9 @@ void IndigoExpanderLabel::mousePressEvent(QMouseEvent* event)
 {
    if (event->buttons() & Qt::LeftButton)
    {
+
+     if(!b_collapsable) return;
+
      event->accept();
      collapse = !collapse;
      emit stateSwitch(collapse);
@@ -30,7 +32,12 @@ void IndigoExpanderLabel::collapsed(bool collapsed){
     collapse = collapsed;
 }
 
-void IndigoExpanderLabel::paintEvent(QPaintEvent *e)
+void IndigoExpanderLabel::isCollapsable(bool collapsable){
+
+    b_collapsable = collapsable;
+}
+
+void IndigoExpanderLabel::paintEvent(QPaintEvent *)
 {
 
    QPainter painter(this);
@@ -53,21 +60,24 @@ void IndigoExpanderLabel::paintEvent(QPaintEvent *e)
    if (h > 0)
    {
 
-     // label start
-     int labelX = margin_left + icon_size + spacing;
+       // label start
+       int labelX = margin_left + icon_size + spacing;
 
-     // line start
-     int lineX = labelX + lbl_width + spacing;
+       // line start
+       int lineX = labelX + lbl_width + spacing;
 
-     if (collapse)
-     {
-        painter.drawImage(QRect(margin_left, iconY, icon_size,icon_size), QImage(":/icons/icons/close.png"));
+
+     if(b_collapsable){
+
+         if (collapse)
+         {
+            painter.drawImage(QRect(margin_left, iconY, icon_size,icon_size), QImage(":/icons/icons/close.png"));
+         }
+         else
+         {
+            painter.drawImage(QRect(margin_left, iconY, icon_size,icon_size), QImage(":/icons/icons/open.png"));
+         }
      }
-     else
-     {
-        painter.drawImage(QRect(margin_left, iconY, icon_size,icon_size), QImage(":/icons/icons/open.png"));
-     }
-
 
      painter.setBrush(QBrush(QColor(this->palette().color(QPalette::WindowText)/*Qt::black*/)));
      painter.setFont(font);
@@ -80,7 +90,7 @@ void IndigoExpanderLabel::paintEvent(QPaintEvent *e)
 
 /********************************************************************************************/
 
-IndigoExpanderGroup::IndigoExpanderGroup(QWidget *parent) : QWidget(parent)
+IndigoExpanderGroup::IndigoExpanderGroup(bool collapsable, QWidget *parent) : QWidget(parent)
 {
     //this->setStyleSheet("QWidget{background-color:#efcd99;}");
 
@@ -90,6 +100,7 @@ IndigoExpanderGroup::IndigoExpanderGroup(QWidget *parent) : QWidget(parent)
     m_handle = new IndigoExpanderLabel(this);
     m_handle->installEventFilter(this);
     m_handle->setFixedHeight(22);
+    m_handle->isCollapsable(collapsable);
     connect(m_handle,SIGNAL(stateSwitch(bool)),this,SLOT(stateSwitch(bool)));
 
     // Content Widget
@@ -127,6 +138,10 @@ void IndigoExpanderGroup::setCaption(const QString text){
     m_handle->setText(text);
 }
 
+void IndigoExpanderGroup::isCollapsable(bool collapsable){
+
+    m_handle->isCollapsable(collapsable);
+}
 
 void IndigoExpanderGroup::stateSwitch(bool collapse){
 

@@ -14,11 +14,13 @@ class IndigoExpanderLabel : public QLabel
 public:
     explicit IndigoExpanderLabel(QWidget *parent = 0);
     void collapsed(bool);
+    void isCollapsable(bool collapsable);
 
 private:
     bool collapse;
+    bool b_collapsable;
     void mousePressEvent(QMouseEvent* event);
-    void paintEvent(QPaintEvent *e);
+    void paintEvent(QPaintEvent *);
 
     int margin_left;
     int spacing;
@@ -35,9 +37,10 @@ class IndigoExpanderGroup : public QWidget
 {
     Q_OBJECT
 public:
-    explicit IndigoExpanderGroup(QWidget *parent = 0);
+    explicit IndigoExpanderGroup(bool collapsable = true, QWidget *parent = 0);
     void addWidget(QWidget * widget);
     void setCaption(const QString text);
+    void isCollapsable(bool collapsable);
 
 private:
     QPalette palette;

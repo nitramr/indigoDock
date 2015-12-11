@@ -1,0 +1,67 @@
+/*
+Theme 
+	dark
+	light
+
+ColorGroups
+	all (for all states)
+	normal (only for active state)
+	active (only for active state)
+	inactive (only for inactive state)
+	disabled (only for disabled state)
+
+ColorRoles
+	alternate-base 		= QPalette::AlternateBase;
+	background 		= QPalette::Background;
+	base 			= QPalette::Base;
+	bright-text 		= QPalette::BrightText;
+	button 			= QPalette::Button;
+	button-text 		= QPalette::ButtonText;
+	dark 			= QPalette::Dark;
+	foreground 		= QPalette::Foreground;
+	highlight 		= QPalette::Highlight;
+	highlighted-text 	= QPalette::HighlightedText;
+	light			= QPalette::Light;
+	link 			= QPalette::Link;
+	link-visited 		= QPalette::LinkVisited;
+	mid 			= QPalette::Mid;
+	midlight 		= QPalette::Midlight;
+	shadow 			= QPalette::Shadow;
+	text 			= QPalette::Text;
+	tooltip-base 		= QPalette::ToolTipBase;
+	tooltip-text 		= QPalette::ToolTipText;
+	window 			= QPalette::Window;
+	window-text 		= QPalette::WindowText;
+
+ColorFormat
+	rgb(255,255,255);
+	rgba(255,255,255,100);
+	hsv(360,100,100);
+	hsva(360,100,100,100);
+
+*/
+Palette::dark {
+	[all]		alternate-base:		rgb(53,53,53);
+	[all]		base:			rgb(25,25,25);
+	[all]		bright-text:		rgb(255,0,0);
+	[all]		button:			rgb(53,53,53);
+	[all]		button-text:		#ffffff;
+	[disabled]	button-text:		#808080;
+	[all]		highlight:		rgb(42,130,218);
+	[all]		highlighted-text:	rgb(0,0,0);
+	[all]		link:			rgb(42,130,218);
+	[all]		text:			#ffffff;
+	[disabled]	text:			#808080;
+	[all]		tooltip-base:		#ffffff;
+	[all]		tooltip-text:		#ffffff;
+	[all]		window:			rgb(53,53,53);
+	[all]		window-text: 		#ffffff;
+}
+
+/* Comment */
+
+QWidget {
+
+ //background-color: palette(text);
+
+}
