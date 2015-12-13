@@ -1,7 +1,0 @@
-<RCC>
-    <qresource prefix="/icons">
-        <file>icons/placeholder.png</file>
-        <file>icons/close.png</file>
-        <file>icons/open.png</file>
-    </qresource>
-</RCC>

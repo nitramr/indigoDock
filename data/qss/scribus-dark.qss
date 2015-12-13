@@ -58,10 +58,13 @@ Palette::dark {
 	[all]		window-text: 		#ffffff;
 }
 
-/* Comment */
+/* Regular QSS definitions */
 
-QWidget {
+IndigoDropZone { 
 
- //background-color: palette(text);
+	background-color: palette(base);
+}
 
+IndigoTabBar::tab:hover {
+        background-color: palette(base);
 }

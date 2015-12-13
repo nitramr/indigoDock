@@ -20,25 +20,36 @@ Experimental Qt Docking extension written for Scribus1.5>=
 ## How to Install indigoDock
 Here is how you run it:  
 1. **Download [QtCreator](http://www.qt.io/download-open-source/) and install**  
-2. **Clone the indigoDock repository to your local machine ```mkdir indigoDock; cd indigoDock/; git clone git://github.com/nitramr/indigoDock``` OR just download the indigoDock [.zip file](https://github.com/nitramr/indigoDock/archive/master.zip)**  
+2. **Clone the indigoDock repository to your local machine** ```mkdir indigoDock; cd indigoDock/; git clone git://github.com/nitramr/indigoDock``` **OR just download the indigoDock [.zip file](https://github.com/nitramr/indigoDock/archive/master.zip)**  
 3. **Find and click on the TestLayout.pro which should invoke QtCreator** 
 ![testlayout pro](https://cloud.githubusercontent.com/assets/4140247/10866360/21cef028-7ff9-11e5-8c4c-e0e86c682868.png)  
 4. **Build TestLayout by clicking on the green arrow OR Build > Build Project "TestLayout"**  
 ![build-indigodock-in-qtcreator](https://cloud.githubusercontent.com/assets/4140247/10866388/01e7e67e-7ffa-11e5-852c-0176e022c647.jpg)  
 
-## Features:
+## Snapshot features:
 * the whole dock is dockable on left or right side of main window  
-* the dock contains a tabbar with sortable tabs  
+* the dock contains a tabbar with sortable tabs (drag and drop sorting)  
 * within the container you can add/remove/arrange single panels (more than one)
 * container highlighting by panel hovering
+* application has a theme switcher (dark/light)
+* setting will saved in a settings file
 
 
 ## Issues:
-* not known
+* double click on panel header move panel to left side of the screen and duplicates the icon in tabbar
 
-## ToDo's
+
+## Roadmap v1.0 - Framework
+* sorting panels by drag and drop
 * automatic tab orientation switch by docking on left site
-* better arranging single panels within a tab (Drag 'n' Drop)
-* if a special panel was called set focus to parent tab (in case of shortcut keys)
-* panel mode (normal/advanced)
+* function to scroll wanted panel to top by click on related icon or using a shortcut
+* panel mode (normal/advanced/collapsed)
+* theme support + icon switch by theme change <span style="color:orange;">(almost done)</span>
 * clean up compile time warnings
+
+## Roadmap v1.1 - Control Element set
+* AnglePicker <span style="color:orange;">(started)</span>
+* Grouped Buttons
+* Color Preview <span style="color:orange;">(almost done)</span>
+* Origin Setter
+* Icon Label Container

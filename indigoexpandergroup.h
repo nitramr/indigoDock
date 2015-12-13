@@ -25,6 +25,7 @@ private:
     int margin_left;
     int spacing;
     int icon_size;
+    QString iconPath;
 
 signals:
     void stateSwitch(bool);

@@ -16,36 +16,32 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 
-public:  
+public:
+
+    enum Theme{
+        Dark,
+        Light
+    };
+
     QDockWidget* m_dockleft;
     QDockWidget* m_dockright;
     QGridLayout* m_mainLayout_r;
-    QGridLayout* m_mainLayout_l;
+    void loadTheme();
+    void saveTheme(Theme theme);
 
     MainWindow(QWidget* parent = 0);
     ~MainWindow();
 
-   /* static MainWindow* getInstance()
-      {
-        if(!instance)
-        {
-          instance = new MainWindow();
-        }
-        return instance;
-      }
-*/
 
-protected:
-   // MainWindow(QWidget* = NULL);
 signals:  
+
+public slots:
+   void loadLightTheme();
+   void loadDarkTheme();
 
 private:
     Ui::MainWindow *ui;
-    bool invert;
-    const QString iconPath = "icons/";
-    QIcon iconInvert(const QIcon &icon, bool invert = false);
-    //static MainWindow* instance;
-
+    QString str_iconPath;
     void textPanel(IndigoPanel *parent);
 };
 

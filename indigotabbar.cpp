@@ -8,12 +8,11 @@ IndigoTabBar::IndigoTabBar(QWidget *parent) :
 {
 
     int_iconScale = 32;
-    QColor c_bg = /*QColor( 153, 153, 153 );*/this->palette().color(QPalette::Base);
 
-    QString styleSheetTab(  "QTabBar{"
+    QString styleSheetTab(  "IndigoTabBar{"
                                 "border: 0px solid transparent;"
                             "}"
-                            "QTabBar::tab {"
+                            "IndigoTabBar::tab {"
                                 "alignment: left;"
                                 "text-align: center;"
                                 "border: 0px solid transparent;"
@@ -22,13 +21,10 @@ IndigoTabBar::IndigoTabBar(QWidget *parent) :
                                 "height: %1 px;"
                                 "padding: 0px;"
                                 "margin: 0px;"
-                            "}"
-                            "QTabBar::tab:hover {"
-                                "background-color: rgb(%2,%3,%4);"
-                            "}"
+                            "}"                            
             );
 
-    this->setStyleSheet( styleSheetTab.arg(int_iconScale).arg(c_bg.red()).arg(c_bg.green()).arg(c_bg.blue()) );
+    this->setStyleSheet( styleSheetTab.arg(int_iconScale));
     this->setMovable(true);
     this->setShape(QTabBar::RoundedEast);
     this->setFocusPolicy(Qt::NoFocus);
@@ -46,7 +42,6 @@ void IndigoTabBar::mousePressEvent(QMouseEvent*event){
     QTabBar::mousePressEvent(event);
     int_oldIndex = this->currentIndex();
 }
-
 
 
 

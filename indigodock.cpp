@@ -1,19 +1,8 @@
 #include "indigodock.h"
 
-/***********************
- *
- * TODO: Install List for sibling IndigoDocks (communication between multiple dock widgets)
- *
- * *******************/
-
 
 IndigoDock::IndigoDock(QWidget *parent) : QWidget(parent)
 {
-
-
-
-    // Background color for DropZone and TabHighlight
-    QColor c_bg = /*QColor( 153, 153, 153 );*/this->palette().color(QPalette::Base);
 
 
     QString styleSheetScroll( "QScrollArea {"
@@ -26,13 +15,9 @@ IndigoDock::IndigoDock(QWidget *parent) : QWidget(parent)
     m_layout->setSpacing(0);
     m_layout->setMargin(0);
 
-
     m_toolbar = new  IndigoTabBar;
 
-
-    m_dropzone = new IndigoDropZone;
-    m_dropzone->setBackgroundColor(c_bg);
-   // m_dropzone->setHighlightColor(QColor( 223, 255, 153 ));
+    m_dropzone = new IndigoDropZone; 
 
     m_scrollArea = new QScrollArea;
     m_scrollArea->setStyleSheet( styleSheetScroll);

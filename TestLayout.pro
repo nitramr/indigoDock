@@ -30,7 +30,8 @@ SOURCES += main.cpp\
     indigoexpandergroup.cpp \
     indigomenubar.cpp \
     anglepicker.cpp \
-    stylefactory.cpp
+    stylefactory.cpp \
+    configmanager.cpp
 
 HEADERS  += mainwindow.h \
     colorswatch.h \
@@ -41,9 +42,9 @@ HEADERS  += mainwindow.h \
     indigoexpandergroup.h \
     indigomenubar.h \
     anglepicker.h \
-    stylefactory.h
+    stylefactory.h \
+    configmanager.h
 
 FORMS    += mainwindow.ui
 
-RESOURCES += \
-    icons.qrc
+RESOURCES +=

@@ -11,6 +11,7 @@
 IndigoDropZone::IndigoDropZone(QWidget *parent) :
    QWidget(parent)
 {
+    setObjectName("IndigoDropZone");
 
     setMouseTracking(true);
     setAutoFillBackground( true );
@@ -18,9 +19,9 @@ IndigoDropZone::IndigoDropZone(QWidget *parent) :
     //QColor bgColor = qApp->style()->standardPalette().brush(QPalette::Background).color();
 
     transparency = 0.1; // 10%
-    this->setBackgroundColor(this->palette().color(QPalette::Base));
+    //this->setBackgroundColor(this->palette().color(QPalette::Base));
     //this->setHighlightColor(QColor( 0, 179, 255 ));
-    this->setHighlightColor(this->palette().color(QPalette::Highlight));
+    //this->setHighlightColor(this->palette().color(QPalette::Highlight));
 
     padding = 6;
     borderHighlight = 3;
@@ -143,26 +144,14 @@ void IndigoDropZone::removePlaceholder (){
 }
 
 
-void IndigoDropZone::setBackgroundColor(const QColor bgColor){
 
-    m_palette.setColor( QPalette::Background, bgColor );
-    setPalette( m_palette );
-    colorHighlightAlpha = blendColor(this->m_palette.background().color(),colorHighlight, transparency);
-}
+void IndigoDropZone::paintEvent(QPaintEvent*event) {
 
-
-
-void IndigoDropZone::setHighlightColor(const QColor hlColor){
-
-    colorHighlight = hlColor;
-    colorHighlightAlpha = blendColor(this->m_palette.background().color(),colorHighlight, transparency);
-}
-
-
-
-void IndigoDropZone::paintEvent(QPaintEvent*) {
+    //QWidget::paintEvent(event);
 
     QPainter painter(this);
+
+    painter.fillRect(0, 0, width(), height(), QColor(this->palette().color(QPalette::Background)));
 
     // Draw highlight
     if(isHighlight){
@@ -177,8 +166,10 @@ void IndigoDropZone::paintEvent(QPaintEvent*) {
 
         int offset = borderHighlight;
 
+        colorHighlightAlpha = blendColor(QColor(this->palette().color(QPalette::Background)),QColor(this->palette().color(QPalette::Highlight)), transparency);
+
         //painter.fillRect(0, 0, size().width(), size().height(), colorNormal);
-        painter.fillRect(x, y, width, height, colorHighlight);
+        painter.fillRect(x, y, width, height, QColor(this->palette().color(QPalette::Highlight)));
         painter.fillRect(x + offset, y + offset, width -(offset*2), height -(offset*2),colorHighlightAlpha);
 
     // Reset highlight (normal view)

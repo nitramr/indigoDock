@@ -9,6 +9,7 @@
 #include "colorswatch.h"
 #include "anglepicker.h"
 #include "stylefactory.h"
+#include "configmanager.h"
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -17,60 +18,9 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    invert = false;
-
-    QFile f("data/qss/dark.qss");
-    if (!f.exists())
-    {
-        printf("Unable to set stylesheet, file not found\n");
-    }
-    else
-    {
-        f.open(QFile::ReadOnly | QFile::Text);
-        QTextStream ts(&f);
-
-        QString style = ts.readAll();
-       // qApp->setStyleSheet(ts.readAll());
-
-        StyleFactory *sf = new StyleFactory();
-        sf->parseString(style);
-
-         qDebug()<< "Style" << style << endl;
-        qApp->setStyleSheet(style);
-
-        if(sf->getTheme() == "dark") invert = true;
-
-        qApp->setPalette(sf->palette());
-    }
-
-
     qApp->setStyle(QStyleFactory::create("Fusion"));
 
-  /*  // Style start
-    qApp->setStyle(QStyleFactory::create("Fusion"));
-    //"Fusion" "Windows". Depending on the platform, "WindowsXP" or "Macintosh" may be available.
-
-    // Style: https://gist.github.com/QuantumCD/6245215
-
-    QPalette darkPalette;
-    darkPalette.setColor(QPalette::Window, QColor(53,53,53));
-    darkPalette.setColor(QPalette::WindowText, Qt::white);
-    darkPalette.setColor(QPalette::Base, QColor(25,25,25));
-    darkPalette.setColor(QPalette::AlternateBase, QColor(53,53,53));
-    darkPalette.setColor(QPalette::ToolTipBase, Qt::white);
-    darkPalette.setColor(QPalette::ToolTipText, Qt::white);
-    darkPalette.setColor(QPalette::Text, Qt::white);
-    darkPalette.setColor(QPalette::Button, QColor(53,53,53));
-    darkPalette.setColor(QPalette::ButtonText, Qt::white);
-    darkPalette.setColor(QPalette::Disabled, QPalette::Text, Qt::darkGray);
-    darkPalette.setColor(QPalette::Disabled, QPalette::ButtonText, Qt::darkGray);
-    darkPalette.setColor(QPalette::BrightText, Qt::red);
-    darkPalette.setColor(QPalette::Link, QColor(42, 130, 218));
-    darkPalette.setColor(QPalette::Highlight, QColor(42, 130, 218));
-    darkPalette.setColor(QPalette::HighlightedText, Qt::black);
-
-    qApp->setPalette(darkPalette);
-    // Style End*/
+    loadTheme();
 
 
 
@@ -81,6 +31,22 @@ MainWindow::MainWindow(QWidget *parent) :
     setMenuBar(menuBar);
 
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q), this, SLOT(close()));
+
+    /******************
+     *
+     * toolBar
+     *
+     * ***************/
+
+    //ui->mainToolBar->addAction("Light");
+
+    QAction *tb_light = new QAction("Light",this);
+    ui->mainToolBar->addAction(tb_light);
+    connect(tb_light, SIGNAL(triggered()), this, SLOT(loadLightTheme()));
+
+    QAction *tb_dark = new QAction("Dark",this);
+    ui->mainToolBar->addAction(tb_dark);
+    connect(tb_dark, SIGNAL(triggered()), this, SLOT(loadDarkTheme()));
 
 
     /*******************
@@ -120,17 +86,17 @@ MainWindow::MainWindow(QWidget *parent) :
     // Panel Setup
     IndigoPanel *pan_page = new IndigoPanel("PanPage", this);
     pan_page->setCaption("Page");
-    pan_page->setIcon(iconInvert(QIcon(iconPath + "pan-page.png"), invert));
+    pan_page->setIcon(QIcon(str_iconPath + "pan-page.png"));
     indigoDock->addIndigoPanel(pan_page);
 
     IndigoPanel *pan_image = new IndigoPanel("PanImage", this);
     pan_image->setCaption("Image");
-    pan_image->setIcon(iconInvert(QIcon(iconPath + "pan-image.png"), invert));
+    pan_image->setIcon(QIcon(str_iconPath + "pan-image.png"));
     indigoDock->addIndigoPanel(pan_image);
 
     IndigoPanel *pan_text = new IndigoPanel("PanText",this);
     pan_text->setCaption("Text");
-    pan_text->setIcon(iconInvert(QIcon(iconPath + "pan-text.png"),invert));
+    pan_text->setIcon(QIcon(str_iconPath + "pan-text.png"));
     indigoDock->addIndigoPanel(pan_text);
 
 
@@ -139,29 +105,17 @@ MainWindow::MainWindow(QWidget *parent) :
     textPanel(pan_text);
 }
 
-QIcon MainWindow::iconInvert(const QIcon &icon, bool invert){
 
-    QSize sz;
 
-    for (int var = 0; var < icon.availableSizes().count(); ++var) {
-        if (icon.availableSizes().at(var).width() > sz.width())
-        sz = icon.availableSizes().at(var);
-    }
-    QPixmap pix = icon.pixmap(sz);
-
-    if(invert){
-        QImage image = pix.toImage();
-        image.invertPixels();
-        pix = pix.fromImage(image);
-    }
-
-    return pix;
-
+MainWindow::~MainWindow()
+{
+    delete ui;
 }
+
 
 void MainWindow::textPanel(IndigoPanel *parent){
 
-    IndigoExpanderGroup *grFont = new IndigoExpanderGroup(false);
+    IndigoExpanderGroup *grFont = new IndigoExpanderGroup();
     IndigoExpanderGroup *grAlignment = new IndigoExpanderGroup(false);
     IndigoExpanderGroup *grStyles = new IndigoExpanderGroup(false);
     IndigoExpanderGroup *grChars = new IndigoExpanderGroup(false);
@@ -205,7 +159,68 @@ void MainWindow::textPanel(IndigoPanel *parent){
 }
 
 
-MainWindow::~MainWindow()
-{
-    delete ui;
+
+void MainWindow::loadTheme(){
+
+    ConfigManager *fm = new ConfigManager();
+
+    str_iconPath = fm->getIconPath();
+
+    QFile f(fm->getThemePath());
+
+    if (!f.exists())
+    {
+        printf("Unable to set stylesheet, file not found\n");
+    }
+    else
+    {
+        f.open(QFile::ReadOnly | QFile::Text);
+        QTextStream ts(&f);
+
+        QString style = ts.readAll();
+       // qApp->setStyleSheet(ts.readAll());
+
+        StyleFactory *sf = new StyleFactory();
+        sf->parseString(style);
+
+        qDebug()<< "QSS Settings:" << style << endl;
+
+        qApp->setPalette(sf->palette());
+        qApp->setStyleSheet(style);
+
+
+
+    }
+}
+
+
+
+void MainWindow::saveTheme(Theme theme){
+
+    ConfigManager *fm = new ConfigManager();
+
+    switch(theme){
+        case Dark:
+            fm->setIconPath("data/icons/dark/");
+            fm->setThemePath("data/qss/scribus-dark.qss");
+            fm->setTheme("Dark");
+            break;
+        case Light:
+            fm->setIconPath("data/icons/light/");
+            fm->setThemePath("data/qss/scribus-light.qss");
+            fm->setTheme("Light");
+            break;
+    }
+
+}
+
+
+void MainWindow::loadDarkTheme(){
+    saveTheme(MainWindow::Dark);
+    loadTheme();
+}
+
+void MainWindow::loadLightTheme(){
+    saveTheme(MainWindow::Light);
+    loadTheme();
 }

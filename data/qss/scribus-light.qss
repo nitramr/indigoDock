@@ -40,28 +40,31 @@ ColorFormat
 	hsva(360,100,100,100);
 
 */
-Palette::dark {
-	[all]		alternate-base:		rgb(53,53,53);
-	[all]		base:			rgb(25,25,25);
+Palette::light {
+	[all]		alternate-base:		rgb(235,235,235);
+	[all]		base:			rgb(210,210,210);
 	[all]		bright-text:		rgb(255,0,0);
-	[all]		button:			rgb(53,53,53);
-	[all]		button-text:		#ffffff;
-	[disabled]	button-text:		#808080;
+	[all]		button:			rgb(235,235,235);
+	[all]		button-text:		rgb(34,34,34);
+	[disabled]	button-text:		rgb(83,83,83);
 	[all]		highlight:		rgb(42,130,218);
 	[all]		highlighted-text:	rgb(0,0,0);
 	[all]		link:			rgb(42,130,218);
-	[all]		text:			#ffffff;
-	[disabled]	text:			#808080;
-	[all]		tooltip-base:		#ffffff;
-	[all]		tooltip-text:		#ffffff;
-	[all]		window:			rgb(53,53,53);
-	[all]		window-text: 		#ffffff;
+	[all]		text:			rgb(34,34,34);
+	[disabled]	text:			rgb(83,83,83);
+	[all]		tooltip-base:		rgb(34,34,34);
+	[all]		tooltip-text:		rgb(34,34,34);
+	[all]		window:			rgb(235,235,235);
+	[all]		window-text: 		rgb(34,34,34);
 }
 
 /* Regular QSS definitions */
 
-QWidget {
+IndigoDropZone { 
 
- //background-color: palette(text);
+	background-color: palette(base);
+}
 
+IndigoTabBar::tab:hover {
+        background-color: palette(base);
 }

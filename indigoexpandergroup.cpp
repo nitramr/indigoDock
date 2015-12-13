@@ -1,4 +1,5 @@
 #include "indigoexpandergroup.h"
+#include "configmanager.h"
 
 IndigoExpanderLabel::IndigoExpanderLabel(QWidget *parent) : QLabel(parent),collapse(false)
 {
@@ -6,6 +7,9 @@ IndigoExpanderLabel::IndigoExpanderLabel(QWidget *parent) : QLabel(parent),colla
     spacing = 4; // space around text label
     icon_size = 8; // icon dimensions
     b_collapsable = true;
+
+    ConfigManager *fm = new ConfigManager();
+    iconPath = fm->getIconPath();
 
 }
 
@@ -71,11 +75,11 @@ void IndigoExpanderLabel::paintEvent(QPaintEvent *)
 
          if (collapse)
          {
-            painter.drawImage(QRect(margin_left, iconY, icon_size,icon_size), QImage(":/icons/icons/close.png"));
+            painter.drawImage(QRect(margin_left, iconY, icon_size,icon_size), QImage(iconPath +"close.png"));
          }
          else
          {
-            painter.drawImage(QRect(margin_left, iconY, icon_size,icon_size), QImage(":/icons/icons/open.png"));
+            painter.drawImage(QRect(margin_left, iconY, icon_size,icon_size), QImage(iconPath +"open.png"));
          }
      }
 
