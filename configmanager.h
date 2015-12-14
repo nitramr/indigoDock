@@ -12,8 +12,6 @@ public:
     void setIconPath(QString path);
     QString getThemePath();
     void setThemePath(QString path);
-    QString getTheme();
-    void setTheme(QString name);
 
 
 private:
@@ -21,7 +19,6 @@ private:
     QString str_SettingsFile;
     QString str_iconPath;
     QString str_themePath;
-    QString str_theme;
 
 
 signals:

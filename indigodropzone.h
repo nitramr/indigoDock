@@ -22,8 +22,9 @@ public:
     void movePanel(int newIndex, QString name);
 
 protected:
-    void paintEvent(QPaintEvent*event);
+    void paintEvent(QPaintEvent*);
     void resizeEvent(QResizeEvent *);
+    void mousePressEvent(QMouseEvent *event);
 
 private:
     QVBoxLayout *m_layout;

@@ -32,8 +32,8 @@ IndigoMenuBar::IndigoMenuBar()
 
 bool IndigoMenuBar::loadSettings()
 {
-    ConfigManager *fm = new ConfigManager();
-    iconPath = fm->getIconPath();
+
+    iconPath = ConfigManager().getIconPath();
 
 
     QFile loadFile(QStringLiteral("data/navigation.json"));

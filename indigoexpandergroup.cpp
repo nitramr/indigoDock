@@ -8,8 +8,8 @@ IndigoExpanderLabel::IndigoExpanderLabel(QWidget *parent) : QLabel(parent),colla
     icon_size = 8; // icon dimensions
     b_collapsable = true;
 
-    ConfigManager *fm = new ConfigManager();
-    iconPath = fm->getIconPath();
+    iconPath =  ConfigManager().getIconPath();
+
 
 }
 

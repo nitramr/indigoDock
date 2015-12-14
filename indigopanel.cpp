@@ -167,7 +167,7 @@ bool IndigoPanel::eventFilter(QObject *o, QEvent *event)
                 setWindowFlags(Qt::Tool|Qt::FramelessWindowHint);
                 show();
 
-                emit mouseReleased(); // activate reparenting in DropZone
+                emit mouseReleased(); // activate reparenting in DropZone*/
                 break;
         }
 
@@ -182,7 +182,7 @@ bool IndigoPanel::eventFilter(QObject *o, QEvent *event)
             move(QPoint(point.x() - relative_x, point.y() - relative_y));
 
 
-            emit mouseMove(this->height()); // activate DropZone hover
+            emit mouseMove(this->height()); // activate DropZone hover*/
             break;
         }
 

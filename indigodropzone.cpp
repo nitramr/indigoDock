@@ -16,12 +16,8 @@ IndigoDropZone::IndigoDropZone(QWidget *parent) :
     setMouseTracking(true);
     setAutoFillBackground( true );
 
-    //QColor bgColor = qApp->style()->standardPalette().brush(QPalette::Background).color();
 
-    transparency = 0.1; // 10%
-    //this->setBackgroundColor(this->palette().color(QPalette::Base));
-    //this->setHighlightColor(QColor( 0, 179, 255 ));
-    //this->setHighlightColor(this->palette().color(QPalette::Highlight));
+    transparency = 0.1; // 10% 
 
     padding = 6;
     borderHighlight = 3;
@@ -45,6 +41,46 @@ IndigoDropZone::IndigoDropZone(QWidget *parent) :
     layout->addLayout(m_layout);
     layout->addStretch(1);
     setLayout(layout);
+
+}
+
+
+
+
+void IndigoDropZone::mousePressEvent(QMouseEvent *event){
+
+    IndigoPanel *child = static_cast<IndigoPanel*>(childAt(event->pos()));
+
+    if (!child) return;
+
+   /* QPixmap pixmap = *child->pixmap();
+
+        QByteArray itemData;
+        QDataStream dataStream(&itemData, QIODevice::WriteOnly);
+        dataStream << pixmap << QPoint(event->pos() - child->pos());
+
+        QMimeData *mimeData = new QMimeData;
+        mimeData->setData("application/x-dnditemdata", itemData);
+
+        QDrag *drag = new QDrag(this);
+        drag->setMimeData(mimeData);
+        drag->setPixmap(pixmap);
+        drag->setHotSpot(event->pos() - child->pos());
+
+        QPixmap tempPixmap = pixmap;
+        QPainter painter;
+        painter.begin(&tempPixmap);
+        painter.fillRect(pixmap.rect(), QColor(127, 127, 127, 127));
+        painter.end();
+
+        child->setPixmap(tempPixmap);
+
+        if (drag->exec(Qt::CopyAction | Qt::MoveAction, Qt::CopyAction) == Qt::MoveAction) {
+            child->close();
+        } else {
+            child->show();
+            child->setPixmap(pixmap);
+        }*/
 
 }
 
@@ -145,9 +181,8 @@ void IndigoDropZone::removePlaceholder (){
 
 
 
-void IndigoDropZone::paintEvent(QPaintEvent*event) {
+void IndigoDropZone::paintEvent(QPaintEvent*) {
 
-    //QWidget::paintEvent(event);
 
     QPainter painter(this);
 
