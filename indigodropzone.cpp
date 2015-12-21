@@ -1,23 +1,18 @@
 #include "indigodropzone.h"
 #include <QStyle>
 #include "qapplication.h"
+#include <QRubberBand>
 
-/* TODO:
- *
- * - add better splitter widget (redocking within a dropzone
- *
- */
 
 IndigoDropZone::IndigoDropZone(QWidget *parent) :
-   QWidget(parent)
+    QWidget(parent)
 {
     setObjectName("IndigoDropZone");
 
     setMouseTracking(true);
     setAutoFillBackground( true );
 
-
-    transparency = 0.1; // 10% 
+    transparency = 0.1; // 10%
 
     padding = 6;
     borderHighlight = 3;
@@ -28,7 +23,7 @@ IndigoDropZone::IndigoDropZone(QWidget *parent) :
     m_splitter = new QSplitter();
     m_splitter->setHandleWidth(padding);
     m_splitter->setOrientation(Qt::Vertical);
-   // m_splitter->setStretchFactor(1, 1);
+    // m_splitter->setStretchFactor(1, 1);
     m_splitter->move(this->pos());
 
     m_layout = new QVBoxLayout;
@@ -46,61 +41,47 @@ IndigoDropZone::IndigoDropZone(QWidget *parent) :
 
 
 
-
-void IndigoDropZone::mousePressEvent(QMouseEvent *event){
-
-    IndigoPanel *child = static_cast<IndigoPanel*>(childAt(event->pos()));
-
-    if (!child) return;
-
-   /* QPixmap pixmap = *child->pixmap();
-
-        QByteArray itemData;
-        QDataStream dataStream(&itemData, QIODevice::WriteOnly);
-        dataStream << pixmap << QPoint(event->pos() - child->pos());
-
-        QMimeData *mimeData = new QMimeData;
-        mimeData->setData("application/x-dnditemdata", itemData);
-
-        QDrag *drag = new QDrag(this);
-        drag->setMimeData(mimeData);
-        drag->setPixmap(pixmap);
-        drag->setHotSpot(event->pos() - child->pos());
-
-        QPixmap tempPixmap = pixmap;
-        QPainter painter;
-        painter.begin(&tempPixmap);
-        painter.fillRect(pixmap.rect(), QColor(127, 127, 127, 127));
-        painter.end();
-
-        child->setPixmap(tempPixmap);
-
-        if (drag->exec(Qt::CopyAction | Qt::MoveAction, Qt::CopyAction) == Qt::MoveAction) {
-            child->close();
-        } else {
-            child->show();
-            child->setPixmap(pixmap);
-        }*/
-
-}
-
-
-
 void IndigoDropZone::hoverZone(int height){
 
     QPoint cursor = this->mapFromGlobal(QCursor::pos());
 
     if (this->rect().contains(cursor) ) {
 
-                this->isHighlight = true;
-                this->addPlaceholder(height);
-                this->update();
+        int index = -1;
+
+        IndigoPanel *pan = qobject_cast<IndigoPanel *>(sender());
+        if (!pan) return;
+        pan->setIndex(index);
+
+        //this->updatePanels();
+
+        QList<IndigoPanel *> panels = findChildren<IndigoPanel *>();
+        foreach(IndigoPanel * panel, panels)
+        {
+
+            //qDebug() << "WidgetRect" << panel->rect() << endl;
+            //qDebug() << "CursorPos" << cursor << endl;
+
+            if(panel->rect().contains(cursor)){
+                index = panel->Index();
+                pan->setIndex(index);
+            }
+        }
+
+
+
+       // qDebug() << "Index under mouse" << index << endl;
+
+        this->isHighlight = true;  // switch highlighter on
+        this->placeholderHeight = height;
+        this->addPlaceholder(index);
+        this->update();
 
     }else{
 
-                this->isHighlight = false;
-                this->removePlaceholder();
-                this->update();
+        this->isHighlight = false;
+        this->removePlaceholder();
+        this->update();
 
     }
 
@@ -114,15 +95,14 @@ void IndigoDropZone::dropPanel()
 
     if (this->rect().contains(cursor) ) {
 
-            IndigoPanel *pan = qobject_cast<IndigoPanel *>(sender());
-            if (!pan) return;
+        IndigoPanel *pan = qobject_cast<IndigoPanel *>(sender());
+        if (!pan) return;
 
-            this->isHighlight = false;
-            this->removePlaceholder();
-            this->addPanel(pan);
-            this->update(); // defocus
+        this->isHighlight = false; // switch highlighter off
+        this->removePlaceholder();
+        this->update();
 
-            emit pan->isDock();
+        redockPanel();
 
     }
 }
@@ -136,38 +116,83 @@ void IndigoDropZone::dropPanel()
  */
 void IndigoDropZone::addPanel (IndigoPanel * panel, int index){
 
-    //index is used for order in Splitter
+   // add panel to list
+   if(index == -1){
+       PanelList.append(panel);
+   }else PanelList.insert(index, panel);
 
-    m_splitter->addWidget(panel);
+
+   // add panel to widget
+   if(index == -1){
+        m_splitter->addWidget(panel);
+    }else m_splitter->insertWidget(index, panel);
+
     m_layout->addWidget(m_splitter);
-
     m_splitter->show();
+
+    panel->setDockState(IndigoPanel::Docked);
     panel->show();
 
-    this->setFixedWidth(panel->width() + padding*2);
+    updatePanels();
+
+    // send signal for successful adding
+    emit panelAdded(panel->Icon(), panel->Index());
 
 }
 
 
 
-void IndigoDropZone::movePanel(int newIndex, QString name){
+void IndigoDropZone::removePanel(int index){
+     PanelList.removeAt(index);
+     updatePanels();
+     emit panelRemoved(index);
+}
 
-    qDebug() << "panel remove:" << name << endl;
 
-    IndigoPanel * pan = this->findChild<IndigoPanel*>(name);
-    pan->setParent(0);
+
+void IndigoDropZone::movePanel(int oldIndex, int newIndex){
+
+    IndigoPanel * pan = PanelList.takeAt(oldIndex);
+    pan->setParent(this);
+
+    PanelList.insert(newIndex, pan);
     m_splitter->insertWidget(newIndex, pan);
 
+    updatePanels();
+
 }
 
 
-void IndigoDropZone::addPlaceholder (int height){
 
-    m_placeholder->setFixedHeight(height);
-    m_splitter->addWidget(m_placeholder);
-    m_layout->addWidget(m_splitter);
+void IndigoDropZone::redockPanel(){
+    IndigoPanel *pan = qobject_cast<IndigoPanel *>(sender());
+    if (!pan) return;
 
-    m_splitter->show();
+    addPanel(pan, pan->Index());
+}
+
+
+
+void IndigoDropZone::updatePanels(){
+
+    // update panel index
+    for( int i=0; i<PanelList.count(); ++i )
+    {
+        PanelList.at(i)->setIndex(i);
+    }
+
+}
+
+
+
+void IndigoDropZone::addPlaceholder (int index){
+
+    m_placeholder->setFixedHeight(placeholderHeight);
+
+    if(index == -1){
+        m_splitter->addWidget(m_placeholder);
+    }else m_splitter->insertWidget(index, m_placeholder);
+
 
 }
 
@@ -176,9 +201,15 @@ void IndigoDropZone::addPlaceholder (int height){
 void IndigoDropZone::removePlaceholder (){
 
     m_placeholder->setParent(this);
-
+    m_placeholder->setFixedHeight(0);
 }
 
+
+
+void IndigoDropZone::mouseMoveEvent(QMouseEvent *){
+
+   // hoverZone(50);
+}
 
 
 void IndigoDropZone::paintEvent(QPaintEvent*) {
@@ -193,6 +224,10 @@ void IndigoDropZone::paintEvent(QPaintEvent*) {
 
         QPoint pRect = m_placeholder->mapToParent(QPoint(padding,padding));
 
+        /*if(m_placeholder->height() <= placeholderHeight){
+            m_placeholder->setFixedHeight(m_placeholder->height() + 1);
+        }*/
+
         int width = m_placeholder->width();
         int height = m_placeholder->height();
 
@@ -203,11 +238,10 @@ void IndigoDropZone::paintEvent(QPaintEvent*) {
 
         colorHighlightAlpha = blendColor(QColor(this->palette().color(QPalette::Background)),QColor(this->palette().color(QPalette::Highlight)), transparency);
 
-        //painter.fillRect(0, 0, size().width(), size().height(), colorNormal);
         painter.fillRect(x, y, width, height, QColor(this->palette().color(QPalette::Highlight)));
         painter.fillRect(x + offset, y + offset, width -(offset*2), height -(offset*2),colorHighlightAlpha);
 
-    // Reset highlight (normal view)
+
     }
 
 }
@@ -232,11 +266,11 @@ QColor IndigoDropZone::blendColor(QColor color1, QColor color2, double ratio){
         ratio = 0;
     }
 
-   return QColor(
-    color1.red()* (1-ratio) + color2.red()*ratio,
-    color1.green()* (1-ratio) + color2.green()*ratio,
-    color1.blue()* (1-ratio) + color2.blue()*ratio,
-    255);
+    return QColor(
+                color1.red()* (1-ratio) + color2.red()*ratio,
+                color1.green()* (1-ratio) + color2.green()*ratio,
+                color1.blue()* (1-ratio) + color2.blue()*ratio,
+                255);
 
 }
 

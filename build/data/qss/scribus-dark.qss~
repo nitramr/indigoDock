@@ -39,6 +39,8 @@ ColorFormat
 	hsv(360,100,100);
 	hsva(360,100,100,100);
 
+Styles: http://doc.qt.io/qt-4.8/stylesheet-examples.html
+
 */
 Palette::dark {
 	[all]		alternate-base:		rgb(53,53,53);
@@ -60,11 +62,75 @@ Palette::dark {
 
 /* Regular QSS definitions */
 
+
 IndigoDropZone { 
 
 	background-color: palette(base);
+	
 }
 
 IndigoTabBar::tab:hover {
         background-color: palette(base);
 }
+
+QScrollBar:horizontal {
+    border: 1px solid palette(dark);
+    background: palette(window);
+    height: 10px;
+    margin: 0px 10px 0px 10px;
+}
+QScrollBar::handle:horizontal {
+    background: palette(base);
+    min-width: 10px;
+}
+QScrollBar::add-line:horizontal {
+    border: 1px solid palette(dark);
+    background: palette(window);
+    width: 10px;
+    subcontrol-position: right;
+    subcontrol-origin: margin;
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
+QScrollBar::sub-line:horizontal {
+    	border: 1px solid palette(dark);
+    	background: palette(window);
+    	width: 10px;
+    	subcontrol-position: left;
+   	subcontrol-origin: margin;
+  	border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+
+QScrollBar:vertical {
+    border: 1px solid palette(dark);
+    background: palette(window);
+    width: 10px;
+    margin: 10px 0px 10px 0px;
+}
+QScrollBar::handle:vertical {
+    background: palette(base);
+    min-height: 10px;
+}
+QScrollBar::add-line:vertical {
+    border: 1px solid palette(dark);
+    background: palette(window);
+    height: 10px;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
+QScrollBar::sub-line:vertical {
+    	border: 1px solid palette(dark);
+    	background: palette(window);
+    	height: 10px;
+    	subcontrol-position: top;
+   	subcontrol-origin: margin;
+  	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+}
+
+

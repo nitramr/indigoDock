@@ -1,5 +1,5 @@
 #ifndef CONFIGMANAGER_H
-#define GONFIGMANAGER_H
+#define CONFIGMANAGER_H
 #include <QString>
 #include <QSettings>
 

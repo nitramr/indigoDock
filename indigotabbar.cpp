@@ -24,14 +24,17 @@ IndigoTabBar::IndigoTabBar(QWidget *parent) :
                             "}"                            
             );
 
+    this->setAccessibleName("IndigoTabBar");
     this->setStyleSheet( styleSheetTab.arg(int_iconScale));
     this->setMovable(true);
     this->setShape(QTabBar::RoundedEast);
+    this->m_tabOrientation = IndigoTabBar::East;
     this->setFocusPolicy(Qt::NoFocus);
     this->setIconSize(QSize(int_iconScale,int_iconScale));
     this->setExpanding(false);
     this->setSelectionBehaviorOnRemove(QTabBar::SelectPreviousTab);
     this->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Expanding));
+
 
 }
 
@@ -48,23 +51,10 @@ void IndigoTabBar::mousePressEvent(QMouseEvent*event){
 void IndigoTabBar::mouseReleaseEvent(QMouseEvent*event){
 
     int_newIndex = this->currentIndex();
-    emit moveTab();
+    emit moveTab(int_oldIndex, int_newIndex);
 
     QTabBar::mouseReleaseEvent(event);
 
-}
-
-
-int IndigoTabBar::oldTabIndex(){
-
-    return int_oldIndex;
-}
-
-
-
-int IndigoTabBar::newTabIndex(){
-
-    return int_newIndex;
 }
 
 
@@ -87,6 +77,10 @@ void IndigoTabBar::insertTab(int index, QIcon &icon){
 }
 
 
+IndigoTabBar::Orientation IndigoTabBar::tabPosition(){
+    return m_tabOrientation;
+}
+
 
 void IndigoTabBar::setTabPosition(Orientation tabOrientation){
 
@@ -101,6 +95,8 @@ void IndigoTabBar::setTabPosition(Orientation tabOrientation){
         this->setTabIcon(i, icon);
 
     }
+
+    m_tabOrientation = tabOrientation;
 
     // set new tab position
     switch(tabOrientation){

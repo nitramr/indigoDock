@@ -49,13 +49,17 @@ FORMS    += mainwindow.ui
 
 RESOURCES +=
 
+
+ROOT_DIRECTORY = $$PWD
+
 CONFIG(debug, debug|release) {
-    DESTDIR = build/debug
+    BUILD_DIRECTORY = $${ROOT_DIRECTORY}/build/debug
 } else {
-    DESTDIR = build/release
+    BUILD_DIRECTORY = $${ROOT_DIRECTORY}/build/release
 }
 
-OBJECTS_DIR = $$DESTDIR/.obj
-MOC_DIR = $$DESTDIR/.moc
-RCC_DIR = $$DESTDIR/.qrc
-UI_DIR = $$DESTDIR/.ui
+DESTDIR = $${ROOT_DIRECTORY}/build
+OBJECTS_DIR = $${BUILD_DIRECTORY}
+MOC_DIR = $${BUILD_DIRECTORY}
+RCC_DIR = $${BUILD_DIRECTORY}
+UI_DIR = $${BUILD_DIRECTORY}

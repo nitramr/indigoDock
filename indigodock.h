@@ -6,38 +6,35 @@
 #include "indigodropzone.h"
 #include "indigotabbar.h"
 
+
+
 class IndigoDock : public QWidget
 {
     Q_OBJECT
 public:
 
 
-
-    explicit IndigoDock(QWidget *parent = 0);  
+    explicit IndigoDock(QWidget *parent = 0);
     IndigoDropZone * m_dropzone;
     IndigoTabBar * m_toolbar;
     void addIndigoPanel(IndigoPanel *panel, int tabIndex = -1);
-
-
 
 private:
 
     QHBoxLayout *m_layout;
     QScrollArea * m_scrollArea;
-    QList<IndigoPanel*> m_panelList;
-    void addPanel(IndigoPanel * panel, int index = -1 );
-    void updatePanels();
-
+    void addPanel(IndigoPanel * panel, int index = -1 );    
 
 
 signals:
 
 public slots:
     void updateTabPosition(Qt::DockWidgetArea area);
-    void movePanel();
-    void removePanel(int index);
-    void redockPanel();
+    void movePanel(int oldIndex, int newIndex);
+    void removeTab(int index);
     void updateSize();
+    void addTab(QIcon icon, int index);
+
 
 };
 

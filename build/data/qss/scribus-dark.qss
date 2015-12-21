@@ -39,6 +39,8 @@ ColorFormat
 	hsv(360,100,100);
 	hsva(360,100,100,100);
 
+Styles: http://doc.qt.io/qt-4.8/stylesheet-examples.html
+
 */
 Palette::dark {
 	[all]		alternate-base:		rgb(53,53,53);
@@ -60,9 +62,11 @@ Palette::dark {
 
 /* Regular QSS definitions */
 
+
 IndigoDropZone { 
 
 	background-color: palette(base);
+	
 }
 
 IndigoTabBar::tab:hover {

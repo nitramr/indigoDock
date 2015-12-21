@@ -14,7 +14,6 @@ class IndigoPanelHandle : public QWidget
 public:
     IndigoPanelHandle(QWidget* parent = 0);
     void setTitle(const QString &title);
-    void setBackgroundColor(const QColor &bgColor);
 
 protected:
 
@@ -22,7 +21,6 @@ private:
     QLabel * m_lblTitle;
     QToolButton * m_btnClose;
     QToolButton * m_btnFloat;
-    QPalette palette;
 
 signals:
 
@@ -36,41 +34,68 @@ class IndigoPanel : public QFrame
     Q_OBJECT
 
 public:
+    enum IndigoState{
+        HiddenDocked,
+        HiddenFloating,
+        Floating,
+        Docked,
+        None
+    };
+
+    enum IndigoExpander{
+        Normal,
+        Advanced,
+        Collapsed
+    };
+
     IndigoPanel(QString name, QWidget* parent = 0);
+    void show();
+    void addWidgetNormal(QWidget *content);
+    void addWidgetExtend(QWidget *content);
 
-
-    void setBackgroundColor(const QColor bgColor);
     void setCaption(const QString title);
-    void setIcon(QIcon icon);
+
     QIcon Icon();
-    void addWidget(QWidget *content);
+    void setIcon(QIcon icon);
+
     int Index();
     void setIndex(int index);
+
+    IndigoState dockState();
+    void setDockState(IndigoState state);
+
+    IndigoExpander expanderState();
+    void setExpanderState(IndigoExpander expander);
+
 
 protected:   
     bool eventFilter(QObject *o, QEvent *e);
 
-private:
-    QPalette palette;
-    QVBoxLayout *m_contentArea;
+private:   
+    QWidget *m_normalContainer;
+    QWidget *m_extendedContainer;
+    QVBoxLayout *m_normalArea;
+    QVBoxLayout *m_extendedArea;
+    QVBoxLayout *m_mainLayout;
     IndigoPanelHandle * m_handle;
-    QPoint oldPos;
+    QPoint oldPos;  
     int relative_x;
     int relative_y;
-    QWidget *m_lastParentWidget;
-    QWidget *m_mainWindow;
     QIcon m_icon;    
-    int m_index;
+    int m_index; 
+    IndigoState m_state;
+    IndigoExpander m_expander;
+    QWidget *m_Parent;
 
 signals:
     void mouseReleased();
     void mouseMove(int height);
     void isFloating(int index);
-    void isDock();
+   // void isDock();
 
 public slots:
     void hide();
-    void dock();
+    void expander();
 };
 
 #endif // INDIGOPANEL_H

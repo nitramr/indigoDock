@@ -84,17 +84,17 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     // Panel Setup
-    IndigoPanel *pan_page = new IndigoPanel("PanPage", this);
+    IndigoPanel *pan_page = new IndigoPanel("PanPage",indigoDock);
     pan_page->setCaption("Page");
     pan_page->setIcon(QIcon(str_iconPath + "pan-page.png"));
     indigoDock->addIndigoPanel(pan_page);
 
-    IndigoPanel *pan_image = new IndigoPanel("PanImage", this);
+    IndigoPanel *pan_image = new IndigoPanel("PanImage",indigoDock);
     pan_image->setCaption("Image");
     pan_image->setIcon(QIcon(str_iconPath + "pan-image.png"));
     indigoDock->addIndigoPanel(pan_image);
 
-    IndigoPanel *pan_text = new IndigoPanel("PanText",this);
+    IndigoPanel *pan_text = new IndigoPanel("PanText", indigoDock);
     pan_text->setCaption("Text");
     pan_text->setIcon(QIcon(str_iconPath + "pan-text.png"));
     indigoDock->addIndigoPanel(pan_text);
@@ -103,6 +103,14 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // Add panel content
     textPanel(pan_text);
+
+    QLabel *lbl1 = new QLabel("Image stuff normal");
+    QLabel *lbl3 = new QLabel("Image stuff extended");
+    pan_image->addWidgetNormal(lbl1);
+    pan_image->addWidgetExtend(lbl3);
+
+    QLabel *lbl2 = new QLabel("Page stuff extended");
+    pan_page->addWidgetExtend(lbl2);
 }
 
 
@@ -148,13 +156,13 @@ void MainWindow::textPanel(IndigoPanel *parent){
     grStyles->addWidget(colorSwatch);
 
 
-    parent->addWidget(grFont);
-    parent->addWidget(grAlignment);
-    parent->addWidget(grStyles);
-    parent->addWidget(grChars);
-    parent->addWidget(grParagraph);
-    parent->addWidget(grLists);
-    parent->addWidget(grColumns);
+    parent->addWidgetNormal(grFont);
+    parent->addWidgetNormal(grAlignment);
+    parent->addWidgetNormal(grStyles);
+    parent->addWidgetNormal(grChars);
+    parent->addWidgetNormal(grParagraph);
+    parent->addWidgetNormal(grLists);
+    parent->addWidgetNormal(grColumns);
 
 }
 
@@ -178,12 +186,9 @@ void MainWindow::loadTheme(){
         QTextStream ts(&f);
 
         QString style = ts.readAll();
-       // qApp->setStyleSheet(ts.readAll());
 
         StyleFactory *sf = new StyleFactory();
         sf->parseString(style);
-
-        qDebug()<< "QSS Settings:" << style << endl;
 
         qApp->setPalette(sf->palette());
         qApp->setStyleSheet(style);
@@ -197,16 +202,16 @@ void MainWindow::loadTheme(){
 
 void MainWindow::saveTheme(Theme theme){
 
-    ConfigManager *fm = new ConfigManager();
+    ConfigManager *cm = new ConfigManager();
 
     switch(theme){
         case Dark:
-            fm->setIconPath("data/icons/dark/");
-            fm->setThemePath("data/qss/scribus-dark.qss");
+            cm->setIconPath("data/icons/dark/");
+            cm->setThemePath("data/qss/scribus-dark.qss");
             break;
         case Light:
-            fm->setIconPath("data/icons/light/");
-            fm->setThemePath("data/qss/scribus-light.qss");
+            cm->setIconPath("data/icons/light/");
+            cm->setThemePath("data/qss/scribus-light.qss");
             break;
     }
 
