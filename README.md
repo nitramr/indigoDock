@@ -24,8 +24,9 @@ Here is how you run it:
 3. **Find and click on the TestLayout.pro which should invoke QtCreator**  
 ![testlayout pro](https://cloud.githubusercontent.com/assets/4140247/10866360/21cef028-7ff9-11e5-8c4c-e0e86c682868.png)  
 4. **Click "Projects" (1), choose "Debug" (2), uncheck "Shadow build" (3), choose "Release" (2), uncheck "Shadow build" (3)**  
-![indigodock_settings](https://cloud.githubusercontent.com/assets/15112256/11942773/1b5a8e9c-a839-11e5-8a50-a897ec7a7236.png)
+![indigodock_settings](https://cloud.githubusercontent.com/assets/15112256/11942773/1b5a8e9c-a839-11e5-8a50-a897ec7a7236.png)  
 5. **Build TestLayout by clicking on the green arrow OR Build > Build Project "TestLayout"**  
+
 ![build-indigodock-in-qtcreator](https://cloud.githubusercontent.com/assets/4140247/10866388/01e7e67e-7ffa-11e5-852c-0176e022c647.jpg)  
 
 ## Snapshot features:
