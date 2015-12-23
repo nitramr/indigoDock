@@ -36,7 +36,7 @@ bool IndigoMenuBar::loadSettings()
     iconPath = ConfigManager().getIconPath();
 
 
-    QFile loadFile(QStringLiteral("data/navigation.json"));
+    QFile loadFile(QStringLiteral(":data/navigation.json"));
 
     if (!loadFile.open(QIODevice::ReadOnly)) {
         qWarning("Couldn't open menubarfile.");

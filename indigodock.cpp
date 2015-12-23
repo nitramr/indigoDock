@@ -25,17 +25,18 @@ IndigoDock::IndigoDock(QWidget *parent) : QWidget(parent)
     m_scrollArea->setWidgetResizable(true);
     m_scrollArea->setWidget(m_dropzone);
 
-   // m_layout->addStretch(1);
     m_layout->addWidget(m_scrollArea);
     m_layout->addWidget(m_toolbar);
 
     setLayout(m_layout);
 
+    PanelList = m_dropzone->PanelList;
+
     // watch active tab change event
-    connect(m_toolbar, SIGNAL(moveTab(int,int)), this, SLOT(movePanel(int,int)));
+    connect(m_toolbar, SIGNAL(tabMoved(int,int)), m_dropzone, SLOT(movePanel(int,int)));
     connect(m_dropzone, SIGNAL(resize()), this, SLOT(updateSize()));
-    connect(m_dropzone, SIGNAL(panelRemoved(int)), this, SLOT(removeTab(int)));
-    connect(m_dropzone, SIGNAL(panelAdded(QIcon,int)), this, SLOT(addTab(QIcon,int)));
+    connect(m_dropzone, SIGNAL(panelRemoved(int)), m_toolbar, SLOT(removeTab(int)));
+    connect(m_dropzone, SIGNAL(panelAdded(QIcon,int)), m_toolbar, SLOT(addTab(QIcon, int)));
 
 }
 
@@ -43,45 +44,14 @@ IndigoDock::IndigoDock(QWidget *parent) : QWidget(parent)
 
 void IndigoDock::addIndigoPanel(IndigoPanel *panel, int tabIndex){
 
-    addPanel(panel, tabIndex);
+    m_dropzone->addPanel(panel, tabIndex);
 
     this->connect(panel, SIGNAL(mouseReleased()), m_dropzone, SLOT(dropPanel()));
     this->connect(panel, SIGNAL(mouseMove(int)), m_dropzone, SLOT(hoverZone(int)));
     this->connect(panel, SIGNAL(isFloating(int)), m_dropzone, SLOT(removePanel(int)));
+    this->connect(panel, SIGNAL(panelClosed(int)), m_toolbar, SLOT(hideTab(int)));
+    this->connect(panel, SIGNAL(panelShown(int)), m_toolbar, SLOT(showTab(int)));
 
-}
-
-
-
-void IndigoDock::movePanel(int oldIndex, int newIndex){
-
-    m_dropzone->movePanel(oldIndex, newIndex);
-
-}
-
-
-
-void IndigoDock::addPanel(IndigoPanel * panel, int index){
-
-    m_dropzone->addPanel(panel, index);
-
-}
-
-
-
-void IndigoDock::removeTab(int index){
-
-     m_toolbar->removeTab(index);
-
-}
-
-
-
-void IndigoDock::addTab(QIcon icon, int index){
-
-    if(index == -1){
-        m_toolbar->addTab(icon);
-    }else m_toolbar->insertTab(index, icon);
 }
 
 

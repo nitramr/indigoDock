@@ -1,7 +1,6 @@
 #include "indigodropzone.h"
 #include <QStyle>
 #include "qapplication.h"
-#include <QRubberBand>
 
 
 IndigoDropZone::IndigoDropZone(QWidget *parent) :
@@ -23,12 +22,10 @@ IndigoDropZone::IndigoDropZone(QWidget *parent) :
     m_splitter = new QSplitter();
     m_splitter->setHandleWidth(padding);
     m_splitter->setOrientation(Qt::Vertical);
-    // m_splitter->setStretchFactor(1, 1);
     m_splitter->move(this->pos());
 
     m_layout = new QVBoxLayout;
     m_layout->setMargin(padding);
-    //setLayout(m_layout);
 
     QVBoxLayout * layout = new QVBoxLayout();
     layout->setMargin(0);
@@ -130,6 +127,8 @@ void IndigoDropZone::addPanel (IndigoPanel * panel, int index){
     m_layout->addWidget(m_splitter);
     m_splitter->show();
 
+
+
     panel->setDockState(IndigoPanel::Docked);
     panel->show();
 
@@ -178,7 +177,10 @@ void IndigoDropZone::updatePanels(){
     // update panel index
     for( int i=0; i<PanelList.count(); ++i )
     {
-        PanelList.at(i)->setIndex(i);
+        if(PanelList.at(i)->dockState() == IndigoPanel::Docked){
+            PanelList.at(i)->setIndex(i);
+        }
+
     }
 
 }

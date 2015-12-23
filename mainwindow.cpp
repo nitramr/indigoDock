@@ -206,12 +206,12 @@ void MainWindow::saveTheme(Theme theme){
 
     switch(theme){
         case Dark:
-            cm->setIconPath("data/icons/dark/");
-            cm->setThemePath("data/qss/scribus-dark.qss");
+            cm->setIconPath(":/data/icons/dark/");
+            cm->setThemePath(":/data/qss/scribus-dark.qss");
             break;
         case Light:
-            cm->setIconPath("data/icons/light/");
-            cm->setThemePath("data/qss/scribus-light.qss");
+            cm->setIconPath(":/data/icons/light/");
+            cm->setThemePath(":/data/qss/scribus-light.qss");
             break;
     }
 

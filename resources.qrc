@@ -1,0 +1,21 @@
+<RCC>
+    <qresource prefix="/">
+        <file>data/navigation.json</file>
+        <file>data/icons/dark/close.png</file>
+        <file>data/icons/dark/new.png</file>
+        <file>data/icons/dark/open.png</file>
+        <file>data/icons/dark/pan-image.png</file>
+        <file>data/icons/dark/pan-page.png</file>
+        <file>data/icons/dark/pan-text.png</file>
+        <file>data/icons/dark/quit.png</file>
+        <file>data/icons/light/close.png</file>
+        <file>data/icons/light/new.png</file>
+        <file>data/icons/light/open.png</file>
+        <file>data/icons/light/pan-image.png</file>
+        <file>data/icons/light/pan-page.png</file>
+        <file>data/icons/light/pan-text.png</file>
+        <file>data/icons/light/quit.png</file>
+        <file>data/qss/scribus-dark.qss</file>
+        <file>data/qss/scribus-light.qss</file>
+    </qresource>
+</RCC>

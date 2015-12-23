@@ -91,7 +91,8 @@ signals:
     void mouseReleased();
     void mouseMove(int height);
     void isFloating(int index);
-   // void isDock();
+    void panelClosed(int index);
+    void panelShown(int index);
 
 public slots:
     void hide();

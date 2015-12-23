@@ -21,7 +21,14 @@ IndigoTabBar::IndigoTabBar(QWidget *parent) :
                                 "height: %1 px;"
                                 "padding: 0px;"
                                 "margin: 0px;"
-                            "}"                            
+                            "}"
+                           /* "IndigoTabBar::tab:disabled{"
+                                "width: 0 px;"
+                                "height: 0 px;"
+                                "margin: 0 px;"
+                                "padding: 0 px;"
+                                "border: none;"
+                            "}"*/
             );
 
     this->setAccessibleName("IndigoTabBar");
@@ -32,6 +39,8 @@ IndigoTabBar::IndigoTabBar(QWidget *parent) :
     this->setFocusPolicy(Qt::NoFocus);
     this->setIconSize(QSize(int_iconScale,int_iconScale));
     this->setExpanding(false);
+    this->setDrawBase(false);
+    this->setUsesScrollButtons(true);
     this->setSelectionBehaviorOnRemove(QTabBar::SelectPreviousTab);
     this->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Expanding));
 
@@ -51,19 +60,56 @@ void IndigoTabBar::mousePressEvent(QMouseEvent*event){
 void IndigoTabBar::mouseReleaseEvent(QMouseEvent*event){
 
     int_newIndex = this->currentIndex();
-    emit moveTab(int_oldIndex, int_newIndex);
 
     QTabBar::mouseReleaseEvent(event);
+
+    if(int_newIndex != int_oldIndex)
+        emit tabMoved(int_oldIndex, int_newIndex);
+
+
 
 }
 
 
 
-void IndigoTabBar::addTab(QIcon &icon){
+void IndigoTabBar::paintEvent(QPaintEvent *event)
+{
+    QTabBar::paintEvent(event);
 
-    icon = rotateIcon(icon);
+   /* QStylePainter p(this);
 
-    QTabBar::addTab(icon, "");
+    for(int i = 0; i < this->count(); ++i)
+    {
+
+
+        QStyleOptionTabV3 tab;
+        initStyleOption(&tab, i);
+
+        if (!(tab.state & QStyle::State_Enabled)) {
+            tab.palette.setCurrentColorGroup(QPalette::Disabled);
+            QRect tabRect(tab.rect.x(), tab.rect.y(), 0,0);
+            p.drawRect(tabRect);
+            continue;
+        }
+
+
+        //p.drawControl(QStyle::CE_TabBarTab, tab);
+
+        //p.drawItemPixmap(tab.rect, 0, tab.icon.pixmap(int_iconScale,int_iconScale));
+    }
+*/
+
+
+}
+
+
+
+void IndigoTabBar::addTab(QIcon icon, int index){
+
+    if(index == -1){
+        icon = rotateIcon(icon);
+        QTabBar::addTab(icon, "");
+    }else insertTab(index, icon);
 
 }
 
@@ -77,9 +123,33 @@ void IndigoTabBar::insertTab(int index, QIcon &icon){
 }
 
 
+
+void IndigoTabBar::removeTab(int index){
+    QTabBar::removeTab(index);
+}
+
+
+
+void IndigoTabBar::hideTab(int index){
+
+    this->setTabEnabled(index,false);    
+    //this->resize(this->sizeHint());
+
+}
+
+
+void IndigoTabBar::showTab(int index){
+
+    this->setTabEnabled(index,true);
+    //this->resize(this->sizeHint());
+
+}
+
+
 IndigoTabBar::Orientation IndigoTabBar::tabPosition(){
     return m_tabOrientation;
 }
+
 
 
 void IndigoTabBar::setTabPosition(Orientation tabOrientation){

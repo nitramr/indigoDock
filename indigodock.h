@@ -16,24 +16,20 @@ public:
 
     explicit IndigoDock(QWidget *parent = 0);
     IndigoDropZone * m_dropzone;
-    IndigoTabBar * m_toolbar;
+    IndigoTabBar * m_toolbar;    
+    QList<IndigoPanel*> PanelList;
     void addIndigoPanel(IndigoPanel *panel, int tabIndex = -1);
 
 private:
 
     QHBoxLayout *m_layout;
-    QScrollArea * m_scrollArea;
-    void addPanel(IndigoPanel * panel, int index = -1 );    
-
+    QScrollArea * m_scrollArea;   
 
 signals:
 
 public slots:
-    void updateTabPosition(Qt::DockWidgetArea area);
-    void movePanel(int oldIndex, int newIndex);
-    void removeTab(int index);
+    void updateTabPosition(Qt::DockWidgetArea area);  
     void updateSize();
-    void addTab(QIcon icon, int index);
 
 
 };

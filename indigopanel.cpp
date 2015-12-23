@@ -264,12 +264,10 @@ void IndigoPanel::addWidgetExtend(QWidget *content){
 
 
 void IndigoPanel::hide(){
-     qDebug() << "Pan hide" << endl;
-
-    // TODO: set entry in WatchList to show this again
 
      if(dockState() == IndigoPanel::Docked){
          setDockState(IndigoPanel::HiddenDocked);
+         emit panelClosed(Index());
      }else if(dockState() == IndigoPanel::Floating){
          setDockState(IndigoPanel::HiddenFloating);
      }
@@ -278,15 +276,19 @@ void IndigoPanel::hide(){
 }
 
 
+
 void IndigoPanel::show(){
+
     if(dockState() == IndigoPanel::HiddenDocked){
         setDockState(IndigoPanel::Docked);
+        emit panelShown(Index());
     }else if(dockState() == IndigoPanel::HiddenFloating){
         setDockState(IndigoPanel::Floating);
     }
 
     QFrame::show();
 }
+
 
 
 void IndigoPanel::expander(){

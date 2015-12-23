@@ -5,13 +5,13 @@ ConfigManager::ConfigManager()
 {
 
     // read setting file
-    str_SettingsFile = "data/settings.ini";
+    str_SettingsFile = "settings.ini";
 
     QSettings settings(str_SettingsFile, QSettings::IniFormat);
 
     // load settings
-    str_iconPath = settings.value("path/iconPath", "data/icons/dark/").toString();
-    str_themePath = settings.value("path/themePath", "data/qss/scribus-dark.qss").toString();
+    str_iconPath = settings.value("path/iconPath", ":/data/icons/dark/").toString();
+    str_themePath = settings.value("path/themePath", ":/data/qss/scribus-dark.qss").toString();
 
 }
 
