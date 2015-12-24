@@ -32,22 +32,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q), this, SLOT(close()));
 
-    /******************
-     *
-     * toolBar
-     *
-     * ***************/
-
-    //ui->mainToolBar->addAction("Light");
-
-    QAction *tb_light = new QAction("Light",this);
-    ui->mainToolBar->addAction(tb_light);
-    connect(tb_light, SIGNAL(triggered()), this, SLOT(loadLightTheme()));
-
-    QAction *tb_dark = new QAction("Dark",this);
-    ui->mainToolBar->addAction(tb_dark);
-    connect(tb_dark, SIGNAL(triggered()), this, SLOT(loadDarkTheme()));
-
 
     /*******************
      *
@@ -111,6 +95,37 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QLabel *lbl2 = new QLabel("Page stuff extended");
     pan_page->addWidgetExtend(lbl2);
+
+
+    /******************
+     *
+     * toolBar
+     *
+     * ***************/
+
+    //ui->mainToolBar->addAction("Light");
+
+    QAction *tb_light = new QAction("Light",this);
+    ui->mainToolBar->addAction(tb_light);
+    connect(tb_light, SIGNAL(triggered()), this, SLOT(loadLightTheme()));
+
+    QAction *tb_dark = new QAction("Dark",this);
+    ui->mainToolBar->addAction(tb_dark);
+    connect(tb_dark, SIGNAL(triggered()), this, SLOT(loadDarkTheme()));
+
+    ui->mainToolBar->addSeparator();
+
+    QAction *tb_text = new QAction("Text",this);
+    ui->mainToolBar->addAction(tb_text);
+    connect(tb_text, SIGNAL(triggered()), pan_text, SLOT(show()));
+
+    QAction *tb_img = new QAction("Image",this);
+    ui->mainToolBar->addAction(tb_img);
+    connect(tb_img, SIGNAL(triggered()), pan_image, SLOT(show()));
+
+    QAction *tb_page = new QAction("Page",this);
+    ui->mainToolBar->addAction(tb_page);
+    connect(tb_page, SIGNAL(triggered()), pan_page, SLOT(show()));
 }
 
 

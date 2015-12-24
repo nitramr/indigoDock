@@ -50,6 +50,7 @@ Palette::light {
 	[all]		highlight:		rgb(42,130,218);
 	[all]		highlighted-text:	rgb(0,0,0);
 	[all]		link:			rgb(42,130,218);
+	[all]		shadow:			rgb(200,200,200);
 	[all]		text:			rgb(34,34,34);
 	[disabled]	text:			rgb(83,83,83);
 	[all]		tooltip-base:		rgb(34,34,34);
@@ -63,8 +64,4 @@ Palette::light {
 IndigoDropZone { 
 
 	background-color: palette(base);
-}
-
-IndigoTabBar::tab:hover {
-        background-color: palette(base);
 }

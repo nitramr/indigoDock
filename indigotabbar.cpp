@@ -1,48 +1,62 @@
 #include "indigotabbar.h"
 #include <QDebug>
-#include <QWheelEvent>
 #include <QStyle>
+#include "helper.h"
+
+IndigoTab::IndigoTab(QIcon icon, QWidget *parent) :
+    QWidget(parent)
+{
+    m_icon = icon;
+    m_display = IndigoTab::visible;
+}
+
+void IndigoTab::setIcon(QIcon icon){
+    m_icon = icon;
+}
+
+QIcon IndigoTab::Icon(){
+    return m_icon;
+}
+
+
+void IndigoTab::setDisplayState(IndigoTab::Display display){
+    m_display = display;
+}
+
+IndigoTab::Display IndigoTab::displayState(){
+    return m_display;
+}
+
+
+
+/***************************************************************************
+ * TODO:
+ * - add overflow buttons
+ * - index calculation after moving doesn't work if tabs are hidden
+ *
+ * ************************************************************************/
+
+/**************************************************************************/
 
 IndigoTabBar::IndigoTabBar(QWidget *parent) :
-    QTabBar(parent)
+    QWidget(parent)
 {
 
-    int_iconScale = 32;
-
-    QString styleSheetTab(  "IndigoTabBar{"
-                                "border: 0px solid transparent;"
-                            "}"
-                            "IndigoTabBar::tab {"
-                                "alignment: left;"
-                                "text-align: center;"
-                                "border: 0px solid transparent;"
-                                "border-radius: 0px;"
-                                "width: %1 px;"
-                                "height: %1 px;"
-                                "padding: 0px;"
-                                "margin: 0px;"
-                            "}"
-                           /* "IndigoTabBar::tab:disabled{"
-                                "width: 0 px;"
-                                "height: 0 px;"
-                                "margin: 0 px;"
-                                "padding: 0 px;"
-                                "border: none;"
-                            "}"*/
-            );
+    int_tabHeight = 32;
+    int_tabWidth = 32;
+    int_hoverIndex = -1;
+    int_gap = 1;
+    borderHighlight = 2;
+    transparency = 0.1; // 10%
+    m_tabOrientation = IndigoTabBar::East;
+    dragProceed = false;
+    int_dragIndex = -1;
 
     this->setAccessibleName("IndigoTabBar");
-    this->setStyleSheet( styleSheetTab.arg(int_iconScale));
-    this->setMovable(true);
-    this->setShape(QTabBar::RoundedEast);
-    this->m_tabOrientation = IndigoTabBar::East;
-    this->setFocusPolicy(Qt::NoFocus);
-    this->setIconSize(QSize(int_iconScale,int_iconScale));
-    this->setExpanding(false);
-    this->setDrawBase(false);
-    this->setUsesScrollButtons(true);
-    this->setSelectionBehaviorOnRemove(QTabBar::SelectPreviousTab);
+    this->setAutoFillBackground(true);
+    this->setFixedWidth(int_tabWidth);
     this->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Expanding));
+    this->setMouseTracking(true);
 
 
 }
@@ -51,99 +65,285 @@ IndigoTabBar::IndigoTabBar(QWidget *parent) :
 
 void IndigoTabBar::mousePressEvent(QMouseEvent*event){
 
-    QTabBar::mousePressEvent(event);
-    int_oldIndex = this->currentIndex();
+    if(TabList.count() < 0) return;
+
+    QPoint mouse = event->pos();
+
+    int_hoverIndex = mouse.y() / (int_tabHeight + int_gap);
+    int_oldIndex = realTabIndex(mouse.y());
+
+    update();
+
+    qDebug() << "oldIndex" << int_oldIndex << endl;
 }
 
 
 
 void IndigoTabBar::mouseReleaseEvent(QMouseEvent*event){
 
-    int_newIndex = this->currentIndex();
+    if(TabList.count() < 0) return;
 
-    QTabBar::mouseReleaseEvent(event);
+    QPoint mouse = event->pos();
 
-    if(int_newIndex != int_oldIndex)
-        emit tabMoved(int_oldIndex, int_newIndex);
+    int_newIndex = realTabIndex(mouse.y());
 
+    if(dragProceed){
+        dragProceed = false;
+        int_dragIndex = -1;
+        moveTab();
+
+    }
+
+    update();
+
+    qDebug() << "newIndex" << int_newIndex << endl;
+
+}
+
+
+
+void IndigoTabBar::mouseMoveEvent(QMouseEvent*event){
+
+    if(TabList.count() < 0) return;
+
+    QPoint mouse = event->pos();
+
+    int_hoverIndex = mouse.y() / (int_tabHeight + int_gap);
+
+    // drag started
+    if (event->buttons() == Qt::LeftButton) {
+        dragProceed = true;
+        int_dragIndex = int_oldIndex;
+        dragPosition = event->pos().y();
+
+    }
+
+    update();
+
+}
+
+
+
+void IndigoTabBar::leaveEvent(QEvent *){
+    int_hoverIndex = -1;
+    update();
+}
+
+
+
+void IndigoTabBar::paintEvent(QPaintEvent *)
+{
+
+    QPainter p(this);
+
+    int i_visible = 0;
+
+    for (int i = 0; i < TabList.count(); ++i){
+
+
+        // draw visibile tabs
+        IndigoTab *tab = TabList.at(i);
+
+        if(tab->displayState() == IndigoTab::visible){
+
+
+            QRect  tabRect(0,i_visible*(int_tabHeight + int_gap), int_tabWidth, int_tabHeight);
+            QRect  gapRect(4,tabRect.y() - int_gap, int_tabWidth - 8, int_gap);
+
+            QIcon icon = tab->Icon();
+            QPixmap pix = icon.pixmap(QSize(int_tabWidth, int_tabHeight));
+
+            // draw background / highlighter
+            if(int_hoverIndex == i_visible && dragProceed){
+
+                Helper h;
+
+                colorHighlightAlpha = h.blendColor(QColor(this->palette().color(QPalette::Background)),
+                                                   QColor(this->palette().color(QPalette::Highlight)),
+                                                   transparency);
+
+                p.fillRect(tabRect,
+                           QColor(this->palette().color(QPalette::Highlight)));
+
+                p.fillRect(tabRect.x()+borderHighlight,
+                           tabRect.y()+borderHighlight,
+                           tabRect.width() -(borderHighlight*2),
+                           tabRect.height() -(borderHighlight*2),
+                           colorHighlightAlpha);
+
+            }else if(int_hoverIndex == i_visible){
+                p.fillRect(tabRect, QColor(this->palette().color(QPalette::Base)));
+            }
+
+            // draw tab content
+            if(int_dragIndex != i){
+                p.drawPixmap(tabRect, pix );
+            }
+
+            // draw divider
+            p.fillRect(gapRect, QColor(this->palette().color(QPalette::Shadow)));
+
+
+            // count only visible tabs
+            ++i_visible;
+        }
+    }
+
+
+    // draw moveable Tab
+
+    if(dragProceed){
+
+        if(int_dragIndex > TabList.count() || int_dragIndex < 0) return;
+
+        IndigoTab *tab = TabList.at(int_dragIndex);
+
+        QIcon icon = tab->Icon();
+        QPixmap pix = icon.pixmap(QSize(int_tabWidth, int_tabHeight));
+
+        QRect dragFrame(0, dragPosition, int_tabWidth, int_tabHeight);
+       // p.fillRect(dragFrame, QColor(this->palette().color(QPalette::Base)));
+        p.drawPixmap(dragFrame, pix );
+
+
+    }
 
 
 }
 
 
 
-void IndigoTabBar::paintEvent(QPaintEvent *event)
-{
-    QTabBar::paintEvent(event);
+int IndigoTabBar::realTabIndex(int mouseY){
 
-   /* QStylePainter p(this);
+    int fakeIndex = fakeTabIndex(mouseY);
 
-    for(int i = 0; i < this->count(); ++i)
-    {
+    for (int i = 0; i < TabList.count(); ++i){
 
-
-        QStyleOptionTabV3 tab;
-        initStyleOption(&tab, i);
-
-        if (!(tab.state & QStyle::State_Enabled)) {
-            tab.palette.setCurrentColorGroup(QPalette::Disabled);
-            QRect tabRect(tab.rect.x(), tab.rect.y(), 0,0);
-            p.drawRect(tabRect);
-            continue;
+        // check if there a hidden tab before visible one
+        if(TabList.at(i)->displayState() == IndigoTab::hidden && fakeIndex <= i){
+            ++fakeIndex;
         }
 
+        // all hidden tabs are counted & realIndex was found
+        if(fakeIndex == i){
+            qDebug() << "realIndex" << i << endl;
+            return i;
+        }
 
-        //p.drawControl(QStyle::CE_TabBarTab, tab);
-
-        //p.drawItemPixmap(tab.rect, 0, tab.icon.pixmap(int_iconScale,int_iconScale));
     }
-*/
 
-
+    return -1;
 }
 
 
 
-void IndigoTabBar::addTab(QIcon icon, int index){
+int IndigoTabBar::fakeTabIndex(int mouseY){
+
+    int fakeIndex = mouseY / (int_tabHeight + int_gap);
+
+    int visibleTabs = 0;
+
+    for (int i = 0; i < TabList.count(); ++i){
+
+        // visible Tab index = fakeIndex
+        if(visibleTabs == fakeIndex || i == TabList.count()-1){
+            return visibleTabs;
+        }
+
+        // count only visible tabs
+        if(TabList.at(i)->displayState() == IndigoTab::visible){
+            ++visibleTabs;
+        }
+    }
+
+    return -1;
+}
+
+
+
+void IndigoTabBar::addTab(QIcon icon){
+
+    insertTab(icon, -1);
+}
+
+
+
+void IndigoTabBar::insertTab(QIcon icon, int index){
+
+    IndigoTab *tab = new IndigoTab(icon);
+    tab->setDisplayState(IndigoTab::visible);
 
     if(index == -1){
-        icon = rotateIcon(icon);
-        QTabBar::addTab(icon, "");
-    }else insertTab(index, icon);
+        //tab->setIndex(TabList.count() +1);
+        TabList.append(tab);
+    }else{
+        //tab->setIndex(index);
+        TabList.insert(index, tab);
+    }
 
-}
-
-
-
-void IndigoTabBar::insertTab(int index, QIcon &icon){
-
-    icon = rotateIcon(icon);
-
-    QTabBar::insertTab(index, icon, "");
+    update();
 }
 
 
 
 void IndigoTabBar::removeTab(int index){
-    QTabBar::removeTab(index);
+
+    if(index >= 0 && index <= TabList.count()){
+        TabList.removeAt(index);
+        update();
+    }
+
+}
+
+
+
+void IndigoTabBar::moveTab(){
+
+    if(int_newIndex != int_oldIndex){
+
+        IndigoTab *tab = TabList.takeAt(int_oldIndex);
+        TabList.insert(int_newIndex, tab);
+
+        emit tabMoved(int_oldIndex, int_newIndex);
+        qDebug() << "TabMoved old" << int_oldIndex << "new" << int_newIndex << endl;
+    }
+
 }
 
 
 
 void IndigoTabBar::hideTab(int index){
 
-    this->setTabEnabled(index,false);    
-    //this->resize(this->sizeHint());
-
+    if(index >= 0 && index <= TabList.count()){
+        TabList.at(index)->setDisplayState(IndigoTab::hidden);
+        update();
+    }
 }
+
 
 
 void IndigoTabBar::showTab(int index){
 
-    this->setTabEnabled(index,true);
-    //this->resize(this->sizeHint());
+    if(index >= 0 && index <= TabList.count()){
+        TabList.at(index)->setDisplayState(IndigoTab::visible);
+        update();
+    }
 
 }
+
+
+
+void IndigoTabBar::setTabSize(int side){
+    setTabSize(side, side);
+}
+
+
+
+void IndigoTabBar::setTabSize(int width, int height){
+    int_tabWidth = width;
+    int_tabHeight = height;
+}
+
 
 
 IndigoTabBar::Orientation IndigoTabBar::tabPosition(){
@@ -154,114 +354,12 @@ IndigoTabBar::Orientation IndigoTabBar::tabPosition(){
 
 void IndigoTabBar::setTabPosition(Orientation tabOrientation){
 
-
-    // Rotate icons in right direction
-    for(int i=0;i<this->count();i++)
-    {
-        QIcon icon = this->tabIcon(i);
-
-        icon = rotateIcon(icon, tabOrientation);
-
-        this->setTabIcon(i, icon);
-
-    }
-
     m_tabOrientation = tabOrientation;
 
-    // set new tab position
-    switch(tabOrientation){
-        case IndigoTabBar::East:{
-            this->setShape(QTabBar::RoundedEast);
-            break;
-        }
-        case IndigoTabBar::West:{
-            this->setShape(QTabBar::RoundedWest);
-            break;
-        }
-        case IndigoTabBar::North:{
-            this->setShape(QTabBar::RoundedNorth);
-            break;
-        }
-        case IndigoTabBar::South:{
-            this->setShape(QTabBar::RoundedSouth);
-            break;
-        }
-        default:
-            this->setShape(QTabBar::RoundedEast);
-            break;
-    }
-
 }
 
 
 
-/******************
- *
- * Helper
- *
- * ***************/
-
-QIcon IndigoTabBar::rotateIcon(const QIcon &icon, Orientation tabOrientation){
-
-    QSize sz;
-
-    for (int var = 0; var < icon.availableSizes().count(); ++var) {
-        if (icon.availableSizes().at(var).width() > sz.width())
-        sz = icon.availableSizes().at(var);
-    }
-    QPixmap pix = icon.pixmap(sz);
-    QTransform trans;
-
-    switch(this->shape()){
-    case QTabBar::RoundedEast:{
-        switch(tabOrientation){
-            case IndigoTabBar::West:{
-                trans.rotate(180);
-                break;
-            }
-            case IndigoTabBar::North:{
-                trans.rotate(-90);
-                break;
-            }
-            case IndigoTabBar::South:{
-                trans.rotate(+90);
-                break;
-            }
-            default:
-                break;
-        }
-
-
-        break;
-    }
-    case QTabBar::RoundedWest:{
-        switch(tabOrientation){
-
-            case IndigoTabBar::East:{
-                trans.rotate(180);
-                break;
-            }
-            case IndigoTabBar::North:{
-                trans.rotate(+90);
-                break;
-            }
-            case IndigoTabBar::South:{
-                trans.rotate(-90);
-                break;
-            }
-            default:
-                break;
-        }
-        break;
-    }
-    default:
-        break;
-    }
-
-    pix = pix.transformed(trans);
-    pix = pix.scaledToWidth( int_iconScale );
-    pix = pix.scaledToHeight( int_iconScale );
-
-    return QIcon(pix);
+int IndigoTabBar::currentIndex(){
+    return int_newIndex;
 }
-

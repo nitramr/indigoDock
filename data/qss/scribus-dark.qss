@@ -52,6 +52,7 @@ Palette::dark {
 	[all]		highlight:		rgb(42,130,218);
 	[all]		highlighted-text:	rgb(0,0,0);
 	[all]		link:			rgb(42,130,218);
+	[all]		shadow:			rgb(40,40,40);
 	[all]		text:			#ffffff;
 	[disabled]	text:			#808080;
 	[all]		tooltip-base:		#ffffff;
@@ -67,8 +68,4 @@ IndigoDropZone {
 
 	background-color: palette(base);
 	
-}
-
-IndigoTabBar::tab:hover {
-        background-color: palette(base);
 }

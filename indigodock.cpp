@@ -36,7 +36,7 @@ IndigoDock::IndigoDock(QWidget *parent) : QWidget(parent)
     connect(m_toolbar, SIGNAL(tabMoved(int,int)), m_dropzone, SLOT(movePanel(int,int)));
     connect(m_dropzone, SIGNAL(resize()), this, SLOT(updateSize()));
     connect(m_dropzone, SIGNAL(panelRemoved(int)), m_toolbar, SLOT(removeTab(int)));
-    connect(m_dropzone, SIGNAL(panelAdded(QIcon,int)), m_toolbar, SLOT(addTab(QIcon, int)));
+    connect(m_dropzone, SIGNAL(panelAdded(QIcon,int)), m_toolbar, SLOT(insertTab(QIcon, int)));
 
 }
 

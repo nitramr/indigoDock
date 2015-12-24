@@ -48,8 +48,7 @@ public:
         Collapsed
     };
 
-    IndigoPanel(QString name, QWidget* parent = 0);
-    void show();
+    IndigoPanel(QString name, QWidget* parent = 0);   
     void addWidgetNormal(QWidget *content);
     void addWidgetExtend(QWidget *content);
 
@@ -95,6 +94,7 @@ signals:
     void panelShown(int index);
 
 public slots:
+    void show();
     void hide();
     void expander();
 };

@@ -1,6 +1,7 @@
 #include "indigodropzone.h"
 #include <QStyle>
 #include "qapplication.h"
+#include "helper.h"
 
 
 IndigoDropZone::IndigoDropZone(QWidget *parent) :
@@ -14,7 +15,7 @@ IndigoDropZone::IndigoDropZone(QWidget *parent) :
     transparency = 0.1; // 10%
 
     padding = 6;
-    borderHighlight = 3;
+    borderHighlight = 2;
     isHighlight = false;
 
     m_placeholder = new QWidget(this);
@@ -238,7 +239,9 @@ void IndigoDropZone::paintEvent(QPaintEvent*) {
 
         int offset = borderHighlight;
 
-        colorHighlightAlpha = blendColor(QColor(this->palette().color(QPalette::Background)),QColor(this->palette().color(QPalette::Highlight)), transparency);
+        Helper h;
+
+        colorHighlightAlpha = h.blendColor(QColor(this->palette().color(QPalette::Background)),QColor(this->palette().color(QPalette::Highlight)), transparency);
 
         painter.fillRect(x, y, width, height, QColor(this->palette().color(QPalette::Highlight)));
         painter.fillRect(x + offset, y + offset, width -(offset*2), height -(offset*2),colorHighlightAlpha);
@@ -256,23 +259,5 @@ void IndigoDropZone::resizeEvent(QResizeEvent*){
 
 
 
-/***********************+
- *
- * Helper
- *
- * *********************/
 
-QColor IndigoDropZone::blendColor(QColor color1, QColor color2, double ratio){
-
-    if(ratio < 0 && ratio > 1){
-        ratio = 0;
-    }
-
-    return QColor(
-                color1.red()* (1-ratio) + color2.red()*ratio,
-                color1.green()* (1-ratio) + color2.green()*ratio,
-                color1.blue()* (1-ratio) + color2.blue()*ratio,
-                255);
-
-}
 
