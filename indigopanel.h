@@ -88,7 +88,7 @@ private:
 
 signals:
     void mouseReleased();
-    void mouseMove(int height);
+    void mouseMove();
     void isFloating(int index);
     void panelClosed(int index);
     void panelShown(int index);

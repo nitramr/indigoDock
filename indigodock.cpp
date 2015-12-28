@@ -47,7 +47,7 @@ void IndigoDock::addIndigoPanel(IndigoPanel *panel, int tabIndex){
     m_dropzone->addPanel(panel, tabIndex);
 
     this->connect(panel, SIGNAL(mouseReleased()), m_dropzone, SLOT(dropPanel()));
-    this->connect(panel, SIGNAL(mouseMove(int)), m_dropzone, SLOT(hoverZone(int)));
+    this->connect(panel, SIGNAL(mouseMove()), m_dropzone, SLOT(hoverZone()));
     this->connect(panel, SIGNAL(isFloating(int)), m_dropzone, SLOT(removePanel(int)));
     this->connect(panel, SIGNAL(panelClosed(int)), m_toolbar, SLOT(hideTab(int)));
     this->connect(panel, SIGNAL(panelShown(int)), m_toolbar, SLOT(showTab(int)));

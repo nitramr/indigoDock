@@ -39,19 +39,19 @@ IndigoDropZone::IndigoDropZone(QWidget *parent) :
 
 
 
-void IndigoDropZone::hoverZone(int height){
+void IndigoDropZone::hoverZone(){
 
     QPoint cursor = this->mapFromGlobal(QCursor::pos());
 
     if (this->rect().contains(cursor) ) {
 
         int index = -1;
+        int height = 0;
 
         IndigoPanel *pan = qobject_cast<IndigoPanel *>(sender());
         if (!pan) return;
         pan->setIndex(index);
-
-        //this->updatePanels();
+        height = pan->height();
 
         QList<IndigoPanel *> panels = findChildren<IndigoPanel *>();
         foreach(IndigoPanel * panel, panels)
@@ -96,11 +96,14 @@ void IndigoDropZone::dropPanel()
         IndigoPanel *pan = qobject_cast<IndigoPanel *>(sender());
         if (!pan) return;
 
+        addPanel(pan, pan->Index());
+
         this->isHighlight = false; // switch highlighter off
         this->removePlaceholder();
         this->update();
 
-        redockPanel();
+
+
 
     }
 }
@@ -126,8 +129,6 @@ void IndigoDropZone::addPanel (IndigoPanel * panel, int index){
     }else m_splitter->insertWidget(index, panel);
 
     m_layout->addWidget(m_splitter);
-    m_splitter->show();
-
 
 
     panel->setDockState(IndigoPanel::Docked);
@@ -164,21 +165,12 @@ void IndigoDropZone::movePanel(int oldIndex, int newIndex){
 
 
 
-void IndigoDropZone::redockPanel(){
-    IndigoPanel *pan = qobject_cast<IndigoPanel *>(sender());
-    if (!pan) return;
-
-    addPanel(pan, pan->Index());
-}
-
-
-
 void IndigoDropZone::updatePanels(){
 
     // update panel index
     for( int i=0; i<PanelList.count(); ++i )
     {
-        if(PanelList.at(i)->dockState() == IndigoPanel::Docked){
+        if(PanelList.at(i)->dockState() == IndigoPanel::Docked || PanelList.at(i)->dockState() == IndigoPanel::HiddenDocked){
             PanelList.at(i)->setIndex(i);
         }
 
@@ -218,18 +210,14 @@ void IndigoDropZone::mouseMoveEvent(QMouseEvent *){
 void IndigoDropZone::paintEvent(QPaintEvent*) {
 
 
-    QPainter painter(this);
+    QPainter p(this);
 
-    painter.fillRect(0, 0, width(), height(), QColor(this->palette().color(QPalette::Background)));
+    p.fillRect(0, 0, width(), height(), QColor(this->palette().color(QPalette::Background)));
 
     // Draw highlight
     if(isHighlight){
 
         QPoint pRect = m_placeholder->mapToParent(QPoint(padding,padding));
-
-        /*if(m_placeholder->height() <= placeholderHeight){
-            m_placeholder->setFixedHeight(m_placeholder->height() + 1);
-        }*/
 
         int width = m_placeholder->width();
         int height = m_placeholder->height();
@@ -243,8 +231,8 @@ void IndigoDropZone::paintEvent(QPaintEvent*) {
 
         colorHighlightAlpha = h.blendColor(QColor(this->palette().color(QPalette::Background)),QColor(this->palette().color(QPalette::Highlight)), transparency);
 
-        painter.fillRect(x, y, width, height, QColor(this->palette().color(QPalette::Highlight)));
-        painter.fillRect(x + offset, y + offset, width -(offset*2), height -(offset*2),colorHighlightAlpha);
+        p.fillRect(x, y, width, height, QColor(this->palette().color(QPalette::Highlight)));
+        p.fillRect(x + offset, y + offset, width -(offset*2), height -(offset*2),colorHighlightAlpha);
 
 
     }

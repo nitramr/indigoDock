@@ -32,11 +32,8 @@ IndigoTab::Display IndigoTab::displayState(){
 /***************************************************************************
  * TODO:
  * - add overflow buttons
- * - index calculation after moving doesn't work if tabs are hidden
  *
  * ************************************************************************/
-
-/**************************************************************************/
 
 IndigoTabBar::IndigoTabBar(QWidget *parent) :
     QWidget(parent)
@@ -74,7 +71,6 @@ void IndigoTabBar::mousePressEvent(QMouseEvent*event){
 
     update();
 
-    qDebug() << "oldIndex" << int_oldIndex << endl;
 }
 
 
@@ -95,8 +91,6 @@ void IndigoTabBar::mouseReleaseEvent(QMouseEvent*event){
     }
 
     update();
-
-    qDebug() << "newIndex" << int_newIndex << endl;
 
 }
 
@@ -141,11 +135,14 @@ void IndigoTabBar::paintEvent(QPaintEvent *)
     for (int i = 0; i < TabList.count(); ++i){
 
 
+        int offset = 0;
+
         // draw visibile tabs
-        IndigoTab *tab = TabList.at(i);
+        IndigoTab *tab = TabList.at(i+offset);
 
         if(tab->displayState() == IndigoTab::visible){
 
+            Helper h;
 
             QRect  tabRect(0,i_visible*(int_tabHeight + int_gap), int_tabWidth, int_tabHeight);
             QRect  gapRect(4,tabRect.y() - int_gap, int_tabWidth - 8, int_gap);
@@ -153,10 +150,10 @@ void IndigoTabBar::paintEvent(QPaintEvent *)
             QIcon icon = tab->Icon();
             QPixmap pix = icon.pixmap(QSize(int_tabWidth, int_tabHeight));
 
+
             // draw background / highlighter
             if(int_hoverIndex == i_visible && dragProceed){
 
-                Helper h;
 
                 colorHighlightAlpha = h.blendColor(QColor(this->palette().color(QPalette::Background)),
                                                    QColor(this->palette().color(QPalette::Highlight)),
@@ -171,18 +168,31 @@ void IndigoTabBar::paintEvent(QPaintEvent *)
                            tabRect.height() -(borderHighlight*2),
                            colorHighlightAlpha);
 
+
             }else if(int_hoverIndex == i_visible){
                 p.fillRect(tabRect, QColor(this->palette().color(QPalette::Base)));
             }
 
             // draw tab content
-            if(int_dragIndex != i){
+            if(int_dragIndex != i_visible){
+
+                /*if(i_visible <= int_hoverIndex && dragProceed){
+                    QRect offsetRect(0, tabRect.y()-(int_tabHeight + int_gap), int_tabWidth, int_tabHeight);
+                    p.drawPixmap(offsetRect, pix );
+                }else{
+                    p.drawPixmap(tabRect, pix );
+                }*/
+
                 p.drawPixmap(tabRect, pix );
+
             }
 
-            // draw divider
-            p.fillRect(gapRect, QColor(this->palette().color(QPalette::Shadow)));
 
+
+            // draw divider
+            p.fillRect(gapRect, h.blendColor(QColor(this->palette().color(QPalette::Background)),
+                                             QColor(this->palette().color(QPalette::Base)),
+                                             0.5));
 
             // count only visible tabs
             ++i_visible;
@@ -217,16 +227,15 @@ int IndigoTabBar::realTabIndex(int mouseY){
 
     int fakeIndex = fakeTabIndex(mouseY);
 
-    for (int i = 0; i < TabList.count(); ++i){
+     for (int i = 0; i < TabList.count(); ++i){
 
         // check if there a hidden tab before visible one
-        if(TabList.at(i)->displayState() == IndigoTab::hidden && fakeIndex <= i){
+        if(TabList.at(i)->displayState() == IndigoTab::hidden){
             ++fakeIndex;
         }
 
         // all hidden tabs are counted & realIndex was found
         if(fakeIndex == i){
-            qDebug() << "realIndex" << i << endl;
             return i;
         }
 
@@ -239,20 +248,22 @@ int IndigoTabBar::realTabIndex(int mouseY){
 
 int IndigoTabBar::fakeTabIndex(int mouseY){
 
+    // calculate fakeIndex by tab grid & mouse position
     int fakeIndex = mouseY / (int_tabHeight + int_gap);
 
     int visibleTabs = 0;
 
+    // recalculate and limit index by real visible tabs
     for (int i = 0; i < TabList.count(); ++i){
 
-        // visible Tab index = fakeIndex
+        // all visible tabs are counted & fakeIndex was found
         if(visibleTabs == fakeIndex || i == TabList.count()-1){
             return visibleTabs;
         }
 
-        // count only visible tabs
+        // check if there a visibile tab on index
         if(TabList.at(i)->displayState() == IndigoTab::visible){
-            ++visibleTabs;
+            ++visibleTabs;           
         }
     }
 
@@ -273,11 +284,9 @@ void IndigoTabBar::insertTab(QIcon icon, int index){
     IndigoTab *tab = new IndigoTab(icon);
     tab->setDisplayState(IndigoTab::visible);
 
-    if(index == -1){
-        //tab->setIndex(TabList.count() +1);
+    if(index == -1){       
         TabList.append(tab);
-    }else{
-        //tab->setIndex(index);
+    }else{       
         TabList.insert(index, tab);
     }
 

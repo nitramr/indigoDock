@@ -174,7 +174,7 @@ bool IndigoPanel::eventFilter(QObject *o, QEvent *event)
 
             move(QPoint(point.x() - relative_x, point.y() - relative_y));
 
-            emit mouseMove(this->height()); // activate DropZone hover*/
+            emit mouseMove(); // activate DropZone hover*/
 
         }
 

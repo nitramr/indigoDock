@@ -37,7 +37,7 @@ private:
     int placeholderHeight;
     double transparency;    
 
-    void redockPanel();
+    //void redockPanel();
     void updatePanels();
 
 signals:
@@ -47,7 +47,7 @@ signals:
 
 public slots:
     void dropPanel();
-    void hoverZone(int height);    
+    void hoverZone();
     void removePanel(int index);
     void movePanel(int oldIndex, int newIndex);
 
