@@ -14,7 +14,7 @@ Experimental Qt Docking extension written for Scribus1.5>=
 * Discussions occcuring in the [Scribus UI/UX sub-forums](http://forums.scribus.net/index.php/topic,1617.0.html).  
 
 ## Current Development Snapshot
-![indigodock tester_002](https://cloud.githubusercontent.com/assets/15112256/11666883/e7e91a14-9dee-11e5-9c43-4b0a2c84af70.png)
+![snapshot-9c2d3ad](https://cloud.githubusercontent.com/assets/4140247/12284558/1a9f278a-b976-11e5-8402-4f50e6f9fbf9.gif)
 
 
 ## How to Install indigoDock
