@@ -13,12 +13,17 @@ class IndigoPanelHandle : public QWidget
         Q_OBJECT
 public:
     IndigoPanelHandle(QWidget* parent = 0);
-    void setTitle(const QString &title);
+    void setTitle(QString title, int fontSize);
+    void setIcon(QIcon icon, int iconSize);
 
 protected:
+    void paintEvent(QPaintEvent *);
 
 private:
-    QLabel * m_lblTitle;
+    QIcon m_icon;
+    int m_iconSize;
+    QString m_title;
+    int m_fontSize;
     QToolButton * m_btnClose;
     QToolButton * m_btnFloat;
 
@@ -52,10 +57,12 @@ public:
     void addWidgetNormal(QWidget *content);
     void addWidgetExtend(QWidget *content);
 
-    void setCaption(const QString title);
+    IndigoPanelHandle * m_handle;
+
+    void setCaption(QString title = "", int fontSize = 10);
 
     QIcon Icon();
-    void setIcon(QIcon icon);
+    void setIcon(QIcon icon, int iconSize = 22);
 
     int Index();
     void setIndex(int index);
@@ -76,7 +83,7 @@ private:
     QVBoxLayout *m_normalArea;
     QVBoxLayout *m_extendedArea;
     QVBoxLayout *m_mainLayout;
-    IndigoPanelHandle * m_handle;
+
     QPoint oldPos;  
     int relative_x;
     int relative_y;
@@ -85,6 +92,7 @@ private:
     IndigoState m_state;
     IndigoExpander m_expander;
     QWidget *m_Parent;
+    QSpacerItem *m_spacer;
 
 signals:
     void mouseReleased();

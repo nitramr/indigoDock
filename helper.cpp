@@ -1,9 +1,6 @@
 #include "helper.h"
 
-Helper::Helper()
-{
-
-}
+Helper::Helper(){}
 
 
 QColor Helper::blendColor(QColor color1, QColor color2, double ratio){

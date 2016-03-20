@@ -8,6 +8,7 @@
 #include <QSplitter>
 #include <QtGui>
 #include <QList>
+#include <QListWidget>
 
 class IndigoDropZone : public QWidget
 {
@@ -19,7 +20,7 @@ public:
     bool isHighlight;
     void addPanel (IndigoPanel * panel, int index = -1);
     void addPlaceholder (int index = -1);
-    void removePlaceholder ();
+        void removePlaceholder ();
 
 protected:
     void paintEvent(QPaintEvent*);
@@ -28,16 +29,17 @@ protected:
 
 private:
     QVBoxLayout *m_layout;
-    QSplitter *m_splitter;
+    QSplitter *m_splitter; 
     QWidget * m_placeholder;
     QColor colorHighlightAlpha;
     QColor blendColor(QColor color1, QColor color2, double ratio = 0);    
     int padding;
     int borderHighlight;
-    int placeholderHeight;
-    double transparency;    
+    //QRect *rect_placeholder;
+     int placeholderHeight;
+    double transparency;  
+    //QList<QPixmap> renderList;
 
-    //void redockPanel();
     void updatePanels();
 
 signals:

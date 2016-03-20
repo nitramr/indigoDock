@@ -139,7 +139,7 @@ MainWindow::~MainWindow()
 void MainWindow::textPanel(IndigoPanel *parent){
 
     IndigoExpanderGroup *grFont = new IndigoExpanderGroup();
-    IndigoExpanderGroup *grAlignment = new IndigoExpanderGroup(false);
+    IndigoExpanderGroup *grAlignment = new IndigoExpanderGroup();
     IndigoExpanderGroup *grStyles = new IndigoExpanderGroup(false);
     IndigoExpanderGroup *grChars = new IndigoExpanderGroup(false);
     IndigoExpanderGroup *grParagraph = new IndigoExpanderGroup(false);
@@ -161,14 +161,15 @@ void MainWindow::textPanel(IndigoPanel *parent){
     AnglePicker * anglePicker = new AnglePicker();
     ColorSwatch * colorSwatch = new ColorSwatch();
 
-
-    QHBoxLayout *layoutFont = new QHBoxLayout();
-    layoutFont->addWidget(comboFont);
-
-
     grFont->addWidget(comboFont);
     grAlignment->addWidget(anglePicker);
     grStyles->addWidget(colorSwatch);
+
+    // Spacer
+    /* QWidget * spacer = new QWidget();
+    QVBoxLayout *layoutSpacer = new QVBoxLayout();
+    layoutSpacer->addStretch(1);
+    spacer->setLayout(layoutSpacer);*/
 
 
     parent->addWidgetNormal(grFont);
@@ -178,6 +179,7 @@ void MainWindow::textPanel(IndigoPanel *parent){
     parent->addWidgetNormal(grParagraph);
     parent->addWidgetNormal(grLists);
     parent->addWidgetNormal(grColumns);
+    //parent->addWidgetNormal(spacer);
 
 }
 

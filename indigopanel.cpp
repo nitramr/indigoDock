@@ -11,21 +11,16 @@ IndigoPanelHandle::IndigoPanelHandle(QWidget *parent) :
 
     setAutoFillBackground( true );
 
+    m_title = "";
 
-    // Objects
-    m_lblTitle = new QLabel("");
-    QFont font = m_lblTitle->font();
-    font.setPointSize(10);
-    font.setBold(true);
-    m_lblTitle->setFont(font);
-
+    // Objects 
     m_btnClose = new QToolButton(this);
-    m_btnClose->setFixedSize(16,18);
+    m_btnClose->setFixedSize(16,16);
     m_btnClose->setAutoRaise(true);
     m_btnClose->setFocusPolicy(Qt::NoFocus);
 
     m_btnFloat = new QToolButton(this);
-    m_btnFloat->setFixedSize(16,18);
+    m_btnFloat->setFixedSize(16,16);
     m_btnFloat->setAutoRaise(true);
     m_btnFloat->setFocusPolicy(Qt::NoFocus);
 
@@ -39,7 +34,6 @@ IndigoPanelHandle::IndigoPanelHandle(QWidget *parent) :
     mainLayout->setMargin(4);
     setLayout(mainLayout);
 
-    mainLayout->addWidget(m_lblTitle);
     mainLayout->addStretch(1);
     mainLayout->addWidget(m_btnFloat);
     mainLayout->addWidget(m_btnClose);
@@ -52,9 +46,47 @@ IndigoPanelHandle::IndigoPanelHandle(QWidget *parent) :
 
 
 
-void IndigoPanelHandle::setTitle(const QString &title){
-    m_lblTitle->setText(title);
+void IndigoPanelHandle::setTitle(QString title, int fontSize){
+
+    m_title = title;
+    m_fontSize = fontSize;
 }
+
+
+
+void IndigoPanelHandle::setIcon(QIcon icon, int iconSize){
+
+    m_icon = icon;
+    m_iconSize = iconSize;
+}
+
+
+void IndigoPanelHandle::paintEvent(QPaintEvent *)
+{
+
+    QPainter p(this);
+
+
+    int h = this->height();
+    int iconY = (h - m_iconSize) / 2;
+
+    QFont font = p.font() ;
+    font.setPointSize ( m_fontSize );
+    font.setWeight(QFont::DemiBold);
+    QFontMetrics fm(this->font());
+    int lbl_width = fm.width(m_title);
+
+
+    if (h > 0)
+    {
+        int labelX = m_iconSize + 4;
+
+        p.drawPixmap(QRect(0, iconY, m_iconSize,m_iconSize),m_icon.pixmap(m_iconSize,m_iconSize));
+        p.setFont(font);
+        p.drawText( QRect(labelX, 0, lbl_width, h), Qt::AlignVCenter, m_title );
+    }
+}
+
 
 
 /*********************************************************************************/
@@ -66,10 +98,11 @@ IndigoPanel::IndigoPanel(QString name, QWidget *parent) :
     // General Properties
     setMouseTracking(true);
     setAutoFillBackground( true );
+    setBackgroundRole(QPalette::Background);
 
     this->setObjectName(name);
     this->setFixedWidth(220);
-    //this->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Maximum));
+    this->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding));
 
 
     // Widgets
@@ -96,8 +129,9 @@ IndigoPanel::IndigoPanel(QString name, QWidget *parent) :
     m_mainLayout->addWidget(m_normalContainer);
     m_mainLayout->addWidget(m_extendedContainer);
     m_mainLayout->setAlignment(Qt::AlignTop);
-    m_mainLayout->addStretch(1);
 
+    m_spacer = new QSpacerItem(10, 0, QSizePolicy::Ignored, QSizePolicy::MinimumExpanding);
+    m_mainLayout->addSpacerItem(m_spacer);
 
     // Extended Properties
     m_index = -1;
@@ -121,16 +155,19 @@ bool IndigoPanel::eventFilter(QObject *o, QEvent *event)
 
         if (me->buttons() == Qt::LeftButton) {
 
-           // QPoint point = me->globalPos();
 
             qDebug() << "PanelIndex is:" << Index() << endl;
+
+            QPoint point = me->globalPos();
+            QPoint xy = this->mapToGlobal(QPoint(0,0));
+            // mouse press relative position
+            relative_x = point.x() - xy.x();
+            relative_y = point.y() - xy.y();
 
             if(dockState() == IndigoPanel::Floating){
                 //QPixmap pixmap = QWidget::grab();
                 // TODO: replace real QWidget with pixmap proxy
 
-                //setWindowFlags(Qt::ToolTip|Qt::FramelessWindowHint); // avoid flickering by moving, will replaced by pixmap
-                //show();
             }
 
         }
@@ -140,7 +177,6 @@ bool IndigoPanel::eventFilter(QObject *o, QEvent *event)
     }
 
     case QEvent::MouseMove:
-
     {
         QMouseEvent *me = static_cast<QMouseEvent *>(event);
 
@@ -154,20 +190,18 @@ bool IndigoPanel::eventFilter(QObject *o, QEvent *event)
                 //QPixmap pixmap = QWidget::grab();
                 // TODO: replace real QWidget with pixmap proxy
 
-                QPoint xy = this->mapToGlobal(QPoint(0,0));
 
-                // mouse press relative position
-                relative_x = point.x() - xy.x();
-                relative_y = point.y() - xy.y();
 
-                emit isFloating(m_index);
-                setDockState(IndigoPanel::Floating);
+                //setParent(m_Parent);
+                setParent(0);
 
-                setParent(m_Parent);
                 setWindowFlags(Qt::ToolTip|Qt::FramelessWindowHint); // avoid flickering by moving, will replaced by pixmap
 
-                move(xy);
                 show();
+
+                setDockState(IndigoPanel::Floating);
+                emit isFloating(m_index);
+
 
             }
 
@@ -182,19 +216,18 @@ bool IndigoPanel::eventFilter(QObject *o, QEvent *event)
 
         break;
     }
+
     case QEvent::MouseButtonRelease:
     {
 
 
         if(dockState() == IndigoPanel::Floating){
 
-            setWindowFlags(Qt::Tool|Qt::FramelessWindowHint);
+            setWindowFlags(Qt::Tool|Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint);
             show();
 
             emit mouseReleased(); // activate reparenting in DropZone*/
         }
-
-        //qDebug() << "MouseReleased" << dockState()<< endl;
 
         break;
 
@@ -211,14 +244,15 @@ bool IndigoPanel::eventFilter(QObject *o, QEvent *event)
 
 
 
-void IndigoPanel::setCaption(const QString title){
-    m_handle->setTitle(title);
+void IndigoPanel::setCaption(const QString title, int fontSize){
+    m_handle->setTitle(title, fontSize);
 }
 
 
 
-void IndigoPanel::setIcon(QIcon icon){
+void IndigoPanel::setIcon(QIcon icon, int iconSize){
     m_icon = icon;
+    m_handle->setIcon(icon, iconSize); // iconSize will used for icon in caption bar
 }
 
 
@@ -293,16 +327,26 @@ void IndigoPanel::show(){
 
 void IndigoPanel::expander(){
 
+   // QSize s = sizeHint();
+   // s.setHeight(this->m_handle->height());
+
+    m_mainLayout->removeItem(m_spacer);
+
     switch(expanderState()){
     case IndigoPanel::Normal:
 
         if(!m_extendedArea->isEmpty()){
             m_extendedContainer->show();
             setExpanderState(IndigoPanel::Advanced);
+
+            m_mainLayout->addItem(m_spacer);
+
         }else{
             m_normalContainer->hide();
             m_extendedContainer->hide();
             setExpanderState(IndigoPanel::Collapsed);
+
+            //resize(s);
         }
         break;
 
@@ -311,6 +355,9 @@ void IndigoPanel::expander(){
         m_normalContainer->hide();
         m_extendedContainer->hide();
         setExpanderState(IndigoPanel::Collapsed);
+
+        //resize(s);
+
         break;
 
     case IndigoPanel::Collapsed:
@@ -318,17 +365,19 @@ void IndigoPanel::expander(){
         if(!m_normalArea->isEmpty()){
             m_normalContainer->show();
             setExpanderState(IndigoPanel::Normal);
+
+            m_mainLayout->addItem(m_spacer);
+
         }else{
             m_extendedContainer->show();
             setExpanderState(IndigoPanel::Advanced);
+
+            m_mainLayout->addItem(m_spacer);
+
         }
 
         break;
     }
-
-   /* QSize s = sizeHint();
-    s.setHeight(height());
-    resize(s);*/
 
     this->adjustSize();
 }

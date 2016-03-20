@@ -142,7 +142,6 @@ void IndigoTabBar::paintEvent(QPaintEvent *)
 
         if(tab->displayState() == IndigoTab::visible){
 
-            Helper h;
 
             QRect  tabRect(0,i_visible*(int_tabHeight + int_gap), int_tabWidth, int_tabHeight);
             QRect  gapRect(4,tabRect.y() - int_gap, int_tabWidth - 8, int_gap);
@@ -155,7 +154,7 @@ void IndigoTabBar::paintEvent(QPaintEvent *)
             if(int_hoverIndex == i_visible && dragProceed){
 
 
-                colorHighlightAlpha = h.blendColor(QColor(this->palette().color(QPalette::Background)),
+                colorHighlightAlpha = Helper().blendColor(QColor(this->palette().color(QPalette::Background)),
                                                    QColor(this->palette().color(QPalette::Highlight)),
                                                    transparency);
 
@@ -190,7 +189,7 @@ void IndigoTabBar::paintEvent(QPaintEvent *)
 
 
             // draw divider
-            p.fillRect(gapRect, h.blendColor(QColor(this->palette().color(QPalette::Background)),
+            p.fillRect(gapRect, Helper().blendColor(QColor(this->palette().color(QPalette::Background)),
                                              QColor(this->palette().color(QPalette::Base)),
                                              0.5));
 
@@ -286,8 +285,8 @@ void IndigoTabBar::insertTab(QIcon icon, int index){
 
     if(index == -1){       
         TabList.append(tab);
-    }else{       
-        TabList.insert(index, tab);
+    }else{
+        TabList.insert(index, tab);       
     }
 
     update();

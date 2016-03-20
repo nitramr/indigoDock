@@ -39,7 +39,7 @@ Here is how you run it:
 
 
 ## Issues:
-* panel sorting by drag and drop doesn't work well in any case**(done)**  
+* panel sorting by drag and drop doesn't work well in any case  
 * tabbar icon doesn't update by theme switch (not implemented)  
 * panel resizing for undocked panels doesn't work well  
 
