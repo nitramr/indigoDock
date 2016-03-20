@@ -85,6 +85,7 @@ private:
 
 signals:
    void tabMoved(int,int);
+   void scrollDropZone(int);
 
 public slots:
     void addTab(QIcon icon);
@@ -92,6 +93,7 @@ public slots:
     void removeTab(int index);
     void hideTab(int index);
     void showTab(int index);
+
 };
 
 #endif // INDIGOTABBAR_H

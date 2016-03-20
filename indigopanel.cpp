@@ -5,6 +5,11 @@
 #include <QStyle>
 #include <QStyleOptionDockWidget>
 
+
+//
+// IndigoPanelHandle
+//
+
 IndigoPanelHandle::IndigoPanelHandle(QWidget *parent) :
     QWidget(parent)
 {
@@ -89,7 +94,9 @@ void IndigoPanelHandle::paintEvent(QPaintEvent *)
 
 
 
-/*********************************************************************************/
+//
+// IndigoPanel
+//
 
 
 IndigoPanel::IndigoPanel(QString name, QWidget *parent) :
@@ -101,7 +108,7 @@ IndigoPanel::IndigoPanel(QString name, QWidget *parent) :
     setBackgroundRole(QPalette::Background);
 
     this->setObjectName(name);
-    this->setFixedWidth(220);
+    this->setMinimumWidth(220);
     this->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding));
 
 

@@ -14,6 +14,7 @@ Experimental Qt Docking extension written for Scribus1.5>=
 * Discussions occcuring in the [Scribus UI/UX sub-forums](http://forums.scribus.net/index.php/topic,1617.0.html).  
 
 ## Current Development Snapshot
+![Preview](https://drive.google.com/open?id=0B6L-QFyXo0RRQ1pSeWdYLVNDUTA)
 ![snapshot-9c2d3ad](https://cloud.githubusercontent.com/assets/4140247/12284558/1a9f278a-b976-11e5-8402-4f50e6f9fbf9.gif)
 
 
@@ -36,18 +37,19 @@ Here is how you run it:
 * container highlighting by panel hovering  
 * application has a theme switcher (dark/light)  
 * setting will saved in a settings file  
+* auto scroll to active panel by click on link icon  
 
 
 ## Issues:
-* panel sorting by drag and drop doesn't work well in any case**(done)**  
+* panel sorting by drag and drop doesn't work well in any case **(done)**  
 * tabbar icon doesn't update by theme switch (not implemented)  
 * panel resizing for undocked panels doesn't work well  
 
 
 ## Roadmap v1.0 - Framework
-* sorting panels by drag and drop **(almost done)**  
+* sorting panels by drag and drop **(done)**  
 * automatic tab orientation switch by docking on left site **(done)**  
-* function to scroll wanted panel to top by click on related icon or using a shortcut  
+* function to scroll wanted panel to top by click on related icon or using a shortcut **(done)**  
 * panel mode (normal/advanced/collapsed) **(done)**  
 * theme support + icon switch by theme change **(almost done)**  
 * clean up compile time warnings  

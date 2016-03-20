@@ -3,6 +3,26 @@
 #include "qapplication.h"
 #include "helper.h"
 
+//
+// IndigoSplitter
+//
+
+IndigoSplitter::IndigoSplitter(QWidget *parent):
+    QSplitter(parent)
+{
+}
+
+void IndigoSplitter::resizeEvent(QResizeEvent *e){
+
+    QSplitter::resizeEvent(e);
+    emit resize();
+
+}
+
+
+//
+// IndigoDropZone
+//
 
 IndigoDropZone::IndigoDropZone(QWidget *parent) :
     QWidget(parent)
@@ -17,12 +37,14 @@ IndigoDropZone::IndigoDropZone(QWidget *parent) :
     padding = 6;
     borderHighlight = 2;
     isHighlight = false;
+    minHeight = 2*padding;
+    lastPanelHeight = 0;
 
     //rect_placeholder = new QRect();
     m_placeholder = new QWidget(this);
 
 
-    m_splitter = new QSplitter();
+    m_splitter = new IndigoSplitter();
     m_splitter->setHandleWidth(padding);
     m_splitter->setOrientation(Qt::Vertical);
     m_splitter->move(this->pos());
@@ -36,6 +58,10 @@ IndigoDropZone::IndigoDropZone(QWidget *parent) :
     layout->addLayout(m_layout);
     layout->addStretch(1);
     setLayout(layout);
+
+    setMinimumWidth(220 + 2*padding);
+
+    this->connect(m_splitter, SIGNAL(resize()), this, SLOT(updateMinHeight()));
 
 }
 
@@ -133,6 +159,7 @@ void IndigoDropZone::dropPanel()
  */
 void IndigoDropZone::addPanel (IndigoPanel *panel, int index){
 
+
     // add panel to PanelList
     if(index == -1){
         PanelList.append(panel);
@@ -148,7 +175,6 @@ void IndigoDropZone::addPanel (IndigoPanel *panel, int index){
 
     m_layout->addWidget(m_splitter);
 
-
     panel->setDockState(IndigoPanel::Docked);
     panel->show();
 
@@ -162,6 +188,7 @@ void IndigoDropZone::addPanel (IndigoPanel *panel, int index){
 
 
 void IndigoDropZone::removePanel(int index){
+
     PanelList.removeAt(index);
     updatePanels();
     emit panelRemoved(index);
@@ -198,6 +225,8 @@ void IndigoDropZone::updatePanels(){
 
     }
 
+    updateMinHeight();
+
 }
 
 
@@ -210,7 +239,6 @@ void IndigoDropZone::addPlaceholder (int index){
         m_splitter->addWidget(m_placeholder);
     }else m_splitter->insertWidget(index, m_placeholder);
 
-
 }
 
 
@@ -219,13 +247,19 @@ void IndigoDropZone::removePlaceholder (){
 
     m_placeholder->setParent(this);
     m_placeholder->setFixedHeight(0);
+
 }
 
 
-void IndigoDropZone::mouseMoveEvent(QMouseEvent *){
+QRect IndigoDropZone::getPanelRect(int index, bool addPadding){
 
-    // hoverZone(50);
+    IndigoPanel *panel = PanelList.at(index);
+    int offset = 0;
+    if(addPadding) offset = padding;
 
+    QPoint panPos = this->mapFromGlobal(panel->mapToGlobal( QPoint( 0, 0 ) ));
+
+    return QRect(QPoint(panPos.x() - offset, panPos.y() - offset), QPoint(panPos.x() + panel->width() + offset, panPos.y() + panel->height() +offset ));
 
 }
 
@@ -268,14 +302,25 @@ void IndigoDropZone::paintEvent(QPaintEvent*e) {
 
 }
 
+void IndigoDropZone::updateMinHeight(){
 
+    // get height of last visible Panel
+    for( int i=0; i<PanelList.count(); ++i )
+    {
 
-void IndigoDropZone::resizeEvent(QResizeEvent*e){
-    Q_UNUSED(e)
-    emit resize();
+        if(PanelList.at(i)->dockState() == IndigoPanel::Docked){
+
+            IndigoPanel * panel = PanelList.at(i);
+            lastPanelHeight = panel->height();
+        }
+
+    }
+
+    minHeight = m_splitter->height();
+
+   // qDebug() << "updateMinHeight" << minHeight << "SplitterHeight:" << m_splitter->height() << "PanelHeight:" << lastPanelHeight << endl;
+
+    emit contentResize();
 }
-
-
-
 
 

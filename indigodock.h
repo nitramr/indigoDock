@@ -23,13 +23,16 @@ public:
 private:
 
     QHBoxLayout *m_layout;
-    QScrollArea * m_scrollArea;   
+    QScrollArea * m_scrollArea;
+    int dropZoneInitHeight;
+    void resizeEvent(QResizeEvent *e);
 
 signals:
 
 public slots:
-    void updateTabPosition(Qt::DockWidgetArea area);  
-    void updateSize();
+    void updateTabPosition(Qt::DockWidgetArea area);
+    void scrollDropZone(int tabIndex);
+    void resizeScrollPanel();
 
 
 };

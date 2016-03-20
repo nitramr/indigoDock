@@ -87,7 +87,9 @@ void IndigoTabBar::mouseReleaseEvent(QMouseEvent*event){
         dragProceed = false;
         int_dragIndex = -1;
         moveTab();
-
+    }else{
+        // Scroll to position in DropZone after mouse click
+        emit scrollDropZone(int_newIndex);
     }
 
     update();
@@ -371,3 +373,4 @@ void IndigoTabBar::setTabPosition(Orientation tabOrientation){
 int IndigoTabBar::currentIndex(){
     return int_newIndex;
 }
+

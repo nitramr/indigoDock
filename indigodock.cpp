@@ -19,11 +19,14 @@ IndigoDock::IndigoDock(QWidget *parent) : QWidget(parent)
     m_toolbar = new  IndigoTabBar;
 
     m_dropzone = new IndigoDropZone;
+    dropZoneInitHeight = m_dropzone->height();
 
     m_scrollArea = new QScrollArea;
     m_scrollArea->setStyleSheet( styleSheetScroll);
     m_scrollArea->setWidgetResizable(true);
     m_scrollArea->setWidget(m_dropzone);
+    m_scrollArea->setMinimumWidth(m_dropzone->minimumWidth() + 20); //scrollbar fix
+    m_scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     m_layout->addWidget(m_scrollArea);
     m_layout->addWidget(m_toolbar);
@@ -32,11 +35,13 @@ IndigoDock::IndigoDock(QWidget *parent) : QWidget(parent)
 
     PanelList = m_dropzone->PanelList;
 
+
     // watch active tab change event
     connect(m_toolbar, SIGNAL(tabMoved(int,int)), m_dropzone, SLOT(movePanel(int,int)));
-    connect(m_dropzone, SIGNAL(resize()), this, SLOT(updateSize()));
+    connect(m_toolbar, SIGNAL(scrollDropZone(int)), this, SLOT(scrollDropZone(int)));
     connect(m_dropzone, SIGNAL(panelRemoved(int)), m_toolbar, SLOT(removeTab(int)));
     connect(m_dropzone, SIGNAL(panelAdded(QIcon,int)), m_toolbar, SLOT(insertTab(QIcon, int)));
+    connect(m_dropzone, SIGNAL(contentResize()), this, SLOT(resizeScrollPanel()));
 
 }
 
@@ -56,8 +61,38 @@ void IndigoDock::addIndigoPanel(IndigoPanel *panel, int tabIndex){
 
 
 
-void IndigoDock::updateSize(){
-    m_scrollArea->setFixedWidth(m_dropzone->width());
+void IndigoDock::scrollDropZone(int tabIndex){
+
+    QRect panRect = m_dropzone->getPanelRect(tabIndex);
+
+    // m_scrollArea->verticalScrollBar()->setValue(panRect.y());
+
+    QPropertyAnimation *animation = new QPropertyAnimation(m_scrollArea->verticalScrollBar(), "value");
+    animation->setDuration(100);
+    animation->setStartValue(m_scrollArea->verticalScrollBar()->value());
+    animation->setEndValue(panRect.y());
+    animation->start();
+
+}
+
+
+void IndigoDock::resizeScrollPanel(){
+    // Update DropZone height
+
+    int dzHeight = m_dropzone->minHeight;
+    int dzPanel = m_dropzone->lastPanelHeight;
+    int spacer = m_scrollArea->height() - dzPanel;
+
+    if(dzHeight < dzPanel) dzHeight = dzPanel;
+
+    m_dropzone->setFixedHeight(dzHeight + spacer);
+}
+
+
+void IndigoDock::resizeEvent(QResizeEvent *e){
+
+  Q_UNUSED(e)
+  resizeScrollPanel();
 }
 
 
