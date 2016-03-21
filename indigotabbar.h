@@ -85,7 +85,7 @@ private:
 
 signals:
    void tabMoved(int,int);
-   void scrollDropZone(int);
+   void scrollToPanel(int);
 
 public slots:
     void addTab(QIcon icon);

@@ -53,7 +53,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     // TabWidget
-    IndigoDock *indigoDock = new IndigoDock;
+    indigoDock = new IndigoDock;
 
     // Container
     m_mainLayout_r = new QGridLayout();
@@ -68,33 +68,94 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     // Panel Setup
+    IndigoPanel *pan_geometry = new IndigoPanel("PanGeometry",indigoDock);
+    pan_geometry ->setCaption("Geometry");
+    pan_geometry ->setIcon(QIcon(str_iconPath + "pan-frame.png"));
+    indigoDock->addIndigoPanel(pan_geometry );
+
+    IndigoPanel *pan_content = new IndigoPanel("PanContent",indigoDock);
+    pan_content->setCaption("Content");
+    pan_content->setIcon(QIcon(str_iconPath + "pan-image.png"));
+    indigoDock->addIndigoPanel(pan_content);
+
+    IndigoPanel *pan_alignment = new IndigoPanel("PanAlignment",indigoDock);
+    pan_alignment->setCaption("Alignment");
+    pan_alignment->setIcon(QIcon(str_iconPath + "pan-image.png"));
+    indigoDock->addIndigoPanel(pan_alignment);
+
+    IndigoPanel *pan_colours = new IndigoPanel("PanColours",indigoDock);
+    pan_colours->setCaption("Colours");
+    pan_colours->setIcon(QIcon(str_iconPath + "pan-image.png"));
+    indigoDock->addIndigoPanel(pan_colours);
+
     IndigoPanel *pan_page = new IndigoPanel("PanPage",indigoDock);
     pan_page->setCaption("Page");
     pan_page->setIcon(QIcon(str_iconPath + "pan-page.png"));
     indigoDock->addIndigoPanel(pan_page);
 
-    IndigoPanel *pan_image = new IndigoPanel("PanImage",indigoDock);
-    pan_image->setCaption("Image");
-    pan_image->setIcon(QIcon(str_iconPath + "pan-image.png"));
-    indigoDock->addIndigoPanel(pan_image);
+    IndigoPanel *pan_group = new IndigoPanel("PanGroup",indigoDock);
+    pan_group->setCaption("Group");
+    pan_group->setIcon(QIcon(str_iconPath + "pan-image.png"));
+    indigoDock->addIndigoPanel(pan_group);
 
-    IndigoPanel *pan_text = new IndigoPanel("PanText", indigoDock);
-    pan_text->setCaption("Text");
-    pan_text->setIcon(QIcon(str_iconPath + "pan-text.png"));
-    indigoDock->addIndigoPanel(pan_text);
+    IndigoPanel *pan_line = new IndigoPanel("PanLine",indigoDock);
+    pan_line->setCaption("Line");
+    pan_line->setIcon(QIcon(str_iconPath + "pan-image.png"));
+    indigoDock->addIndigoPanel(pan_line);
+
+    IndigoPanel *pan_transparency = new IndigoPanel("PanTransparency",indigoDock);
+    pan_transparency ->setCaption("Transparency");
+    pan_transparency ->setIcon(QIcon(str_iconPath + "pan-image.png"));
+    indigoDock->addIndigoPanel(pan_transparency);
+
+    IndigoPanel *pan_table = new IndigoPanel("PanTable",indigoDock);
+    pan_table ->setCaption("Table");
+    pan_table ->setIcon(QIcon(str_iconPath + "pan-image.png"));
+    indigoDock->addIndigoPanel(pan_table);
+
+    IndigoPanel *pan_layers = new IndigoPanel("PanLayer",indigoDock);
+    pan_layers ->setCaption("Layers");
+    pan_layers ->setIcon(QIcon(str_iconPath + "pan-image.png"));
+    indigoDock->addIndigoPanel(pan_layers);
+
+    IndigoPanel *pan_outlines = new IndigoPanel("PanOutlines",indigoDock);
+    pan_outlines ->setCaption("Outlines");
+    pan_outlines ->setIcon(QIcon(str_iconPath + "pan-image.png"));
+    indigoDock->addIndigoPanel(pan_outlines);
+
+    IndigoPanel *pan_bookmarks = new IndigoPanel("PanBookmarks",indigoDock);
+    pan_bookmarks ->setCaption("Bookmarks");
+    pan_bookmarks ->setIcon(QIcon(str_iconPath + "pan-image.png"));
+    indigoDock->addIndigoPanel(pan_bookmarks);
+
+    IndigoPanel *pan_scrapbook = new IndigoPanel("PanScrapbook",indigoDock);
+    pan_scrapbook ->setCaption("Scrapbook");
+    pan_scrapbook ->setIcon(QIcon(str_iconPath + "pan-image.png"));
+    indigoDock->addIndigoPanel(pan_scrapbook);
+
+    IndigoPanel *pan_symbols = new IndigoPanel("PanSymbols",indigoDock);
+    pan_symbols ->setCaption("Symbols");
+    pan_symbols ->setIcon(QIcon(str_iconPath + "pan-image.png"));
+    indigoDock->addIndigoPanel(pan_symbols);
+
+    IndigoPanel *pan_inlineitems = new IndigoPanel("PanInlineItems",indigoDock);
+    pan_inlineitems ->setCaption("Inline Items");
+    pan_inlineitems ->setIcon(QIcon(str_iconPath + "pan-image.png"));
+    indigoDock->addIndigoPanel(pan_inlineitems);
+
 
 
 
     // Add panel content
-    textPanel(pan_text);
+    textPanel(pan_content);
 
-    QLabel *lbl1 = new QLabel("Image stuff normal");
+   /* QLabel *lbl1 = new QLabel("Image stuff normal");
     QLabel *lbl3 = new QLabel("Image stuff extended");
-    pan_image->addWidgetNormal(lbl1);
-    pan_image->addWidgetExtend(lbl3);
+    pan_group->addWidgetNormal(lbl1);
+    pan_group->addWidgetExtend(lbl3);
 
     QLabel *lbl2 = new QLabel("Page stuff extended");
-    pan_page->addWidgetExtend(lbl2);
+    pan_page->addWidgetExtend(lbl2);*/
 
 
     /******************
@@ -115,17 +176,36 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->mainToolBar->addSeparator();
 
-    QAction *tb_text = new QAction("Text",this);
-    ui->mainToolBar->addAction(tb_text);
-    connect(tb_text, SIGNAL(triggered()), pan_text, SLOT(show()));
 
-    QAction *tb_img = new QAction("Image",this);
+    QAction *tb_img = new QAction("Geometry",this);
     ui->mainToolBar->addAction(tb_img);
-    connect(tb_img, SIGNAL(triggered()), pan_image, SLOT(show()));
+    connect(tb_img, SIGNAL(triggered()), pan_geometry, SLOT(show()));
+    connect(tb_img, SIGNAL(triggered()), this, SLOT(scrollToGeometry()));
+
+    QAction *tb_text = new QAction("Content",this);
+    ui->mainToolBar->addAction(tb_text);
+    connect(tb_text, SIGNAL(triggered()), pan_content, SLOT(show()));
+    connect(tb_text, SIGNAL(triggered()), this, SLOT(scrollToContent()));
+
 
     QAction *tb_page = new QAction("Page",this);
     ui->mainToolBar->addAction(tb_page);
     connect(tb_page, SIGNAL(triggered()), pan_page, SLOT(show()));
+    connect(tb_page, SIGNAL(triggered()), this, SLOT(scrollToPage()));
+
+}
+
+
+void MainWindow::scrollToGeometry(){
+    indigoDock->scrollToPanel("PanGeometry");
+}
+
+void MainWindow::scrollToContent(){
+    indigoDock->scrollToPanel("PanContent");
+}
+
+void MainWindow::scrollToPage(){
+    indigoDock->scrollToPanel("PanPage");
 }
 
 

@@ -17,8 +17,9 @@ public:
     explicit IndigoDock(QWidget *parent = 0);
     IndigoDropZone * m_dropzone;
     IndigoTabBar * m_toolbar;    
-    QList<IndigoPanel*> PanelList;
+    QList<IndigoPanel *> getPanelList();
     void addIndigoPanel(IndigoPanel *panel, int tabIndex = -1);
+
 
 private:
 
@@ -27,11 +28,13 @@ private:
     int dropZoneInitHeight;
     void resizeEvent(QResizeEvent *e);
 
+
 signals:
 
 public slots:
     void updateTabPosition(Qt::DockWidgetArea area);
-    void scrollDropZone(int tabIndex);
+    void scrollToPanel(int PanelIndex);
+    void scrollToPanel(QString PanelName);
     void resizeScrollPanel();
 
 

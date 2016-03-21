@@ -17,5 +17,7 @@
         <file>data/icons/light/quit.png</file>
         <file>data/qss/scribus-dark.qss</file>
         <file>data/qss/scribus-light.qss</file>
+        <file>data/icons/dark/pan-frame.png</file>
+        <file>data/icons/light/pan-frame.png</file>
     </qresource>
 </RCC>

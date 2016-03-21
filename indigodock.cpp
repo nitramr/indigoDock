@@ -33,12 +33,9 @@ IndigoDock::IndigoDock(QWidget *parent) : QWidget(parent)
 
     setLayout(m_layout);
 
-    PanelList = m_dropzone->PanelList;
-
-
     // watch active tab change event
     connect(m_toolbar, SIGNAL(tabMoved(int,int)), m_dropzone, SLOT(movePanel(int,int)));
-    connect(m_toolbar, SIGNAL(scrollDropZone(int)), this, SLOT(scrollDropZone(int)));
+    connect(m_toolbar, SIGNAL(scrollToPanel(int)), this, SLOT(scrollToPanel(int)));
     connect(m_dropzone, SIGNAL(panelRemoved(int)), m_toolbar, SLOT(removeTab(int)));
     connect(m_dropzone, SIGNAL(panelAdded(QIcon,int)), m_toolbar, SLOT(insertTab(QIcon, int)));
     connect(m_dropzone, SIGNAL(contentResize()), this, SLOT(resizeScrollPanel()));
@@ -60,10 +57,16 @@ void IndigoDock::addIndigoPanel(IndigoPanel *panel, int tabIndex){
 }
 
 
+QList<IndigoPanel*> IndigoDock::getPanelList(){
 
-void IndigoDock::scrollDropZone(int tabIndex){
+    return m_dropzone->PanelList;
 
-    QRect panRect = m_dropzone->getPanelRect(tabIndex);
+}
+
+
+void IndigoDock::scrollToPanel(int PanelIndex){
+
+    QRect panRect = m_dropzone->getPanelRect(PanelIndex);
 
     // m_scrollArea->verticalScrollBar()->setValue(panRect.y());
 
@@ -72,6 +75,25 @@ void IndigoDock::scrollDropZone(int tabIndex){
     animation->setStartValue(m_scrollArea->verticalScrollBar()->value());
     animation->setEndValue(panRect.y());
     animation->start();
+
+}
+
+
+void IndigoDock::scrollToPanel(QString PanelName){
+
+    QList<IndigoPanel*> PanelList = getPanelList();
+
+    for( int i=0; i<PanelList.size(); ++i )
+    {
+        if(PanelList.at(i)->dockState() == IndigoPanel::Docked || PanelList.at(i)->dockState() == IndigoPanel::HiddenDocked){
+
+            if(PanelList.at(i)->objectName() == PanelName){
+
+                this->scrollToPanel(i);
+            }
+        }
+    }
+
 
 }
 

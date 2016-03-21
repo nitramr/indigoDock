@@ -5,6 +5,7 @@
 #include <QDockWidget>
 #include <QVBoxLayout>
 #include <QListWidget>
+#include "indigodock.h"
 #include "indigopanel.h"
 
 namespace Ui {
@@ -15,6 +16,10 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
+private:
+    Ui::MainWindow *ui;
+    QString str_iconPath;
+    void textPanel(IndigoPanel *parent);
 
 public:
 
@@ -23,6 +28,7 @@ public:
         Light
     };
 
+    IndigoDock *indigoDock;
     QDockWidget* m_dockleft;
     QDockWidget* m_dockright;
     QGridLayout* m_mainLayout_r;
@@ -36,13 +42,13 @@ public:
 signals:  
 
 public slots:
-   void loadLightTheme();
-   void loadDarkTheme();
+    void loadLightTheme();
+    void loadDarkTheme();
+    void scrollToGeometry();
+    void scrollToContent();
+    void scrollToPage();
 
-private:
-    Ui::MainWindow *ui;
-    QString str_iconPath;
-    void textPanel(IndigoPanel *parent);
+
 };
 
 

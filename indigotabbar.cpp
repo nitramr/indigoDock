@@ -89,7 +89,7 @@ void IndigoTabBar::mouseReleaseEvent(QMouseEvent*event){
         moveTab();
     }else{
         // Scroll to position in DropZone after mouse click
-        emit scrollDropZone(int_newIndex);
+        emit scrollToPanel(int_newIndex);
     }
 
     update();
