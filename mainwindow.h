@@ -7,6 +7,7 @@
 #include <QListWidget>
 #include "indigodock.h"
 #include "indigopanel.h"
+#include "indigohub.h"
 
 namespace Ui {
 class MainWindow;
@@ -28,10 +29,13 @@ public:
         Light
     };
 
-    IndigoDock *indigoDock;
-    QDockWidget* m_dockleft;
-    QDockWidget* m_dockright;
+    IndigoHub * indigoHub;
+    IndigoDock *indigoDock_r;
+    IndigoDock *indigoDock_l;
+    QDockWidget* m_dockholder_l;
+    QDockWidget* m_dockholder_r;
     QGridLayout* m_mainLayout_r;
+    QGridLayout* m_mainLayout_l;
     void loadTheme();
     void saveTheme(Theme theme);
 

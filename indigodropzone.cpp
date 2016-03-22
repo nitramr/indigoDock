@@ -34,13 +34,12 @@ IndigoDropZone::IndigoDropZone(QWidget *parent) :
 
     transparency = 0.1; // 10%
 
-    padding = 6;
+    padding = 3;
     borderHighlight = 2;
     isHighlight = false;
     minHeight = 2*padding;
     lastPanelHeight = 0;
 
-    //rect_placeholder = new QRect();
     m_placeholder = new QWidget(this);
 
 

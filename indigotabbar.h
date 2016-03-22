@@ -81,6 +81,7 @@ private:
    int fakeTabIndex(int mouseY);
 
    void moveTab();
+   void calculateHeight();
 
 
 signals:

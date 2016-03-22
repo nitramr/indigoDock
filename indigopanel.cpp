@@ -118,6 +118,7 @@ IndigoPanel::IndigoPanel(QString name, QWidget *parent) :
     m_handle->setFixedHeight(30);
 
     m_normalContainer = new QWidget;
+    m_normalContainer->setMinimumHeight(100); // simulate fake content - remove for productive usage
     m_extendedContainer = new QWidget;
 
     m_normalArea = new QVBoxLayout(m_normalContainer);

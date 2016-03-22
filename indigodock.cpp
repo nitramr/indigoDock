@@ -21,15 +21,23 @@ IndigoDock::IndigoDock(QWidget *parent) : QWidget(parent)
     m_dropzone = new IndigoDropZone;
     dropZoneInitHeight = m_dropzone->height();
 
-    m_scrollArea = new QScrollArea;
-    m_scrollArea->setStyleSheet( styleSheetScroll);
-    m_scrollArea->setWidgetResizable(true);
-    m_scrollArea->setWidget(m_dropzone);
-    m_scrollArea->setMinimumWidth(m_dropzone->minimumWidth() + 20); //scrollbar fix
-    m_scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_scrollArea_dz = new QScrollArea;
+    m_scrollArea_dz->setStyleSheet( styleSheetScroll);
+    m_scrollArea_dz->setWidgetResizable(true);
+    m_scrollArea_dz->setWidget(m_dropzone);
+    m_scrollArea_dz->setMinimumWidth(m_dropzone->minimumWidth() + 20); //scrollbar fix
+    m_scrollArea_dz->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    m_layout->addWidget(m_scrollArea);
-    m_layout->addWidget(m_toolbar);
+    m_scrollArea_tb = new QScrollArea;
+    m_scrollArea_tb->setStyleSheet( styleSheetScroll);
+    m_scrollArea_tb->setWidgetResizable(true);
+    m_scrollArea_tb->setWidget(m_toolbar);
+    m_scrollArea_tb->setFixedWidth(m_toolbar->width());
+    m_scrollArea_tb->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_scrollArea_tb->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    m_layout->addWidget(m_scrollArea_dz);
+    m_layout->addWidget(m_scrollArea_tb);
 
     setLayout(m_layout);
 
@@ -70,9 +78,9 @@ void IndigoDock::scrollToPanel(int PanelIndex){
 
     // m_scrollArea->verticalScrollBar()->setValue(panRect.y());
 
-    QPropertyAnimation *animation = new QPropertyAnimation(m_scrollArea->verticalScrollBar(), "value");
+    QPropertyAnimation *animation = new QPropertyAnimation(m_scrollArea_dz->verticalScrollBar(), "value");
     animation->setDuration(100);
-    animation->setStartValue(m_scrollArea->verticalScrollBar()->value());
+    animation->setStartValue(m_scrollArea_dz->verticalScrollBar()->value());
     animation->setEndValue(panRect.y());
     animation->start();
 
@@ -103,7 +111,7 @@ void IndigoDock::resizeScrollPanel(){
 
     int dzHeight = m_dropzone->minHeight;
     int dzPanel = m_dropzone->lastPanelHeight;
-    int spacer = m_scrollArea->height() - dzPanel;
+    int spacer = m_scrollArea_dz->height() - dzPanel;
 
     if(dzHeight < dzPanel) dzHeight = dzPanel;
 
@@ -148,7 +156,3 @@ void IndigoDock::updateTabPosition(Qt::DockWidgetArea area){
     }
 
 }
-
-
-
-

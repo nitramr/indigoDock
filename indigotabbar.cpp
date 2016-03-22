@@ -291,6 +291,7 @@ void IndigoTabBar::insertTab(QIcon icon, int index){
         TabList.insert(index, tab);       
     }
 
+    calculateHeight();
     update();
 }
 
@@ -300,7 +301,9 @@ void IndigoTabBar::removeTab(int index){
 
     if(index >= 0 && index <= TabList.count()){
         TabList.removeAt(index);
+        calculateHeight();
         update();
+
     }
 
 }
@@ -326,6 +329,7 @@ void IndigoTabBar::hideTab(int index){
 
     if(index >= 0 && index <= TabList.count()){
         TabList.at(index)->setDisplayState(IndigoTab::hidden);
+        calculateHeight();
         update();
     }
 }
@@ -336,7 +340,9 @@ void IndigoTabBar::showTab(int index){
 
     if(index >= 0 && index <= TabList.count()){
         TabList.at(index)->setDisplayState(IndigoTab::visible);
+        calculateHeight();
         update();
+
     }
 
 }
@@ -372,5 +378,23 @@ void IndigoTabBar::setTabPosition(Orientation tabOrientation){
 
 int IndigoTabBar::currentIndex(){
     return int_newIndex;
+}
+
+
+
+void IndigoTabBar::calculateHeight(){
+
+   int items=0;
+
+   for( int i=0; i<TabList.size(); ++i ){
+       if(TabList.at(i)->displayState() == IndigoTab::visible){
+
+           items +=1;
+       }
+
+   }
+
+   this->setFixedHeight(items*(int_tabHeight + int_gap));
+
 }
 

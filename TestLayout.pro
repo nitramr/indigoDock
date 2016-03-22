@@ -32,7 +32,8 @@ SOURCES += main.cpp\
     anglepicker.cpp \
     stylefactory.cpp \
     configmanager.cpp \
-    helper.cpp
+    helper.cpp \
+    indigohub.cpp
 
 HEADERS  += mainwindow.h \
     colorswatch.h \
@@ -45,7 +46,8 @@ HEADERS  += mainwindow.h \
     anglepicker.h \
     stylefactory.h \
     configmanager.h \
-    helper.h
+    helper.h \
+    indigohub.h
 
 FORMS    += mainwindow.ui
 

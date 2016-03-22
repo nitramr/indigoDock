@@ -19,5 +19,7 @@
         <file>data/qss/scribus-light.qss</file>
         <file>data/icons/dark/pan-frame.png</file>
         <file>data/icons/light/pan-frame.png</file>
+        <file>data/icons/dark/pan-content.png</file>
+        <file>data/icons/light/pan-content.png</file>
     </qresource>
 </RCC>

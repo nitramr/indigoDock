@@ -24,7 +24,8 @@ public:
 private:
 
     QHBoxLayout *m_layout;
-    QScrollArea * m_scrollArea;
+    QScrollArea * m_scrollArea_dz;
+    QScrollArea * m_scrollArea_tb;
     int dropZoneInitHeight;
     void resizeEvent(QResizeEvent *e);
 
