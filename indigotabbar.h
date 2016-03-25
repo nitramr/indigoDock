@@ -52,11 +52,11 @@ public:
 
 
 protected:   
-    void paintEvent(QPaintEvent *);
+    void paintEvent(QPaintEvent *event);
     void mousePressEvent(QMouseEvent*event);
     void mouseReleaseEvent(QMouseEvent*event);
     void mouseMoveEvent(QMouseEvent*event);
-    void leaveEvent(QEvent *);
+    void leaveEvent(QEvent *event);
 
 private:
    int int_tabWidth;

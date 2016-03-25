@@ -10,6 +10,7 @@
 #include "anglepicker.h"
 #include "stylefactory.h"
 #include "configmanager.h"
+#include "indigolabelcontrol.h"
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -117,7 +118,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     IndigoPanel *pan_alignment = new IndigoPanel("PanAlignment",indigoDock_r);
     pan_alignment->setCaption("Alignment");
-    pan_alignment->setIcon(QIcon(str_iconPath + "pan-image.png"));
+    pan_alignment->setIcon(QIcon(str_iconPath + "pan-alignment.png"));
     indigoDock_r->addIndigoPanel(pan_alignment);
 
     IndigoPanel *pan_colours = new IndigoPanel("PanColours",indigoDock_r);
@@ -130,37 +131,37 @@ MainWindow::MainWindow(QWidget *parent) :
     pan_page->setIcon(QIcon(str_iconPath + "pan-page.png"));
     indigoDock_r->addIndigoPanel(pan_page);
 
-    IndigoPanel *pan_group = new IndigoPanel("PanGroup",indigoDock_r);
+  /*  IndigoPanel *pan_group = new IndigoPanel("PanGroup",indigoDock_r);
     pan_group->setCaption("Group");
     pan_group->setIcon(QIcon(str_iconPath + "pan-image.png"));
-    indigoDock_r->addIndigoPanel(pan_group);
+    indigoDock_r->addIndigoPanel(pan_group);*/
 
     IndigoPanel *pan_line = new IndigoPanel("PanLine",indigoDock_r);
     pan_line->setCaption("Line");
-    pan_line->setIcon(QIcon(str_iconPath + "pan-image.png"));
+    pan_line->setIcon(QIcon(str_iconPath + "pan-lines.png"));
     indigoDock_r->addIndigoPanel(pan_line);
 
     IndigoPanel *pan_transparency = new IndigoPanel("PanTransparency",indigoDock_r);
     pan_transparency ->setCaption("Transparency");
-    pan_transparency ->setIcon(QIcon(str_iconPath + "pan-image.png"));
+    pan_transparency ->setIcon(QIcon(str_iconPath + "pan-transparency.png"));
     indigoDock_r->addIndigoPanel(pan_transparency);
 
     IndigoPanel *pan_table = new IndigoPanel("PanTable",indigoDock_r);
     pan_table ->setCaption("Table");
-    pan_table ->setIcon(QIcon(str_iconPath + "pan-image.png"));
+    pan_table ->setIcon(QIcon(str_iconPath + "pan-table.png"));
     indigoDock_r->addIndigoPanel(pan_table);
 
     IndigoPanel *pan_layers = new IndigoPanel("PanLayer",indigoDock_r);
     pan_layers ->setCaption("Layers");
-    pan_layers ->setIcon(QIcon(str_iconPath + "pan-image.png"));
+    pan_layers ->setIcon(QIcon(str_iconPath + "pan-layer.png"));
     indigoDock_r->addIndigoPanel(pan_layers);
 
     IndigoPanel *pan_outlines = new IndigoPanel("PanOutlines",indigoDock_r);
     pan_outlines ->setCaption("Outlines");
-    pan_outlines ->setIcon(QIcon(str_iconPath + "pan-image.png"));
+    pan_outlines ->setIcon(QIcon(str_iconPath + "pan-outline.png"));
     indigoDock_r->addIndigoPanel(pan_outlines);
 
-    IndigoPanel *pan_bookmarks = new IndigoPanel("PanBookmarks",indigoDock_r);
+   /* IndigoPanel *pan_bookmarks = new IndigoPanel("PanBookmarks",indigoDock_r);
     pan_bookmarks ->setCaption("Bookmarks");
     pan_bookmarks ->setIcon(QIcon(str_iconPath + "pan-image.png"));
     indigoDock_r->addIndigoPanel(pan_bookmarks);
@@ -178,7 +179,7 @@ MainWindow::MainWindow(QWidget *parent) :
     IndigoPanel *pan_inlineitems = new IndigoPanel("PanInlineItems",indigoDock_r);
     pan_inlineitems ->setCaption("Inline Items");
     pan_inlineitems ->setIcon(QIcon(str_iconPath + "pan-image.png"));
-    indigoDock_r->addIndigoPanel(pan_inlineitems);
+    indigoDock_r->addIndigoPanel(pan_inlineitems);*/
 
 
 
@@ -286,7 +287,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::textPanel(IndigoPanel *parent){
 
-    IndigoExpanderGroup *grFont = new IndigoExpanderGroup();
+    /*IndigoExpanderGroup *grFont = new IndigoExpanderGroup();
     IndigoExpanderGroup *grAlignment = new IndigoExpanderGroup();
     IndigoExpanderGroup *grStyles = new IndigoExpanderGroup(false);
     IndigoExpanderGroup *grChars = new IndigoExpanderGroup(false);
@@ -314,10 +315,10 @@ void MainWindow::textPanel(IndigoPanel *parent){
     grStyles->addWidget(colorSwatch);
 
     // Spacer
-    /* QWidget * spacer = new QWidget();
+     QWidget * spacer = new QWidget();
     QVBoxLayout *layoutSpacer = new QVBoxLayout();
     layoutSpacer->addStretch(1);
-    spacer->setLayout(layoutSpacer);*/
+    spacer->setLayout(layoutSpacer);*
 
 
     parent->addWidgetNormal(grFont);
@@ -327,7 +328,52 @@ void MainWindow::textPanel(IndigoPanel *parent){
     parent->addWidgetNormal(grParagraph);
     parent->addWidgetNormal(grLists);
     parent->addWidgetNormal(grColumns);
-    //parent->addWidgetNormal(spacer);
+    //parent->addWidgetNormal(spacer);*/
+
+
+    IndigoLabelControl *ilcTest = new IndigoLabelControl();
+    ilcTest->setLabel(QIcon(str_iconPath + "pan-image.png"));
+    QLineEdit *textBox = new QLineEdit("Icon Test");
+    ilcTest->setWidget(textBox);
+    parent->addWidgetNormal(ilcTest);
+
+
+    IndigoLabelControl *ilcTest2 = new IndigoLabelControl();
+    ilcTest2->setLabel(QString("b:"));
+    QLineEdit *textBox2 = new QLineEdit("String Test");
+    ilcTest2->setWidget(textBox2);
+    parent->addWidgetNormal(ilcTest2);
+
+
+    IndigoLabelControl *ilcTest4 = new IndigoLabelControl();
+    ilcTest4->setLabel(QIcon(str_iconPath + "pan-image.png"));
+    QLineEdit *textBox4 = new QLineEdit("Col left");
+    ilcTest4->setWidget(textBox4);
+    IndigoLabelControl *ilcTest5 = new IndigoLabelControl();
+    ilcTest5->setLabel(QIcon(str_iconPath + "pan-image.png"));
+    QLineEdit *textBox5 = new QLineEdit("Col right");
+    ilcTest5->setWidget(textBox5);
+    QHBoxLayout *hbox = new QHBoxLayout();
+    hbox->addWidget(ilcTest4);
+    hbox->addWidget(ilcTest5);
+    hbox->setMargin(0);
+    parent->addWidgetNormal(hbox);
+
+
+    AnglePicker * aPicker = new AnglePicker();
+    IndigoLabelControl *ilcTest3 = new IndigoLabelControl();
+    ilcTest3->setLabel(aPicker, aPicker->width());
+    QLineEdit *textBox3 = new QLineEdit("Widget Test");
+    ilcTest3->setWidget(textBox3);
+    parent->addWidgetNormal(ilcTest3);
+
+
+    ColorSwatch * cPicker = new ColorSwatch();
+    IndigoLabelControl *ilcTest6 = new IndigoLabelControl();
+    ilcTest6->setLabel("Rect Colour:", 100);
+    ilcTest6->setWidget(cPicker, cPicker->width());
+    parent->addWidgetNormal(ilcTest6);
+
 
 }
 
@@ -363,8 +409,6 @@ void MainWindow::loadTheme(){
 
         qApp->setPalette(sf->palette());
         qApp->setStyleSheet(style);
-
-
 
     }
 }

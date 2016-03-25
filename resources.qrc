@@ -23,5 +23,17 @@
         <file>data/icons/light/pan-content.png</file>
         <file>data/icons/light/pan-colour.png</file>
         <file>data/icons/dark/pan-colour.png</file>
+        <file>data/icons/dark/pan-alignment.png</file>
+        <file>data/icons/dark/pan-lines.png</file>
+        <file>data/icons/dark/pan-table.png</file>
+        <file>data/icons/dark/pan-transparency.png</file>
+        <file>data/icons/light/pan-alignment.png</file>
+        <file>data/icons/light/pan-lines.png</file>
+        <file>data/icons/light/pan-table.png</file>
+        <file>data/icons/light/pan-transparency.png</file>
+        <file>data/icons/dark/pan-layer.png</file>
+        <file>data/icons/light/pan-layer.png</file>
+        <file>data/icons/dark/pan-outline.png</file>
+        <file>data/icons/light/pan-outline.png</file>
     </qresource>
 </RCC>

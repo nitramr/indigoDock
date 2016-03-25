@@ -17,7 +17,7 @@ public:
     void setIcon(QIcon icon, int iconSize);
 
 protected:
-    void paintEvent(QPaintEvent *);
+    void paintEvent(QPaintEvent *event);
 
 private:
     QIcon m_icon;
@@ -56,7 +56,9 @@ public:
 
     IndigoPanel(QString name, QWidget* parent = 0);   
     void addWidgetNormal(QWidget *content);
+    void addWidgetNormal(QLayout *content);
     void addWidgetExtend(QWidget *content);
+    void addWidgetExtend(QLayout *content);
 
     IndigoPanelHandle * m_handle;
 

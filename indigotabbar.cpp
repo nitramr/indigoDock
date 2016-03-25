@@ -100,6 +100,7 @@ void IndigoTabBar::mouseReleaseEvent(QMouseEvent*event){
 
 void IndigoTabBar::mouseMoveEvent(QMouseEvent*event){
 
+
     if(TabList.count() < 0) return;
 
     QPoint mouse = event->pos();
@@ -120,15 +121,19 @@ void IndigoTabBar::mouseMoveEvent(QMouseEvent*event){
 
 
 
-void IndigoTabBar::leaveEvent(QEvent *){
+void IndigoTabBar::leaveEvent(QEvent *event){
+
+    Q_UNUSED(event)
+
     int_hoverIndex = -1;
     update();
 }
 
 
 
-void IndigoTabBar::paintEvent(QPaintEvent *)
+void IndigoTabBar::paintEvent(QPaintEvent *event)
 {
+   Q_UNUSED(event)
 
     QPainter p(this);
 

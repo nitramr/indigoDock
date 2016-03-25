@@ -19,7 +19,7 @@ AnglePicker::AnglePicker(QWidget *parent)
 
     circleFrame = QRect(1,1,this->diameter-m_lineThickness - 1, this->diameter-m_lineThickness -1);
 
-    this->setFixedHeight(diameter);
+    this->setFixedSize(diameter, diameter);
 }
 
 

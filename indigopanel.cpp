@@ -66,8 +66,9 @@ void IndigoPanelHandle::setIcon(QIcon icon, int iconSize){
 }
 
 
-void IndigoPanelHandle::paintEvent(QPaintEvent *)
+void IndigoPanelHandle::paintEvent(QPaintEvent *event)
 {
+    Q_UNUSED(event)
 
     QPainter p(this);
 
@@ -112,6 +113,7 @@ IndigoPanel::IndigoPanel(QString name, QWidget *parent) :
     this->setMinimumWidth(220);
     this->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding));
 
+    int padding = 5;
 
     // Widgets
     m_handle = new IndigoPanelHandle(this);
@@ -120,12 +122,12 @@ IndigoPanel::IndigoPanel(QString name, QWidget *parent) :
 
     m_normalContainer = new QWidget;
     m_normalContainer->setMinimumHeight(100); // simulate fake content - remove for productive usage
-    m_extendedContainer = new QWidget;
-
     m_normalArea = new QVBoxLayout(m_normalContainer);
-    m_normalArea->setMargin(0);
+    m_normalArea->setMargin(padding);
+
+    m_extendedContainer = new QWidget;    
     m_extendedArea = new QVBoxLayout(m_extendedContainer);
-    m_extendedArea->setMargin(0);
+    m_extendedArea->setMargin(padding);
 
     m_Parent = parent;
 
@@ -303,10 +305,28 @@ void IndigoPanel::addWidgetNormal(QWidget *content){
 
 }
 
+void IndigoPanel::addWidgetNormal(QLayout *content){
+
+    QWidget *widget = new QWidget();
+    widget->setLayout(content);
+
+     m_normalArea->addWidget(widget);
+
+}
+
 
 
 void IndigoPanel::addWidgetExtend(QWidget *content){
      m_extendedArea->addWidget(content);
+
+}
+
+void IndigoPanel::addWidgetExtend(QLayout *content){
+
+    QWidget *widget = new QWidget();
+    widget->setLayout(content);
+
+     m_extendedArea->addWidget(widget);
 
 }
 

@@ -33,7 +33,8 @@ SOURCES += main.cpp\
     stylefactory.cpp \
     configmanager.cpp \
     helper.cpp \
-    indigohub.cpp
+    indigohub.cpp \
+    indigolabelcontrol.cpp
 
 HEADERS  += mainwindow.h \
     colorswatch.h \
@@ -47,7 +48,8 @@ HEADERS  += mainwindow.h \
     stylefactory.h \
     configmanager.h \
     helper.h \
-    indigohub.h
+    indigohub.h \
+    indigolabelcontrol.h
 
 FORMS    += mainwindow.ui
 
