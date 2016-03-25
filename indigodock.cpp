@@ -8,6 +8,7 @@ IndigoDock::IndigoDock(QWidget *parent) : QWidget(parent)
     QString styleSheetScroll( "QScrollArea {"
                                 "border: 0px solid transparent;"
                             "}"
+
             );
 
 

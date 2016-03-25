@@ -21,5 +21,7 @@
         <file>data/icons/light/pan-frame.png</file>
         <file>data/icons/dark/pan-content.png</file>
         <file>data/icons/light/pan-content.png</file>
+        <file>data/icons/light/pan-colour.png</file>
+        <file>data/icons/dark/pan-colour.png</file>
     </qresource>
 </RCC>

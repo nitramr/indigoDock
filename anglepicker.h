@@ -10,20 +10,25 @@ class AnglePicker : public QWidget
        Q_OBJECT
 
 public:
-     AnglePicker(QWidget *parent = 0);
-
+    AnglePicker(QWidget *parent = 0);
+    void setAngle(double degree);
+    double Angle();
 
 private:
     void paintEvent(QPaintEvent*);
     void mouseMoveEvent(QMouseEvent *event);
-    float getAngle(QPoint centerPt, QPoint targetPt);
+
 
     QPoint m_center;
     QPoint m_pointer;
+    QRect circleFrame;
     int m_lineThickness;
-    float m_angle;
+    double m_angle;
+    int diameter;
+    double transparency;
 
 signals:
+    void angleChanged();
 
 public slots:
 };

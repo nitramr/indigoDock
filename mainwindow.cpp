@@ -122,7 +122,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     IndigoPanel *pan_colours = new IndigoPanel("PanColours",indigoDock_r);
     pan_colours->setCaption("Colours");
-    pan_colours->setIcon(QIcon(str_iconPath + "pan-image.png"));
+    pan_colours->setIcon(QIcon(str_iconPath + "pan-colour.png"));
     indigoDock_r->addIndigoPanel(pan_colours);
 
     IndigoPanel *pan_page = new IndigoPanel("PanPage",indigoDock_r);

@@ -65,3 +65,11 @@ IndigoDropZone {
 
 	background-color: palette(base);
 }
+
+IndigoDock QScrollBar:vertical {
+width: 10px;
+}
+
+IndigoDock QScrollBar:horizontal {
+height: 10px;
+}

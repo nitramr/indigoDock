@@ -100,12 +100,13 @@ void IndigoPanelHandle::paintEvent(QPaintEvent *)
 
 
 IndigoPanel::IndigoPanel(QString name, QWidget *parent) :
-   QFrame(parent)
+   QFrame(parent, Qt::ToolTip|Qt::WindowStaysOnTopHint|Qt::CustomizeWindowHint)
 {
     // General Properties
     setMouseTracking(true);
     setAutoFillBackground( true );
     setBackgroundRole(QPalette::Background);
+    //setWindowFlags(Qt::ToolTip|Qt::WindowStaysOnTopHint|Qt::CustomizeWindowHint);
 
     this->setObjectName(name);
     this->setMinimumWidth(220);
@@ -150,7 +151,10 @@ IndigoPanel::IndigoPanel(QString name, QWidget *parent) :
 }
 
 
-bool IndigoPanel::eventFilter(QObject *o, QEvent *event)
+// http://doc.qt.io/qt-5/qtwidgets-widgets-shapedclock-example.html
+
+
+bool IndigoPanel::eventFilter(QObject *object, QEvent *event)
 {
 
     switch( event->type() )
@@ -168,17 +172,18 @@ bool IndigoPanel::eventFilter(QObject *o, QEvent *event)
 
             QPoint point = me->globalPos();
             QPoint xy = this->mapToGlobal(QPoint(0,0));
-            // mouse press relative position
-            relative_x = point.x() - xy.x();
-            relative_y = point.y() - xy.y();
 
-            if(dockState() == IndigoPanel::Floating){
+            relativeOffset = point - xy;
+
+
+            /*if(dockState() == IndigoPanel::Floating){
                 //QPixmap pixmap = QWidget::grab();
                 // TODO: replace real QWidget with pixmap proxy
 
-            }
-
+            }*/
+            me->accept();
         }
+
 
         break;
 
@@ -199,13 +204,13 @@ bool IndigoPanel::eventFilter(QObject *o, QEvent *event)
                 // TODO: replace real QWidget with pixmap proxy
 
 
+                setParent(m_Parent);
 
-                //setParent(m_Parent);
-                setParent(0);
-
-                setWindowFlags(Qt::ToolTip|Qt::FramelessWindowHint); // avoid flickering by moving, will replaced by pixmap
+                setWindowFlags(Qt::ToolTip|Qt::WindowStaysOnTopHint|Qt::CustomizeWindowHint); // avoid flickering by moving, will replaced by pixmap
 
                 show();
+
+                //setParent(m_Parent);
 
                 setDockState(IndigoPanel::Floating);
                 emit isFloating(m_index);
@@ -213,13 +218,13 @@ bool IndigoPanel::eventFilter(QObject *o, QEvent *event)
 
             }
 
+            move(point - relativeOffset);
+            me->accept();
 
-            move(QPoint(point.x() - relative_x, point.y() - relative_y));
+            emit mouseMove(); // activate DropZone hover*
 
-            emit mouseMove(); // activate DropZone hover*/
 
         }
-
 
 
         break;
@@ -231,10 +236,12 @@ bool IndigoPanel::eventFilter(QObject *o, QEvent *event)
 
         if(dockState() == IndigoPanel::Floating){
 
-            setWindowFlags(Qt::Tool|Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint);
+            setWindowFlags(Qt::Tool
+                           | Qt::WindowStaysOnTopHint
+                           | Qt::CustomizeWindowHint);
             show();
 
-            emit mouseReleased(); // activate reparenting in DropZone*/
+            emit mouseReleased(); // activate reparenting in DropZone*
         }
 
         break;
@@ -247,7 +254,7 @@ bool IndigoPanel::eventFilter(QObject *o, QEvent *event)
 
 
 
-    return QFrame::eventFilter(o, event);
+    return QFrame::eventFilter(object, event);
 }
 
 

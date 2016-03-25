@@ -27,6 +27,7 @@ private:
     QToolButton * m_btnClose;
     QToolButton * m_btnFloat;
 
+
 signals:
 
 public slots:
@@ -75,7 +76,7 @@ public:
 
 
 protected:   
-    bool eventFilter(QObject *o, QEvent *e);
+    bool eventFilter(QObject *object, QEvent *e);
 
 private:   
     QWidget *m_normalContainer;
@@ -84,9 +85,7 @@ private:
     QVBoxLayout *m_extendedArea;
     QVBoxLayout *m_mainLayout;
 
-    QPoint oldPos;  
-    int relative_x;
-    int relative_y;
+    QPoint relativeOffset;
     QIcon m_icon;    
     int m_index; 
     IndigoState m_state;

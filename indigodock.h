@@ -32,11 +32,13 @@ private:
 
 signals:
 
+
 public slots:
     void updateTabPosition(Qt::DockWidgetArea area);
     void scrollToPanel(int PanelIndex);
     void scrollToPanel(QString PanelName);
     void resizeScrollPanel();
+
 
 
 };

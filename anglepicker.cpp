@@ -2,33 +2,63 @@
 #include "math.h"
 #include <QStyle>
 #include "qapplication.h"
+#include "helper.h"
 
 
 AnglePicker::AnglePicker(QWidget *parent)
     : QWidget(parent)
 {
-    this->setFixedSize(30,30);
+    //this->setFixedSize(30,30);
 
-    m_center = QPoint(this->width()/2, this->height()/2);
-    m_pointer = QPoint(this->width()/2, 0);
+    diameter = 30;
+    m_center = QPoint(this->diameter/2, this->diameter/2);
+    m_pointer = QPoint(this->diameter/2, 0);
     m_lineThickness = 2;
+    m_angle = 0;
+    transparency = 0.55; // 10%
+
+    circleFrame = QRect(1,1,this->diameter-m_lineThickness - 1, this->diameter-m_lineThickness -1);
+
+    this->setFixedHeight(diameter);
 }
+
+
 
 void AnglePicker::paintEvent(QPaintEvent*) {
 
     QPainter painter(this);
-    QPen pen;
-
     QColor c_line = QColor(this->palette().color(QPalette::WindowText));
+    QColor c_fill = Helper().blendColor(QColor(this->palette().color(QPalette::Background)),
+                                        QColor(this->palette().color(QPalette::Highlight)),
+                                        transparency);
 
+    QBrush brush(c_fill);
+
+    QPen pen;
     pen.setColor(c_line);
     pen.setWidth(m_lineThickness);
 
-    painter.setPen(pen);
     painter.setRenderHint(QPainter::Antialiasing);
-    painter.drawEllipse(1,1,this->height()-m_lineThickness - 1, this->width()-m_lineThickness -1);
 
-    painter.drawLine(m_center.x(), m_center.y(), m_pointer.x(), m_pointer.y());
+    // draw filled angle
+    painter.save();
+    painter.setPen(Qt::NoPen);
+    painter.setBrush(brush);
+    painter.drawPie(circleFrame, 0, 6000 / 360 * m_angle);
+    painter.restore();
+
+    painter.setPen(pen);
+
+    // draw outer circle
+    painter.drawEllipse(circleFrame);
+
+    // darw angle line
+    painter.save();
+    painter.translate(m_center.x(), m_center.y());
+    painter.rotate(-m_angle);
+    painter.drawLine(0, 0, diameter/2 - m_lineThickness - 1, 0);
+    painter.restore();
+
 
 }
 
@@ -38,28 +68,35 @@ void AnglePicker::mouseMoveEvent(QMouseEvent *event) {
     {
         m_pointer = event->pos();
 
+        QLineF *line = new QLineF(m_center, m_pointer);
+
+        // rotate 0° to 12 o'clock
+        double angle = line->angle();// -90;
+       // if (angle > 0) angle -= 360;
+
+        // invert counter direction
+        m_angle = angle;
+
         update();
 
-        qDebug() << "mouseDown" << m_pointer << endl;
+        emit angleChanged();
+
+        qDebug() << "mouseDown" << m_pointer << "Angle is:" << m_angle << endl;
 
 
     }
 }
 
-float AnglePicker::getAngle(QPoint centerPt, QPoint targetPt) {
+double AnglePicker::Angle() {
 
-       /* qreal theta = qAtan2(targetPt.y() - centerPt.y(), targetPt.x() - centerPt.x());
+    return m_angle;
+}
 
-        theta += M_PI/2.0;
+void AnglePicker::setAngle(double degree){
 
-        // convert from radians to degrees
-        // this will give you an angle from [0->270],[-180,0]
-        double angle = Math.toDegrees(theta);
+    if (degree < 0) degree = 0;
+    if (degree > 360) degree = 360;
 
-        if (angle < 0) {
-            angle += 360;
-        }
+    m_angle = degree;
 
-        return angle;*/
-    return 0;
 }
