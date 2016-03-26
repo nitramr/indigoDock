@@ -29,13 +29,10 @@ public:
         Light
     };
 
-    IndigoHub * indigoHub;
-    IndigoDock *indigoDock_r;
-    IndigoDock *indigoDock_l;
-    QDockWidget* m_dockholder_l;
-    QDockWidget* m_dockholder_r;
-    QGridLayout* m_mainLayout_r;
-    QGridLayout* m_mainLayout_l;
+   // IndigoHub * wdg_indigoHub;
+    IndigoDock *wdg_indigoDock_r;
+    IndigoDock *wdg_indigoDock_l;
+
     void loadTheme();
     void saveTheme(Theme theme);
 

@@ -23,13 +23,13 @@ public:
 
 
 private:
-    QIcon m_icon;
-    QWidget *m_label;
-    QWidget *m_widget;
-    QHBoxLayout *m_widgetLayout;
-    QHBoxLayout *m_labelLayout;
+    QIcon ico_icon;
+    QWidget *wdg_label;
+    QWidget *wdg_widget;
+    QHBoxLayout *lyt_widgetLayout;
+    QHBoxLayout *lyt_labelLayout;
 
-    int m_iconSize;
+    int int_iconSize;
 
 signals:
 

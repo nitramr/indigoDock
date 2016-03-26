@@ -24,8 +24,8 @@ private:
     int m_iconSize;
     QString m_title;
     int m_fontSize;
-    QToolButton * m_btnClose;
-    QToolButton * m_btnFloat;
+    QToolButton * wdg_btnClose;
+    QToolButton * wdg_btnFloat;
 
 
 signals:
@@ -60,7 +60,7 @@ public:
     void addWidgetExtend(QWidget *content);
     void addWidgetExtend(QLayout *content);
 
-    IndigoPanelHandle * m_handle;
+    IndigoPanelHandle * wdg_handle;
 
     void setCaption(QString title = "", int fontSize = 10);
 
@@ -81,19 +81,19 @@ protected:
     bool eventFilter(QObject *object, QEvent *e);
 
 private:   
-    QWidget *m_normalContainer;
-    QWidget *m_extendedContainer;
-    QVBoxLayout *m_normalArea;
-    QVBoxLayout *m_extendedArea;
-    QVBoxLayout *m_mainLayout;
+    QWidget *wdg_normalContainer;
+    QWidget *wdg_extendedContainer;
+    QVBoxLayout *lyt_normalArea;
+    QVBoxLayout *lyt_extendedArea;
+    QVBoxLayout *lyt_main;
 
-    QPoint relativeOffset;
-    QIcon m_icon;    
-    int m_index; 
+    QPoint pnt_relativeOffset;
+    QIcon ico_icon;    
+    int int_index; 
     IndigoState m_state;
     IndigoExpander m_expander;
-    QWidget *m_Parent;
-    QSpacerItem *m_spacer;
+    QWidget *wdg_Parent;
+    QSpacerItem *wdg_spacer;
 
 signals:
     void mouseReleased();

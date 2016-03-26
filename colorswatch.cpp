@@ -1,11 +1,5 @@
 #include "colorswatch.h"
 
-/****************************
- *
- * TODO: Add edit buttons
- *
- * ***************************/
-
 
 ColorSwatch::ColorSwatch(QWidget *parent)
     : QWidget(parent)
@@ -15,18 +9,18 @@ ColorSwatch::ColorSwatch(QWidget *parent)
     setAutoFillBackground(true);
 
 
-    conWidth = 9; // countour thickness
-    spacer = 1; // spacer between countour and fill
-    valveWidth = 4; // valve width
-    valveHeight = 4; // valve height
-    btnSize = 22; // button dimensions
+    int_conWidth = 9; // countour thickness
+    int_spacer = 1; // spacer between countour and fill
+    int_valveWidth = 4; // valve width
+    int_valveHeight = 4; // valve height
+    int_btnSize = 22; // button dimensions
 
-    setMinimumHeight(btnSize*2);
+    setMinimumHeight(int_btnSize*2);
 
     setFixedHeight(44);
-    setMinimumWidth(height() + valveWidth + btnSize);
+    setMinimumWidth(height() + int_valveWidth + int_btnSize);
 
-    conSize = this->height(); // square width and height without valves
+    int_conSize = this->height(); // square width and height without valves
 
     // Placeholder Buttons
     btn_Contour = new QPushButton(this);
@@ -37,8 +31,8 @@ ColorSwatch::ColorSwatch(QWidget *parent)
     placeFillButton();
 
     // set default brush
-    br_fill = QBrush(Qt::black);
-    br_contour = QBrush(Qt::black);
+    brsh_fill = QBrush(Qt::black);
+    brsh_contour = QBrush(Qt::black);
 
 
 
@@ -56,6 +50,7 @@ ColorSwatch::ColorSwatch(QWidget *parent)
 }
 
 
+
 void ColorSwatch::paintEvent(QPaintEvent*) {
 
     QPainter painter(this);
@@ -66,61 +61,61 @@ void ColorSwatch::paintEvent(QPaintEvent*) {
     int conX1 = 0;
     int conY1 = 0;
 
-    int conX2   = conSize;
+    int conX2   = int_conSize;
     int conY2   = 0;
 
-    int conX3   = conSize;
-    int conY3   = conWidth;
+    int conX3   = int_conSize;
+    int conY3   = int_conWidth;
 
-    int conX4   = conWidth;
-    int conY4   = conWidth;
+    int conX4   = int_conWidth;
+    int conY4   = int_conWidth;
 
-    int conX5   = conWidth;
-    int conY5   = conSize - conWidth ;
+    int conX5   = int_conWidth;
+    int conY5   = int_conSize - int_conWidth ;
 
     int conX6   = conY5; //conSize - conWidth;
     int conY6   = conY5; //conSize - conWidth;
 
     int conX7   = conY5; //conSize - conWidth;
-    int conY7   = conWidth + (spacer*2) + valveHeight;
+    int conY7   = int_conWidth + (int_spacer*2) + int_valveHeight;
 
-    int conX8   = conSize;
+    int conX8   = int_conSize;
     int conY8   = conY7; //conWidth + (spacer*2) + valveHeight;
 
-    int conX9   = conSize;
-    int conY9   = conSize - spacer - conWidth - valveHeight;
+    int conX9   = int_conSize;
+    int conY9   = int_conSize - int_spacer - int_conWidth - int_valveHeight;
 
-    int conX10   = conSize + valveWidth;
+    int conX10   = int_conSize + int_valveWidth;
     int conY10   = conY9; //conSize - spacer - conWidth - valveHeight;
 
-    int conX11   = conSize + valveWidth;
-    int conY11   = conSize - spacer - conWidth;
+    int conX11   = int_conSize + int_valveWidth;
+    int conY11   = int_conSize - int_spacer - int_conWidth;
 
-    int conX12   = conSize;
+    int conX12   = int_conSize;
     int conY12   = conY11; //conSize - spacer - conWidth;
 
-    int conX13   = conSize;
-    int conY13   = conSize;
+    int conX13   = int_conSize;
+    int conY13   = int_conSize;
 
     int conX14   = 0;
-    int conY14   = conSize;
+    int conY14   = int_conSize;
 
 
     // Fill Points
-    int fillX1 = conX4 + spacer;
-    int fillY1 = conY4 + spacer;
+    int fillX1 = conX4 + int_spacer;
+    int fillY1 = conY4 + int_spacer;
 
     int fillX2 = conX10;
     int fillY2 = fillY1;
 
     int fillX3 = conX10;
-    int fillY3 = conWidth + spacer + valveHeight;
+    int fillY3 = int_conWidth + int_spacer + int_valveHeight;
 
     int fillX4 = conY11;
     int fillY4 = fillY3; //conWidth + spacer + valveHeight;
 
-    int fillX5 = conX6 - spacer;
-    int fillY5 = conY6 - spacer;
+    int fillX5 = conX6 - int_spacer;
+    int fillY5 = conY6 - int_spacer;
 
     int fillX6 = fillX1;
     int fillY6 = fillY5;
@@ -152,44 +147,56 @@ void ColorSwatch::paintEvent(QPaintEvent*) {
     fill.lineTo (fillX1, fillY1);
 
     painter.setPen (Qt :: NoPen);
-    painter.fillPath (countour, br_contour);
-    painter.fillPath (fill, br_fill);
+    painter.fillPath (countour, brsh_contour);
+    painter.fillPath (fill, brsh_fill);
 
 
 }
+
+
 
 void ColorSwatch::setContourBrush(QBrush brush){
-    br_contour = brush;
+    brsh_contour = brush;
     update();
 }
 
+
+
 void ColorSwatch::setFillBrush(QBrush brush){
-    br_fill = brush;
+    brsh_fill = brush;
     update();
 }
+
+
 
 void ColorSwatch::setContourButton(QPushButton *btnContour){
     btn_Contour = btnContour;
     placeContourButton();
 }
 
+
+
 void ColorSwatch::setFillButton(QPushButton *btnFill){
     btn_Fill = btnFill;
     placeFillButton();
 }
 
+
+
 void ColorSwatch::placeContourButton(){
     if (!btn_Contour) return;
 
-    btn_Contour->setFixedSize(btnSize,btnSize);
-    btn_Contour->move(conSize + valveWidth, 0);
+    btn_Contour->setFixedSize(int_btnSize,int_btnSize);
+    btn_Contour->move(int_conSize + int_valveWidth, 0);
 
 }
+
+
 
 void ColorSwatch::placeFillButton(){
     if(!btn_Fill) return;
 
-    btn_Fill->setFixedSize(btnSize,btnSize);
-    btn_Fill->move(conSize + valveWidth, conSize - btn_Fill->height());
+    btn_Fill->setFixedSize(int_btnSize,int_btnSize);
+    btn_Fill->move(int_conSize + int_valveWidth, int_conSize - btn_Fill->height());
 }
 

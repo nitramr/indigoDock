@@ -19,19 +19,19 @@ IndigoPanelHandle::IndigoPanelHandle(QWidget *parent) :
     m_title = "";
 
     // Objects 
-    m_btnClose = new QToolButton(this);
-    m_btnClose->setFixedSize(16,16);
-    m_btnClose->setAutoRaise(true);
-    m_btnClose->setFocusPolicy(Qt::NoFocus);
+    wdg_btnClose = new QToolButton(this);
+    wdg_btnClose->setFixedSize(16,16);
+    wdg_btnClose->setAutoRaise(true);
+    wdg_btnClose->setFocusPolicy(Qt::NoFocus);
 
-    m_btnFloat = new QToolButton(this);
-    m_btnFloat->setFixedSize(16,16);
-    m_btnFloat->setAutoRaise(true);
-    m_btnFloat->setFocusPolicy(Qt::NoFocus);
+    wdg_btnFloat = new QToolButton(this);
+    wdg_btnFloat->setFixedSize(16,16);
+    wdg_btnFloat->setAutoRaise(true);
+    wdg_btnFloat->setFocusPolicy(Qt::NoFocus);
 
     QStyleOptionDockWidget opt;
-    m_btnClose->setIcon(style()->standardIcon(QStyle::SP_TitleBarCloseButton, &opt, this));
-    m_btnFloat->setIcon(style()->standardIcon(QStyle::SP_TitleBarShadeButton, &opt, this)); // SP_TitleBarUnshadeButton // http://doc.qt.io/qt-4.8/qstyle.html
+    wdg_btnClose->setIcon(style()->standardIcon(QStyle::SP_TitleBarCloseButton, &opt, this));
+    wdg_btnFloat->setIcon(style()->standardIcon(QStyle::SP_TitleBarShadeButton, &opt, this)); // SP_TitleBarUnshadeButton // http://doc.qt.io/qt-4.8/qstyle.html
 
 
     // Main LayoutContainer
@@ -40,12 +40,12 @@ IndigoPanelHandle::IndigoPanelHandle(QWidget *parent) :
     setLayout(mainLayout);
 
     mainLayout->addStretch(1);
-    mainLayout->addWidget(m_btnFloat);
-    mainLayout->addWidget(m_btnClose);
+    mainLayout->addWidget(wdg_btnFloat);
+    mainLayout->addWidget(wdg_btnClose);
 
     // Actions
-    connect(m_btnClose, SIGNAL (clicked()), parent, SLOT (hide()));
-    connect(m_btnFloat, SIGNAL (clicked()), parent, SLOT (expander()));
+    connect(wdg_btnClose, SIGNAL (clicked()), parent, SLOT (hide()));
+    connect(wdg_btnFloat, SIGNAL (clicked()), parent, SLOT (expander()));
 
 }
 
@@ -107,48 +107,49 @@ IndigoPanel::IndigoPanel(QString name, QWidget *parent) :
     setMouseTracking(true);
     setAutoFillBackground( true );
     setBackgroundRole(QPalette::Background);
+
     //setWindowFlags(Qt::ToolTip|Qt::WindowStaysOnTopHint|Qt::CustomizeWindowHint);
 
     this->setObjectName(name);
     this->setMinimumWidth(220);
     this->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding));
 
-    int padding = 5;
+    int int_padding = 5;
 
     // Widgets
-    m_handle = new IndigoPanelHandle(this);
-    m_handle->installEventFilter(this);
-    m_handle->setFixedHeight(30);
+    wdg_handle = new IndigoPanelHandle(this);
+    wdg_handle->installEventFilter(this);
+    wdg_handle->setFixedHeight(30);
 
-    m_normalContainer = new QWidget;
-    m_normalContainer->setMinimumHeight(100); // simulate fake content - remove for productive usage
-    m_normalArea = new QVBoxLayout(m_normalContainer);
-    m_normalArea->setMargin(padding);
+    wdg_normalContainer = new QWidget;
+    wdg_normalContainer->setMinimumHeight(100); // simulate fake content - remove for productive usage
+    lyt_normalArea = new QVBoxLayout(wdg_normalContainer);
+    lyt_normalArea->setMargin(int_padding);
 
-    m_extendedContainer = new QWidget;    
-    m_extendedArea = new QVBoxLayout(m_extendedContainer);
-    m_extendedArea->setMargin(padding);
+    wdg_extendedContainer = new QWidget;
+    lyt_extendedArea = new QVBoxLayout(wdg_extendedContainer);
+    lyt_extendedArea->setMargin(int_padding);
 
-    m_Parent = parent;
+    wdg_Parent = parent;
 
     // Layouts
-    m_mainLayout = new QVBoxLayout;
-    m_mainLayout->setMargin(0);
-    setLayout(m_mainLayout);
+    lyt_main = new QVBoxLayout;
+    lyt_main->setMargin(0);
+    setLayout(lyt_main);
 
-    m_mainLayout->addWidget(m_handle);
-    m_mainLayout->addWidget(m_normalContainer);
-    m_mainLayout->addWidget(m_extendedContainer);
-    m_mainLayout->setAlignment(Qt::AlignTop);
+    lyt_main->addWidget(wdg_handle);
+    lyt_main->addWidget(wdg_normalContainer);
+    lyt_main->addWidget(wdg_extendedContainer);
+    lyt_main->setAlignment(Qt::AlignTop);
 
-    m_spacer = new QSpacerItem(10, 0, QSizePolicy::Ignored, QSizePolicy::MinimumExpanding);
-    m_mainLayout->addSpacerItem(m_spacer);
+    wdg_spacer = new QSpacerItem(10, 0, QSizePolicy::Ignored, QSizePolicy::MinimumExpanding);
+    lyt_main->addSpacerItem(wdg_spacer);
 
     // Extended Properties
-    m_index = -1;
+    int_index = -1;
     m_state = IndigoPanel::None;
     m_expander = IndigoPanel::Normal;
-    m_extendedContainer->hide();
+    wdg_extendedContainer->hide();
 
 }
 
@@ -175,7 +176,7 @@ bool IndigoPanel::eventFilter(QObject *object, QEvent *event)
             QPoint point = me->globalPos();
             QPoint xy = this->mapToGlobal(QPoint(0,0));
 
-            relativeOffset = point - xy;
+            pnt_relativeOffset = point - xy;
 
 
             /*if(dockState() == IndigoPanel::Floating){
@@ -206,7 +207,7 @@ bool IndigoPanel::eventFilter(QObject *object, QEvent *event)
                 // TODO: replace real QWidget with pixmap proxy
 
 
-                setParent(m_Parent);
+                setParent(wdg_Parent);
 
                 setWindowFlags(Qt::ToolTip|Qt::WindowStaysOnTopHint|Qt::CustomizeWindowHint); // avoid flickering by moving, will replaced by pixmap
 
@@ -215,12 +216,12 @@ bool IndigoPanel::eventFilter(QObject *object, QEvent *event)
                 //setParent(m_Parent);
 
                 setDockState(IndigoPanel::Floating);
-                emit isFloating(m_index);
+                emit isFloating(int_index);
 
 
             }
 
-            move(point - relativeOffset);
+            move(point - pnt_relativeOffset);
             me->accept();
 
             emit mouseMove(); // activate DropZone hover*
@@ -262,20 +263,20 @@ bool IndigoPanel::eventFilter(QObject *object, QEvent *event)
 
 
 void IndigoPanel::setCaption(const QString title, int fontSize){
-    m_handle->setTitle(title, fontSize);
+    wdg_handle->setTitle(title, fontSize);
 }
 
 
 
 void IndigoPanel::setIcon(QIcon icon, int iconSize){
-    m_icon = icon;
-    m_handle->setIcon(icon, iconSize); // iconSize will used for icon in caption bar
+    ico_icon = icon;
+    wdg_handle->setIcon(icon, iconSize); // iconSize will used for icon in caption bar
 }
 
 
 
 QIcon IndigoPanel::Icon(){
-    return m_icon;
+    return ico_icon;
 }
 
 
@@ -285,7 +286,7 @@ QIcon IndigoPanel::Icon(){
  * @return index in dropzone
  */
 int IndigoPanel::Index(){
-    return m_index;
+    return int_index;
 }
 
 
@@ -295,13 +296,13 @@ int IndigoPanel::Index(){
  * @param index
  */
 void IndigoPanel::setIndex(int index){
-     m_index = index;
+     int_index = index;
 }
 
 
 
 void IndigoPanel::addWidgetNormal(QWidget *content){
-     m_normalArea->addWidget(content);
+     lyt_normalArea->addWidget(content);
 
 }
 
@@ -310,14 +311,14 @@ void IndigoPanel::addWidgetNormal(QLayout *content){
     QWidget *widget = new QWidget();
     widget->setLayout(content);
 
-     m_normalArea->addWidget(widget);
+     lyt_normalArea->addWidget(widget);
 
 }
 
 
 
 void IndigoPanel::addWidgetExtend(QWidget *content){
-     m_extendedArea->addWidget(content);
+     lyt_extendedArea->addWidget(content);
 
 }
 
@@ -326,7 +327,7 @@ void IndigoPanel::addWidgetExtend(QLayout *content){
     QWidget *widget = new QWidget();
     widget->setLayout(content);
 
-     m_extendedArea->addWidget(widget);
+     lyt_extendedArea->addWidget(widget);
 
 }
 
@@ -365,20 +366,20 @@ void IndigoPanel::expander(){
    // QSize s = sizeHint();
    // s.setHeight(this->m_handle->height());
 
-    m_mainLayout->removeItem(m_spacer);
+    lyt_main->removeItem(wdg_spacer);
 
     switch(expanderState()){
     case IndigoPanel::Normal:
 
-        if(!m_extendedArea->isEmpty()){
-            m_extendedContainer->show();
+        if(!lyt_extendedArea->isEmpty()){
+            wdg_extendedContainer->show();
             setExpanderState(IndigoPanel::Advanced);
 
-            m_mainLayout->addItem(m_spacer);
+            lyt_main->addItem(wdg_spacer);
 
         }else{
-            m_normalContainer->hide();
-            m_extendedContainer->hide();
+            wdg_normalContainer->hide();
+            wdg_extendedContainer->hide();
             setExpanderState(IndigoPanel::Collapsed);
 
             //resize(s);
@@ -387,8 +388,8 @@ void IndigoPanel::expander(){
 
     case IndigoPanel::Advanced:
 
-        m_normalContainer->hide();
-        m_extendedContainer->hide();
+        wdg_normalContainer->hide();
+        wdg_extendedContainer->hide();
         setExpanderState(IndigoPanel::Collapsed);
 
         //resize(s);
@@ -397,17 +398,17 @@ void IndigoPanel::expander(){
 
     case IndigoPanel::Collapsed:
 
-        if(!m_normalArea->isEmpty()){
-            m_normalContainer->show();
+        if(!lyt_normalArea->isEmpty()){
+            wdg_normalContainer->show();
             setExpanderState(IndigoPanel::Normal);
 
-            m_mainLayout->addItem(m_spacer);
+            lyt_main->addItem(wdg_spacer);
 
         }else{
-            m_extendedContainer->show();
+            wdg_extendedContainer->show();
             setExpanderState(IndigoPanel::Advanced);
 
-            m_mainLayout->addItem(m_spacer);
+            lyt_main->addItem(wdg_spacer);
 
         }
 

@@ -10,16 +10,16 @@ AnglePicker::AnglePicker(QWidget *parent)
 {
     //this->setFixedSize(30,30);
 
-    diameter = 30;
-    m_center = QPoint(this->diameter/2, this->diameter/2);
-    m_pointer = QPoint(this->diameter/2, 0);
-    m_lineThickness = 2;
-    m_angle = 0;
-    transparency = 0.55; // 10%
+    int_diameter = 30;
+    pnt_center = QPoint(this->int_diameter/2, this->int_diameter/2);
+    pnt_pointer = QPoint(this->int_diameter/2, 0);
+    int_lineThickness = 2;
+    int_angle = 0;
+    dbl_transparency = 0.55; // 10%
 
-    circleFrame = QRect(1,1,this->diameter-m_lineThickness - 1, this->diameter-m_lineThickness -1);
+    rct_circleFrame = QRect(1,1,this->int_diameter-int_lineThickness - 1, this->int_diameter-int_lineThickness -1);
 
-    this->setFixedSize(diameter, diameter);
+    this->setFixedSize(int_diameter, int_diameter);
 }
 
 
@@ -30,13 +30,13 @@ void AnglePicker::paintEvent(QPaintEvent*) {
     QColor c_line = QColor(this->palette().color(QPalette::WindowText));
     QColor c_fill = Helper().blendColor(QColor(this->palette().color(QPalette::Background)),
                                         QColor(this->palette().color(QPalette::Highlight)),
-                                        transparency);
+                                        dbl_transparency);
 
     QBrush brush(c_fill);
 
     QPen pen;
     pen.setColor(c_line);
-    pen.setWidth(m_lineThickness);
+    pen.setWidth(int_lineThickness);
 
     painter.setRenderHint(QPainter::Antialiasing);
 
@@ -44,59 +44,64 @@ void AnglePicker::paintEvent(QPaintEvent*) {
     painter.save();
     painter.setPen(Qt::NoPen);
     painter.setBrush(brush);
-    painter.drawPie(circleFrame, 0, 6000 / 360 * m_angle);
+    painter.drawPie(rct_circleFrame, 0, 6000 / 360 * int_angle);
     painter.restore();
 
     painter.setPen(pen);
 
     // draw outer circle
-    painter.drawEllipse(circleFrame);
+    painter.drawEllipse(rct_circleFrame);
 
     // darw angle line
     painter.save();
-    painter.translate(m_center.x(), m_center.y());
-    painter.rotate(-m_angle);
-    painter.drawLine(0, 0, diameter/2 - m_lineThickness - 1, 0);
+    painter.translate(pnt_center.x(), pnt_center.y());
+    painter.rotate(-int_angle);
+    painter.drawLine(0, 0, int_diameter/2 - int_lineThickness - 1, 0);
     painter.restore();
 
 
 }
 
 
+
 void AnglePicker::mouseMoveEvent(QMouseEvent *event) {
     if (event->buttons() & Qt::LeftButton)
     {
-        m_pointer = event->pos();
+        pnt_pointer = event->pos();
 
-        QLineF *line = new QLineF(m_center, m_pointer);
+        QLineF *line = new QLineF(pnt_center, pnt_pointer);
 
         // rotate 0° to 12 o'clock
         double angle = line->angle();// -90;
        // if (angle > 0) angle -= 360;
 
         // invert counter direction
-        m_angle = angle;
+        int_angle = angle;
 
         update();
 
         emit angleChanged();
 
-        qDebug() << "mouseDown" << m_pointer << "Angle is:" << m_angle << endl;
+        qDebug() << "mouseDown" << pnt_pointer << "Angle is:" << int_angle << endl;
 
 
     }
 }
 
+
+
 double AnglePicker::Angle() {
 
-    return m_angle;
+    return int_angle;
 }
+
+
 
 void AnglePicker::setAngle(double degree){
 
     if (degree < 0) degree = 0;
     if (degree > 360) degree = 360;
 
-    m_angle = degree;
+    int_angle = degree;
 
 }

@@ -19,13 +19,13 @@ private:
     void mouseMoveEvent(QMouseEvent *event);
 
 
-    QPoint m_center;
-    QPoint m_pointer;
-    QRect circleFrame;
-    int m_lineThickness;
-    double m_angle;
-    int diameter;
-    double transparency;
+    QPoint pnt_center;
+    QPoint pnt_pointer;
+    QRect rct_circleFrame;
+    int int_lineThickness;
+    double int_angle;
+    int int_diameter;
+    double dbl_transparency;
 
 signals:
     void angleChanged();

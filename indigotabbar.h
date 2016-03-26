@@ -23,7 +23,7 @@ public:
     Display displayState();
 
 private:
-    QIcon m_icon;
+    QIcon ico_icon;
     Display m_display;
 
 };
@@ -37,12 +37,14 @@ public:
 
     enum Orientation{
         East,
-        West
+        West,
+        North,
+        South
     };
 
     IndigoTabBar(QWidget* parent = 0);
 
-    QList<IndigoTab*> TabList;
+    QList<IndigoTab*> lst_TabList;
 
     int currentIndex();
     Orientation tabPosition();
@@ -62,20 +64,20 @@ private:
    int int_tabWidth;
    int int_tabHeight;
    int int_gap;
-   int borderHighlight;
-   double transparency;
+   int int_borderHighlight;
+   double dbl_transparency;
 
    int int_hoverIndex;
 
    int int_oldIndex;
    int int_newIndex;
 
-   bool dragProceed;
+   bool bool_dragProceed;
    int dragPosition;
    int int_dragIndex;
 
    Orientation m_tabOrientation;
-   QColor colorHighlightAlpha;
+   QColor col_colorHighlightAlpha;
 
    int realTabIndex(int mouseY);
    int fakeTabIndex(int mouseY);

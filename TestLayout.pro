@@ -26,7 +26,6 @@ SOURCES += main.cpp\
     indigodock.cpp \
     indigotabbar.cpp \
     indigopanel.cpp \
-    indigodropzone.cpp \
     indigoexpandergroup.cpp \
     indigomenubar.cpp \
     anglepicker.cpp \
@@ -41,7 +40,6 @@ HEADERS  += mainwindow.h \
     indigodock.h \
     indigotabbar.h \
     indigopanel.h \
-    indigodropzone.h \
     indigoexpandergroup.h \
     indigomenubar.h \
     anglepicker.h \

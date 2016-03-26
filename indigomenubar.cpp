@@ -30,6 +30,8 @@ IndigoMenuBar::IndigoMenuBar()
 
 }
 
+
+
 bool IndigoMenuBar::loadSettings()
 {
 
@@ -59,6 +61,8 @@ bool IndigoMenuBar::loadSettings()
     return true;
 }
 
+
+
 void IndigoMenuBar::read(const QJsonObject &json)
 {
     //qDebug() << "json" << json << endl;
@@ -66,6 +70,8 @@ void IndigoMenuBar::read(const QJsonObject &json)
     // TODO: check that menubar exists
     this->fill(json["menubar"].toArray());
 }
+
+
 
 void IndigoMenuBar::fill(const QJsonArray menuMainEntries)
 {

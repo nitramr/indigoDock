@@ -37,7 +37,7 @@ class StyleFactory
 public:
     StyleFactory();
 
-    inline QPalette palette() const { return m_palette; }
+    inline QPalette palette() const { return pal_palette; }
 
     QString getTheme();
     void parseString(QString &StyleString);
@@ -49,8 +49,8 @@ protected:
 
 
  private:
-    QString m_theme;
-    QPalette m_palette;
+    QString str_theme;
+    QPalette pal_palette;
 
     void builtPalette(QString group, QString role, QString color);
     qreal colorRange(qreal value, qreal min, qreal max);

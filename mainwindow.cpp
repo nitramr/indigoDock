@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QtGui>
-#include "indigodropzone.h"
 #include "indigomenubar.h"
 #include "indigodock.h"
 #include "indigoexpandergroup.h"
@@ -34,25 +33,10 @@ MainWindow::MainWindow(QWidget *parent) :
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q), this, SLOT(close()));
 
 
-    /*******************
-     *
-     * QDockWidget Setup
-     *
-     ******************/
-
-    // add right dock container
-    m_dockholder_r = new QDockWidget(this);
-    m_dockholder_r->setAllowedAreas(Qt::RightDockWidgetArea | Qt::LeftDockWidgetArea);
-    this->addDockWidget(Qt::RightDockWidgetArea, m_dockholder_r);
-
-    m_dockholder_l = new QDockWidget(this);
-    m_dockholder_l->setAllowedAreas(Qt::RightDockWidgetArea | Qt::LeftDockWidgetArea);
-    this->addDockWidget(Qt::LeftDockWidgetArea, m_dockholder_l);
-
 
     // Setup Indigo Hub
 
-    indigoHub = new IndigoHub();
+   // wdg_indigoHub = new IndigoHub();
 
 
 
@@ -64,36 +48,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     // IndigoDock 1
-    indigoDock_r = new IndigoDock;
-
-    // Container
-    m_mainLayout_r = new QGridLayout();
-    m_mainLayout_r->setMargin(0);
-    m_mainLayout_r->addWidget(indigoDock_r, 0, 0);
-    QWidget *containerRight = new QWidget;
-    containerRight->setLayout(m_mainLayout_r);
-
-    // set Layouted Widget to DockPanel
-    m_dockholder_r->setWidget(containerRight);
-    connect(m_dockholder_r, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), indigoDock_r, SLOT(updateTabPosition(Qt::DockWidgetArea)));
-
-
-
-
-    // IndigoDock 2
-    indigoDock_l = new IndigoDock;
-
-    // Container
-    m_mainLayout_l = new QGridLayout();
-    m_mainLayout_l->setMargin(0);
-    m_mainLayout_l->addWidget(indigoDock_l, 0, 0);
-    QWidget *containerLeft = new QWidget;
-    containerLeft->setLayout(m_mainLayout_l);
-
-    // set Layouted Widget to DockPanel
-    m_dockholder_l->setWidget(containerLeft);
-    connect(m_dockholder_l, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), indigoDock_l, SLOT(updateTabPosition(Qt::DockWidgetArea)));
-
+    wdg_indigoDock_r = new IndigoDock;
+    wdg_indigoDock_r->setAllowedAreas(Qt::RightDockWidgetArea | Qt::LeftDockWidgetArea | Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea);
+    this->addDockWidget(Qt::RightDockWidgetArea, wdg_indigoDock_r);
 
 
 
@@ -106,60 +63,60 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     // Panel Setup
-    IndigoPanel *pan_geometry = new IndigoPanel("PanGeometry",indigoDock_r);
+    IndigoPanel *pan_geometry = new IndigoPanel("PanGeometry",wdg_indigoDock_r);
     pan_geometry ->setCaption("Geometry");
     pan_geometry ->setIcon(QIcon(str_iconPath + "pan-frame.png"));
-    indigoDock_r->addIndigoPanel(pan_geometry );
+    wdg_indigoDock_r->addIndigoPanel(pan_geometry );
 
-    IndigoPanel *pan_content = new IndigoPanel("PanContent",indigoDock_r);
+    IndigoPanel *pan_content = new IndigoPanel("PanContent",wdg_indigoDock_r);
     pan_content->setCaption("Content");
     pan_content->setIcon(QIcon(str_iconPath + "pan-content.png"));
-    indigoDock_r->addIndigoPanel(pan_content);
+    wdg_indigoDock_r->addIndigoPanel(pan_content);
 
-    IndigoPanel *pan_alignment = new IndigoPanel("PanAlignment",indigoDock_r);
+    IndigoPanel *pan_alignment = new IndigoPanel("PanAlignment",wdg_indigoDock_r);
     pan_alignment->setCaption("Alignment");
     pan_alignment->setIcon(QIcon(str_iconPath + "pan-alignment.png"));
-    indigoDock_r->addIndigoPanel(pan_alignment);
+    wdg_indigoDock_r->addIndigoPanel(pan_alignment);
 
-    IndigoPanel *pan_colours = new IndigoPanel("PanColours",indigoDock_r);
+    IndigoPanel *pan_colours = new IndigoPanel("PanColours",wdg_indigoDock_r);
     pan_colours->setCaption("Colours");
     pan_colours->setIcon(QIcon(str_iconPath + "pan-colour.png"));
-    indigoDock_r->addIndigoPanel(pan_colours);
+    wdg_indigoDock_r->addIndigoPanel(pan_colours);
 
-    IndigoPanel *pan_page = new IndigoPanel("PanPage",indigoDock_r);
+    IndigoPanel *pan_page = new IndigoPanel("PanPage",wdg_indigoDock_r);
     pan_page->setCaption("Page");
     pan_page->setIcon(QIcon(str_iconPath + "pan-page.png"));
-    indigoDock_r->addIndigoPanel(pan_page);
+    wdg_indigoDock_r->addIndigoPanel(pan_page);
 
   /*  IndigoPanel *pan_group = new IndigoPanel("PanGroup",indigoDock_r);
     pan_group->setCaption("Group");
     pan_group->setIcon(QIcon(str_iconPath + "pan-image.png"));
     indigoDock_r->addIndigoPanel(pan_group);*/
 
-    IndigoPanel *pan_line = new IndigoPanel("PanLine",indigoDock_r);
+    IndigoPanel *pan_line = new IndigoPanel("PanLine",wdg_indigoDock_r);
     pan_line->setCaption("Line");
     pan_line->setIcon(QIcon(str_iconPath + "pan-lines.png"));
-    indigoDock_r->addIndigoPanel(pan_line);
+    wdg_indigoDock_r->addIndigoPanel(pan_line);
 
-    IndigoPanel *pan_transparency = new IndigoPanel("PanTransparency",indigoDock_r);
+    IndigoPanel *pan_transparency = new IndigoPanel("PanTransparency",wdg_indigoDock_r);
     pan_transparency ->setCaption("Transparency");
     pan_transparency ->setIcon(QIcon(str_iconPath + "pan-transparency.png"));
-    indigoDock_r->addIndigoPanel(pan_transparency);
+    wdg_indigoDock_r->addIndigoPanel(pan_transparency);
 
-    IndigoPanel *pan_table = new IndigoPanel("PanTable",indigoDock_r);
+    IndigoPanel *pan_table = new IndigoPanel("PanTable",wdg_indigoDock_r);
     pan_table ->setCaption("Table");
     pan_table ->setIcon(QIcon(str_iconPath + "pan-table.png"));
-    indigoDock_r->addIndigoPanel(pan_table);
+    wdg_indigoDock_r->addIndigoPanel(pan_table);
 
-    IndigoPanel *pan_layers = new IndigoPanel("PanLayer",indigoDock_r);
+    IndigoPanel *pan_layers = new IndigoPanel("PanLayer",wdg_indigoDock_r);
     pan_layers ->setCaption("Layers");
     pan_layers ->setIcon(QIcon(str_iconPath + "pan-layer.png"));
-    indigoDock_r->addIndigoPanel(pan_layers);
+    wdg_indigoDock_r->addIndigoPanel(pan_layers);
 
-    IndigoPanel *pan_outlines = new IndigoPanel("PanOutlines",indigoDock_r);
+    IndigoPanel *pan_outlines = new IndigoPanel("PanOutlines",wdg_indigoDock_r);
     pan_outlines ->setCaption("Outlines");
     pan_outlines ->setIcon(QIcon(str_iconPath + "pan-outline.png"));
-    indigoDock_r->addIndigoPanel(pan_outlines);
+    wdg_indigoDock_r->addIndigoPanel(pan_outlines);
 
    /* IndigoPanel *pan_bookmarks = new IndigoPanel("PanBookmarks",indigoDock_r);
     pan_bookmarks ->setCaption("Bookmarks");
@@ -193,16 +150,16 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     // Panel Setup
-    IndigoPanel *pan_test = new IndigoPanel("PanTest",indigoDock_r);
+   /* IndigoPanel *pan_test = new IndigoPanel("PanTest",wdg_indigoDock_r);
     pan_test ->setCaption("Test");
     pan_test ->setIcon(QIcon(str_iconPath + "pan-image.png"));
-    indigoDock_l->addIndigoPanel(pan_test );
+    wdg_indigoDock_l->addIndigoPanel(pan_test );
 
-
+*/
 
 
 // Connect Panels
-  //  indigoHub->connectIndigoPanel(pan_test, indigoDock_l, indigoDock_r);
+  //  wdg_indigoHub->connectIndigoPanel(pan_test, wdg_indigoDock_l, wdg_indigoDock_r);
 
 
 
@@ -261,15 +218,19 @@ MainWindow::MainWindow(QWidget *parent) :
 // Auto scroll event calls by panel names
 
 void MainWindow::scrollToGeometry(){
-    indigoDock_r->scrollToPanel("PanGeometry");
+    wdg_indigoDock_r->scrollToPanel("PanGeometry");
 }
+
+
 
 void MainWindow::scrollToContent(){
-    indigoDock_r->scrollToPanel("PanContent");
+    wdg_indigoDock_r->scrollToPanel("PanContent");
 }
 
+
+
 void MainWindow::scrollToPage(){
-    indigoDock_r->scrollToPanel("PanPage");
+    wdg_indigoDock_r->scrollToPanel("PanPage");
 }
 
 
@@ -339,7 +300,7 @@ void MainWindow::textPanel(IndigoPanel *parent){
 
 
     IndigoLabelControl *ilcTest2 = new IndigoLabelControl();
-    ilcTest2->setLabel(QString("b:"));
+    ilcTest2->setLabel("b:");
     QLineEdit *textBox2 = new QLineEdit("String Test");
     ilcTest2->setWidget(textBox2);
     parent->addWidgetNormal(ilcTest2);

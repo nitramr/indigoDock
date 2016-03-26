@@ -24,15 +24,15 @@ protected:
 
 private:  
     void paintEvent(QPaintEvent*);
-    QBrush br_contour;
-    QBrush br_fill;
+    QBrush brsh_contour;
+    QBrush brsh_fill;
 
-    int conSize;
-    int conWidth;
-    int spacer;
-    int valveWidth;
-    int valveHeight;
-    int btnSize;
+    int int_conSize;
+    int int_conWidth;
+    int int_spacer;
+    int int_valveWidth;
+    int int_valveHeight;
+    int int_btnSize;
 
     void placeContourButton();
     void placeFillButton();

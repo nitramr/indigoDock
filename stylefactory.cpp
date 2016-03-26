@@ -33,7 +33,7 @@
 
 StyleFactory::StyleFactory()
 {
-    m_theme = "";
+    str_theme = "";
 
 
     // Init palette color groups
@@ -74,7 +74,7 @@ StyleFactory::StyleFactory()
 
 
 QString StyleFactory::getTheme(){
-    return m_theme;
+    return str_theme;
 }
 
 
@@ -104,8 +104,8 @@ void StyleFactory::parseString(QString &StyleString){
 
        QString str_palette = rx_Palette.cap(0).trimmed();
 
-       m_theme = rx_Palette.cap(2).trimmed();
-       qDebug() << "UI theme is:" << m_theme << endl;
+       str_theme = rx_Palette.cap(2).trimmed();
+       qDebug() << "UI theme is:" << str_theme << endl;
 
        // remove palette style in QSS File
        str_palette.remove(rx_Palette.cap(1)); // Palette
@@ -153,14 +153,15 @@ void StyleFactory::builtPalette(QString group, QString role, QString color){
 
 
     if(group == "all"){
-         m_palette.setColor(cr, co);
+         pal_palette.setColor(cr, co);
     }else{
-         m_palette.setColor(cg, cr, co);
+         pal_palette.setColor(cg, cr, co);
     }
 
 
 
 }
+
 
 
 QColor StyleFactory::parseColor(const QString str)
@@ -231,6 +232,8 @@ QColor StyleFactory::parseColor(const QString str)
     }
     return QColor();
 }
+
+
 
 qreal StyleFactory::colorRange(qreal value, qreal min, qreal max){
 
