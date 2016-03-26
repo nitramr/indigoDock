@@ -50,6 +50,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // IndigoDock 1
     wdg_indigoDock_r = new IndigoDock;
     wdg_indigoDock_r->setAllowedAreas(Qt::RightDockWidgetArea | Qt::LeftDockWidgetArea | Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea);
+   // wdg_indigoDock_r->setFeatures(QDockWidget::DockWidgetVerticalTitleBar);
     this->addDockWidget(Qt::RightDockWidgetArea, wdg_indigoDock_r);
 
 

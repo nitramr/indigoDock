@@ -51,7 +51,8 @@ private:
     QWidget * wdg_placeholder;
     QVBoxLayout * lyt_dropzone;
     IndigoSplitter *wdg_splitter;
-    QHBoxLayout *lyt_main;
+    //QHBoxLayout *lyt_main;
+    QGridLayout *lyt_main;
     QScrollArea * wdg_scrollArea_dz;
     QScrollArea * wdg_scrollArea_tb;
 

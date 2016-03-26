@@ -45,17 +45,16 @@ IndigoTabBar::IndigoTabBar(QWidget *parent) :
     int_gap = 1;
     int_borderHighlight = 2;
     dbl_transparency = 0.1; // 10%
-    m_tabOrientation = IndigoTabBar::East;
     bool_dragProceed = false;
     int_dragIndex = -1;
+    int_minDimension = 0;
 
     setAccessibleName("IndigoTabBar");
+    setMouseTracking(true);
     setAutoFillBackground(true);
     setBackgroundRole(QPalette::Background);
-    setFixedWidth(int_tabWidth);
-    setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Expanding));
-    setMouseTracking(true);
 
+    setTabOrientation(IndigoTabBar::Vertical);
 
 }
 
@@ -67,8 +66,23 @@ void IndigoTabBar::mousePressEvent(QMouseEvent*event){
 
     QPoint mouse = event->pos();
 
-    int_hoverIndex = mouse.y() / (int_tabHeight + int_gap);
-    int_oldIndex = realTabIndex(mouse.y());
+
+    switch (m_tabOrientation){
+
+        case IndigoTabBar::Vertical:
+            int_hoverIndex = mouse.y() / (int_tabHeight + int_gap);
+            int_oldIndex = realTabIndex(mouse.y());
+
+            break;
+
+        case IndigoTabBar::Horizontal:
+            int_hoverIndex = mouse.x() / (int_tabHeight + int_gap);
+            int_oldIndex = realTabIndex(mouse.x());
+
+            break;
+
+    }
+
 
     update();
 
@@ -82,7 +96,20 @@ void IndigoTabBar::mouseReleaseEvent(QMouseEvent*event){
 
     QPoint mouse = event->pos();
 
-    int_newIndex = realTabIndex(mouse.y());
+    switch (m_tabOrientation){
+
+        case IndigoTabBar::Vertical:
+            int_newIndex = realTabIndex(mouse.y());
+
+            break;
+
+        case IndigoTabBar::Horizontal:
+            int_newIndex = realTabIndex(mouse.x());
+
+            break;
+
+    }
+
 
     if(bool_dragProceed){
         bool_dragProceed = false;
@@ -106,14 +133,27 @@ void IndigoTabBar::mouseMoveEvent(QMouseEvent*event){
 
     QPoint mouse = event->pos();
 
-    int_hoverIndex = mouse.y() / (int_tabHeight + int_gap);
+
+    switch (m_tabOrientation){
+
+        case IndigoTabBar::Vertical:
+            int_hoverIndex = mouse.y() / (int_tabHeight + int_gap);
+            pnt_dragPosition = QPoint(0,event->pos().y());
+
+            break;
+
+        case IndigoTabBar::Horizontal:
+            int_hoverIndex = mouse.x() / (int_tabHeight + int_gap);
+            pnt_dragPosition = QPoint(event->pos().x(), 0);
+
+            break;
+
+    }
 
     // drag started
     if (event->buttons() == Qt::LeftButton) {
         bool_dragProceed = true;
         int_dragIndex = int_oldIndex;
-        dragPosition = event->pos().y();
-
     }
 
     update();
@@ -150,9 +190,25 @@ void IndigoTabBar::paintEvent(QPaintEvent *event)
 
         if(tab->displayState() == IndigoTab::visible){
 
+            QRect  tabRect;
+            QRect  gapRect;
 
-            QRect  tabRect(0,i_visible*(int_tabHeight + int_gap), int_tabWidth, int_tabHeight);
-            QRect  gapRect(4,tabRect.y() - int_gap, int_tabWidth - 8, int_gap);
+
+            switch (m_tabOrientation){
+
+            case IndigoTabBar::Vertical:
+                tabRect = QRect(0,i_visible*(int_tabHeight + int_gap), int_tabWidth, int_tabHeight);
+                gapRect = QRect(4,tabRect.y() - int_gap, int_tabWidth - 8, int_gap);
+                break;
+
+            case IndigoTabBar::Horizontal:
+                tabRect = QRect(i_visible*(int_tabWidth + int_gap), 0, int_tabWidth, int_tabHeight);
+                gapRect = QRect(tabRect.x() - int_gap, 4, int_gap, int_tabHeight - 8);
+                break;
+
+            }
+
+
 
             QIcon icon = tab->Icon();
             QPixmap pix = icon.pixmap(QSize(int_tabWidth, int_tabHeight));
@@ -218,7 +274,7 @@ void IndigoTabBar::paintEvent(QPaintEvent *event)
         QIcon icon = tab->Icon();
         QPixmap pix = icon.pixmap(QSize(int_tabWidth, int_tabHeight));
 
-        QRect dragFrame(0, dragPosition, int_tabWidth, int_tabHeight);
+        QRect dragFrame(pnt_dragPosition.x(), pnt_dragPosition.y(), int_tabWidth, int_tabHeight);
        // p.fillRect(dragFrame, QColor(this->palette().color(QPalette::Base)));
         p.drawPixmap(dragFrame, pix );
 
@@ -297,7 +353,7 @@ void IndigoTabBar::insertTab(QIcon icon, int index){
         lst_TabList.insert(index, tab);
     }
 
-    calculateHeight();
+    calculateSize();
     update();
 }
 
@@ -307,7 +363,7 @@ void IndigoTabBar::removeTab(int index){
 
     if(index >= 0 && index <= lst_TabList.count()){
         lst_TabList.removeAt(index);
-        calculateHeight();
+        calculateSize();
         update();
 
     }
@@ -335,7 +391,7 @@ void IndigoTabBar::hideTab(int index){
 
     if(index >= 0 && index <= lst_TabList.count()){
         lst_TabList.at(index)->setDisplayState(IndigoTab::hidden);
-        calculateHeight();
+        calculateSize();
         update();
     }
 }
@@ -346,7 +402,7 @@ void IndigoTabBar::showTab(int index){
 
     if(index >= 0 && index <= lst_TabList.count()){
         lst_TabList.at(index)->setDisplayState(IndigoTab::visible);
-        calculateHeight();
+        calculateSize();
         update();
 
     }
@@ -368,15 +424,17 @@ void IndigoTabBar::setTabSize(int width, int height){
 
 
 
-IndigoTabBar::Orientation IndigoTabBar::tabPosition(){
+IndigoTabBar::Orientation IndigoTabBar::TabOrientation(){
     return m_tabOrientation;
 }
 
 
 
-void IndigoTabBar::setTabPosition(Orientation tabOrientation){
+void IndigoTabBar::setTabOrientation(Orientation tabDirection){
 
-    m_tabOrientation = tabOrientation;
+    m_tabOrientation = tabDirection;
+
+   calculateSize();
 
 }
 
@@ -388,7 +446,7 @@ int IndigoTabBar::currentIndex(){
 
 
 
-void IndigoTabBar::calculateHeight(){
+void IndigoTabBar::calculateSize(){
 
    int items=0;
 
@@ -400,7 +458,32 @@ void IndigoTabBar::calculateHeight(){
 
    }
 
-   this->setFixedHeight(items*(int_tabHeight + int_gap));
+   switch (m_tabOrientation){
+
+   case IndigoTabBar::Vertical:
+
+       int_minDimension = items*(int_tabHeight + int_gap);
+
+       setMinimumSize(QSize(int_tabWidth, int_minDimension));
+       setMaximumSize(QSize(int_tabWidth, 16777215));
+       setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::MinimumExpanding));
+
+       break;
+
+   case IndigoTabBar::Horizontal:
+
+       int_minDimension = items*(int_tabWidth + int_gap);
+
+       setMinimumSize(QSize(int_minDimension, int_tabHeight));
+       setMaximumSize(QSize(16777215, int_tabHeight));
+       setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed));
+
+       break;
+   default:
+       break;
+
+   }
+
 
 }
 
