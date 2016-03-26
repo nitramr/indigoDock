@@ -183,38 +183,44 @@ void IndigoTabBar::paintEvent(QPaintEvent *event)
     for (int i = 0; i < lst_TabList.count(); ++i){
 
 
-        int offset = 0;
-
         // draw visibile tabs
-        IndigoTab *tab = lst_TabList.at(i+offset);
+        IndigoTab *tab = lst_TabList.at(i);
 
         if(tab->displayState() == IndigoTab::visible){
 
             QRect  tabRect;
             QRect  gapRect;
+            int xP, yP, xN, yN;
 
-
+            // calculate tab rectangles based on tabBar orientation
             switch (m_tabOrientation){
 
-            case IndigoTabBar::Vertical:
-                tabRect = QRect(0,i_visible*(int_tabHeight + int_gap), int_tabWidth, int_tabHeight);
-                gapRect = QRect(4,tabRect.y() - int_gap, int_tabWidth - 8, int_gap);
-                break;
+                case IndigoTabBar::Vertical:
+                    tabRect = QRect(0,i_visible*(int_tabHeight + int_gap), int_tabWidth, int_tabHeight);
+                    gapRect = QRect(4,tabRect.y() - int_gap, int_tabWidth - 8, int_gap);
+                    xN = 0;
+                    yN = tabRect.y()-(int_tabHeight + int_gap);
+                    xP = 0;
+                    yP = tabRect.y()+(int_tabHeight + int_gap);
+                    break;
 
-            case IndigoTabBar::Horizontal:
-                tabRect = QRect(i_visible*(int_tabWidth + int_gap), 0, int_tabWidth, int_tabHeight);
-                gapRect = QRect(tabRect.x() - int_gap, 4, int_gap, int_tabHeight - 8);
-                break;
+                case IndigoTabBar::Horizontal:
+                    tabRect = QRect(i_visible*(int_tabWidth + int_gap), 0, int_tabWidth, int_tabHeight);
+                    gapRect = QRect(tabRect.x() - int_gap, 4, int_gap, int_tabHeight - 8);
+                    xN = tabRect.x()-(int_tabWidth + int_gap);
+                    yN = 0;
+                    xP = tabRect.y()+(int_tabWidth + int_gap);
+                    yP = 0;
+                    break;
 
             }
-
 
 
             QIcon icon = tab->Icon();
             QPixmap pix = icon.pixmap(QSize(int_tabWidth, int_tabHeight));
 
 
-            // draw background / highlighter
+            // draw highlighter
             if(int_hoverIndex == i_visible && bool_dragProceed){
 
 
@@ -232,24 +238,33 @@ void IndigoTabBar::paintEvent(QPaintEvent *event)
                            col_colorHighlightAlpha);
 
 
+             // clear hovered background
             }else if(int_hoverIndex == i_visible){
-                p.fillRect(tabRect, QColor(this->palette().color(QPalette::Base)));
+
+                p.fillRect(tabRect,
+                           QColor(this->palette().color(QPalette::Base)));
             }
+
 
             // draw tab content
             if(int_dragIndex != i_visible){
 
-                /*if(i_visible <= int_hoverIndex && dragProceed){
-                    QRect offsetRect(0, tabRect.y()-(int_tabHeight + int_gap), int_tabWidth, int_tabHeight);
+                if(i_visible <= int_hoverIndex && i_visible > int_dragIndex && bool_dragProceed){
+
+                    QRect offsetRect(xN, yN, int_tabWidth, int_tabHeight);
                     p.drawPixmap(offsetRect, pix );
+
+
+                }else if(i_visible >= int_hoverIndex && i_visible < int_dragIndex && bool_dragProceed){
+
+                    QRect offsetRect(xP, yP, int_tabWidth, int_tabHeight);
+                    p.drawPixmap(offsetRect, pix );
+
                 }else{
                     p.drawPixmap(tabRect, pix );
-                }*/
-
-                p.drawPixmap(tabRect, pix );
+                }
 
             }
-
 
 
             // draw divider
@@ -275,7 +290,7 @@ void IndigoTabBar::paintEvent(QPaintEvent *event)
         QPixmap pix = icon.pixmap(QSize(int_tabWidth, int_tabHeight));
 
         QRect dragFrame(pnt_dragPosition.x(), pnt_dragPosition.y(), int_tabWidth, int_tabHeight);
-       // p.fillRect(dragFrame, QColor(this->palette().color(QPalette::Base)));
+        //p.fillRect(dragFrame, QColor(this->palette().color(QPalette::Background)));
         p.drawPixmap(dragFrame, pix );
 
 
