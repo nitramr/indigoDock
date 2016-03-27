@@ -5,6 +5,12 @@
 #include <QWidget>
 #include <QIcon>
 
+
+//
+// IndigoTab
+//
+
+
 class IndigoTab : public QWidget
 {
     Q_OBJECT
@@ -28,7 +34,11 @@ private:
 
 };
 
-/****************************************/
+
+//
+// IndigoTabBar
+//
+
 
 class IndigoTabBar : public QWidget
 {
@@ -87,8 +97,8 @@ signals:
    void scrollToPanel(int);
 
 public slots:
-    void addTab(QIcon icon);
-    void insertTab(QIcon icon, int index);
+    void addTab(QIcon icon, QString toolTip = "");
+    void insertTab(QIcon icon, int index, QString toolTip = "");
     void removeTab(int index);
     void hideTab(int index);
     void showTab(int index);

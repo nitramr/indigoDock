@@ -29,6 +29,7 @@ IndigoTab::Display IndigoTab::displayState(){
 
 
 
+
 /***************************************************************************
  * TODO:
  * - add overflow buttons
@@ -149,6 +150,14 @@ void IndigoTabBar::mouseMoveEvent(QMouseEvent*event){
             break;
 
     }
+
+    if (int_hoverIndex >= lst_TabList.size()-1) int_hoverIndex = lst_TabList.size()-1;
+    else if (int_hoverIndex < 0) int_hoverIndex = 0;
+
+
+    // ToolTip
+    setToolTip(lst_TabList.at(int_hoverIndex)->toolTip());
+
 
     // drag started
     if (event->buttons() == Qt::LeftButton) {
@@ -350,17 +359,18 @@ int IndigoTabBar::fakeTabIndex(int mouseY){
 
 
 
-void IndigoTabBar::addTab(QIcon icon){
+void IndigoTabBar::addTab(QIcon icon, QString toolTip){
 
-    insertTab(icon, -1);
+    insertTab(icon, -1, toolTip);
 }
 
 
 
-void IndigoTabBar::insertTab(QIcon icon, int index){
+void IndigoTabBar::insertTab(QIcon icon, int index, QString toolTip){
 
     IndigoTab *tab = new IndigoTab(icon);
     tab->setDisplayState(IndigoTab::visible);
+    if(toolTip != "") tab->setToolTip(toolTip);
 
     if(index == -1){       
         lst_TabList.append(tab);

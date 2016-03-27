@@ -53,7 +53,7 @@ Palette::light {
 	[all]		shadow:			rgb(200,200,200);
 	[all]		text:			rgb(34,34,34);
 	[disabled]	text:			rgb(83,83,83);
-	[all]		tooltip-base:		rgb(34,34,34);
+	[all]		tooltip-base:		rgb(210,210,210);
 	[all]		tooltip-text:		rgb(34,34,34);
 	[all]		window:			rgb(235,235,235);
 	[all]		window-text: 		rgb(34,34,34);

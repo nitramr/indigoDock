@@ -105,7 +105,7 @@ IndigoDock::IndigoDock(QWidget *parent) : QDockWidget(parent)
     setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding));
 
 
-    connect(this, SIGNAL(panelAdded(QIcon,int)), wdg_toolbar, SLOT(insertTab(QIcon, int)));
+    connect(this, SIGNAL(panelAdded(QIcon,int, QString)), wdg_toolbar, SLOT(insertTab(QIcon, int, QString)));
     connect(this, SIGNAL(panelRemoved(int)), wdg_toolbar, SLOT(removeTab(int)));
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(updateTabPosition(Qt::DockWidgetArea)));
     connect(wdg_toolbar, SIGNAL(tabMoved(int,int)), this, SLOT(movePanel(int,int)));
@@ -160,7 +160,7 @@ void IndigoDock::addPanel (IndigoPanel *panel, int tabIndex){
     updatePanels();
 
     // send signal for successful adding
-    emit panelAdded(panel->Icon(), panel->Index());
+    emit panelAdded(panel->Icon(), panel->Index(), panel->Caption());
 
 }
 

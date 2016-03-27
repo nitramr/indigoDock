@@ -55,7 +55,7 @@ Palette::dark {
 	[all]		shadow:			rgb(40,40,40);
 	[all]		text:			#ffffff;
 	[disabled]	text:			#808080;
-	[all]		tooltip-base:		#ffffff;
+	[all]		tooltip-base:		rgb(53,53,53);
 	[all]		tooltip-text:		#ffffff;
 	[all]		window:			rgb(53,53,53);
 	[all]		window-text: 		#ffffff;

@@ -70,7 +70,7 @@ protected:
 
 signals:
     void panelRemoved(int index);
-    void panelAdded(QIcon icon,int index);
+    void panelAdded(QIcon icon,int index, QString);
 
 public slots:
 

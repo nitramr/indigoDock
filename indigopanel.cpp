@@ -16,7 +16,7 @@ IndigoPanelHandle::IndigoPanelHandle(QWidget *parent) :
 
     setAutoFillBackground( true );
 
-    m_title = "";
+    str_title = "";
 
     // Objects 
     wdg_btnClose = new QToolButton(this);
@@ -51,18 +51,22 @@ IndigoPanelHandle::IndigoPanelHandle(QWidget *parent) :
 
 
 
-void IndigoPanelHandle::setTitle(QString title, int fontSize){
+void IndigoPanelHandle::setCaption(QString title, int fontSize){
 
-    m_title = title;
-    m_fontSize = fontSize;
+    str_title = title;
+    int_fontSize = fontSize;
+}
+
+QString IndigoPanelHandle::Caption(){
+    return str_title;
 }
 
 
 
 void IndigoPanelHandle::setIcon(QIcon icon, int iconSize){
 
-    m_icon = icon;
-    m_iconSize = iconSize;
+    ico_icon = icon;
+    int_iconSize = iconSize;
 }
 
 
@@ -74,22 +78,22 @@ void IndigoPanelHandle::paintEvent(QPaintEvent *event)
 
 
     int h = this->height();
-    int iconY = (h - m_iconSize) / 2;
+    int iconY = (h - int_iconSize) / 2;
 
     QFont font = p.font() ;
-    font.setPointSize ( m_fontSize );
+    font.setPointSize ( int_fontSize );
     font.setWeight(QFont::DemiBold);
     QFontMetrics fm(this->font());
-    int lbl_width = fm.width(m_title);
+    int lbl_width = fm.width(str_title);
 
 
     if (h > 0)
     {
-        int labelX = m_iconSize + 4;
+        int labelX = int_iconSize + 4;
 
-        p.drawPixmap(QRect(0, iconY, m_iconSize,m_iconSize),m_icon.pixmap(m_iconSize,m_iconSize));
+        p.drawPixmap(QRect(0, iconY, int_iconSize,int_iconSize),ico_icon.pixmap(int_iconSize,int_iconSize));
         p.setFont(font);
-        p.drawText( QRect(labelX, 0, lbl_width, h), Qt::AlignVCenter, m_title );
+        p.drawText( QRect(labelX, 0, lbl_width, h), Qt::AlignVCenter, str_title );
     }
 }
 
@@ -209,7 +213,9 @@ bool IndigoPanel::eventFilter(QObject *object, QEvent *event)
 
                 setParent(wdg_Parent);
 
-                setWindowFlags(Qt::ToolTip|Qt::WindowStaysOnTopHint|Qt::CustomizeWindowHint); // avoid flickering by moving, will replaced by pixmap
+                setWindowFlags(Qt::ToolTip
+                               //| Qt::WindowStaysOnTopHint
+                               | Qt::CustomizeWindowHint); // avoid flickering by moving, will replaced by pixmap
 
                 show();
 
@@ -240,7 +246,7 @@ bool IndigoPanel::eventFilter(QObject *object, QEvent *event)
         if(dockState() == IndigoPanel::Floating){
 
             setWindowFlags(Qt::Tool
-                           | Qt::WindowStaysOnTopHint
+                           //| Qt::WindowStaysOnTopHint
                            | Qt::CustomizeWindowHint);
             show();
 
@@ -263,7 +269,12 @@ bool IndigoPanel::eventFilter(QObject *object, QEvent *event)
 
 
 void IndigoPanel::setCaption(const QString title, int fontSize){
-    wdg_handle->setTitle(title, fontSize);
+    wdg_handle->setCaption(title, fontSize);
+}
+
+
+QString IndigoPanel::Caption(){
+    return wdg_handle->Caption();
 }
 
 

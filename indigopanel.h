@@ -13,17 +13,18 @@ class IndigoPanelHandle : public QWidget
         Q_OBJECT
 public:
     IndigoPanelHandle(QWidget* parent = 0);
-    void setTitle(QString title, int fontSize);
+    QString Caption();
+    void setCaption(QString title, int fontSize);
     void setIcon(QIcon icon, int iconSize);
 
 protected:
     void paintEvent(QPaintEvent *event);
 
 private:
-    QIcon m_icon;
-    int m_iconSize;
-    QString m_title;
-    int m_fontSize;
+    QIcon ico_icon;
+    int int_iconSize;
+    QString str_title;
+    int int_fontSize;
     QToolButton * wdg_btnClose;
     QToolButton * wdg_btnFloat;
 
@@ -62,6 +63,7 @@ public:
 
     IndigoPanelHandle * wdg_handle;
 
+    QString Caption();
     void setCaption(QString title = "", int fontSize = 10);
 
     QIcon Icon();
