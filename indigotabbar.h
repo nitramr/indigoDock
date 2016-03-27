@@ -79,14 +79,15 @@ private:
    int int_newIndex;
    bool bool_dragProceed;
    QPoint pnt_dragPosition;
+   int int_realIndex;
    int int_dragIndex;
    int int_minDimension;
 
    Orientation m_tabOrientation;
    QColor col_colorHighlightAlpha;
 
-   int realTabIndex(int mouseY);
-   int fakeTabIndex(int mouseY);
+   int realTabIndex(int mouseAxis);
+   int fakeTabIndex(int mouseAxis);
 
    void moveTab();
    void calculateSize();

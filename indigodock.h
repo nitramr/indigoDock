@@ -12,7 +12,6 @@
 #include "helper.h"
 
 
-
 //
 // IndigoSplitter
 //
@@ -36,22 +35,20 @@ signals:
 class IndigoDock : public QDockWidget
 {
     Q_OBJECT
+
 public:
 
-
     IndigoDock(QWidget *parent = 0);
-    IndigoTabBar * wdg_toolbar;
     void addIndigoPanel(IndigoPanel *panel, int tabIndex = -1);
-
 
 private:
 
+    IndigoTabBar * wdg_toolbar;
     QList<IndigoPanel*> lst_PanelList;
     QWidget *wdg_dropzone;
     QWidget * wdg_placeholder;
     QVBoxLayout * lyt_dropzone;
     IndigoSplitter *wdg_splitter;
-    //QHBoxLayout *lyt_main;
     QGridLayout *lyt_main;
     QScrollArea * wdg_scrollArea_dz;
     QScrollArea * wdg_scrollArea_tb;
@@ -64,8 +61,8 @@ private:
     void removePlaceholder ();
     void addPanel (IndigoPanel *panel, int tabIndex);
 
+
 protected:
-    //void paintEvent(QPaintEvent *e);
     void resizeEvent(QResizeEvent *e);
 
 signals:
@@ -73,7 +70,6 @@ signals:
     void panelAdded(QIcon icon,int index, QString);
 
 public slots:
-
 
     void scrollToPanel(int PanelIndex);
     void scrollToPanel(QString PanelName);
@@ -84,10 +80,10 @@ public slots:
     void removePanel(int index);
     void movePanel(int oldIndex, int newIndex);
 
-    void updateMinHeight();
 
 private slots:
      void updateTabPosition(Qt::DockWidgetArea area);
+     void updateMinHeight();
 
 };
 
