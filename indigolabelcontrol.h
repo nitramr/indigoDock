@@ -15,9 +15,9 @@ public:
     void setWidget(QWidget *widget, int width = -1);
     QWidget *Widget();
 
-    void setLabel(QIcon icon, int iconSize = 22, Qt::Alignment alignment = false);
-    void setLabel(QString string, int width = 22, Qt::Alignment alignment = false);
-    void setLabel(QWidget *widget, int width = 22, Qt::Alignment alignment = false);
+    void setLabel(QIcon icon, int iconSize = 22, Qt::Alignment alignment = Qt::AlignRight);
+    void setLabel(QString string, int width = 22, Qt::Alignment alignment = Qt::AlignRight);
+    void setLabel(QWidget *widget, int width = 22, Qt::Alignment alignment = Qt::AlignRight);
     QIcon Icon();
     QWidget *Label();
 
