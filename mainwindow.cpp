@@ -213,6 +213,33 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(tb_page, SIGNAL(triggered()), pan_page, SLOT(show()));
     connect(tb_page, SIGNAL(triggered()), this, SLOT(scrollToPage()));
 
+
+    /******************
+     *
+     * Document simulator
+     *
+     * ***************/
+
+
+
+    wdg_textbox = new TextBoxSimulator;
+
+    connect(wdg_textbox, SIGNAL(mousePressed()), pan_geometry, SLOT(show()));
+    connect(wdg_textbox, SIGNAL(mousePressed()), this, SLOT(scrollToGeometry()));
+    connect(wdg_textbox, SIGNAL(mouseDoubleClick()), pan_content, SLOT(show()));
+    connect(wdg_textbox, SIGNAL(mouseDoubleClick()), this, SLOT(scrollToContent()));
+
+
+    QHBoxLayout *lyt_tbsim = new QHBoxLayout();
+    lyt_tbsim->setMargin(100);
+    lyt_tbsim->addWidget(wdg_textbox);
+
+    wdg_document = new QWidget;
+    wdg_document->setAutoFillBackground(true);
+    wdg_document->setBackgroundRole(QPalette::Light);
+    wdg_document->setLayout(lyt_tbsim);
+    this->setCentralWidget(wdg_document);
+
 }
 
 

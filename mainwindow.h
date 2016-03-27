@@ -8,6 +8,7 @@
 #include "indigodock.h"
 #include "indigopanel.h"
 #include "indigohub.h"
+#include "textboxsimulator.h"
 
 namespace Ui {
 class MainWindow;
@@ -31,7 +32,8 @@ public:
 
    // IndigoHub * wdg_indigoHub;
     IndigoDock *wdg_indigoDock_r;
-    IndigoDock *wdg_indigoDock_l;
+    QWidget *wdg_document;
+    TextBoxSimulator *wdg_textbox;
 
     void loadTheme();
     void saveTheme(Theme theme);
