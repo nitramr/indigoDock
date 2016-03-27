@@ -231,7 +231,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     QHBoxLayout *lyt_tbsim = new QHBoxLayout();
-    lyt_tbsim->setMargin(100);
+    lyt_tbsim->setMargin(20);
     lyt_tbsim->addWidget(wdg_textbox);
 
     wdg_document = new QWidget;
