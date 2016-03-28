@@ -11,13 +11,14 @@ class AnglePicker : public QWidget
 
 public:
     AnglePicker(QWidget *parent = 0);
+    AnglePicker(double angle, QWidget *parent = 0);
     void setAngle(double degree);
     double Angle();
 
 private:
     void paintEvent(QPaintEvent*);
     void mouseMoveEvent(QMouseEvent *event);
-
+    void init();
 
     QPoint pnt_center;
     QPoint pnt_pointer;

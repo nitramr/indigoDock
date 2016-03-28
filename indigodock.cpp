@@ -109,7 +109,7 @@ IndigoDock::IndigoDock(QWidget *parent) : QDockWidget(parent)
     connect(this, SIGNAL(panelRemoved(int)), wdg_toolbar, SLOT(removeTab(int)));
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(updateTabPosition(Qt::DockWidgetArea)));
     connect(wdg_toolbar, SIGNAL(tabMoved(int,int)), this, SLOT(movePanel(int,int)));
-    connect(wdg_toolbar, SIGNAL(scrollToPanel(int)), this, SLOT(scrollToPanel(int)));
+    connect(wdg_toolbar, SIGNAL(tabClicked(int)), this, SLOT(scrollToPanel(int)));
     connect(wdg_splitter, SIGNAL(resize()), this, SLOT(updateMinHeight()));
 
 

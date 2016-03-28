@@ -320,7 +320,7 @@ void MainWindow::textPanel(IndigoPanel *parent){
     //parent->addWidgetNormal(spacer);*/
 
 
-    IndigoLabelControl *ilcTest = new IndigoLabelControl();
+   /* IndigoLabelControl *ilcTest = new IndigoLabelControl();
     ilcTest->setLabel(QIcon(str_iconPath + "pan-image.png"));
     QLineEdit *textBox = new QLineEdit("Icon Test");
     ilcTest->setWidget(textBox);
@@ -349,20 +349,30 @@ void MainWindow::textPanel(IndigoPanel *parent){
     parent->addWidgetNormal(hbox);
 
 
-    AnglePicker * aPicker = new AnglePicker();
-    IndigoLabelControl *ilcTest3 = new IndigoLabelControl();
-    ilcTest3->setLabel(aPicker, aPicker->width());
-    QLineEdit *textBox3 = new QLineEdit("Widget Test");
-    ilcTest3->setWidget(textBox3);
-    parent->addWidgetNormal(ilcTest3);
-
-
     ColorSwatch * cPicker = new ColorSwatch();
     IndigoLabelControl *ilcTest6 = new IndigoLabelControl();
     ilcTest6->setLabel("Rect Colour:", 100);
     ilcTest6->setWidget(cPicker, cPicker->width());
-    parent->addWidgetNormal(ilcTest6);
+    parent->addWidgetNormal(ilcTest6);*/
 
+
+
+
+
+    IndigoIconWidget *wdg_icon = new IndigoIconWidget(str_iconPath + "pan-image.png", 22);
+
+    QLineEdit *textBox = new QLineEdit("Icon Test");
+    QLineEdit *textBox2 = new QLineEdit("135 °");
+    AnglePicker * aPicker = new AnglePicker(135);
+
+
+    QFormLayout *qfl1 = new QFormLayout();
+    qfl1->setMargin(0);
+    qfl1->addRow( wdg_icon, textBox );
+    qfl1->addRow( aPicker, textBox2 );
+
+
+    parent->addWidgetNormal(qfl1);
 
 }
 

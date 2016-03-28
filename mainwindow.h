@@ -9,6 +9,7 @@
 #include "indigopanel.h"
 #include "indigohub.h"
 #include "textboxsimulator.h"
+#include "indigoiconwidget.h"
 
 namespace Ui {
 class MainWindow;

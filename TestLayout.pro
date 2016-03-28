@@ -33,8 +33,8 @@ SOURCES += main.cpp\
     configmanager.cpp \
     helper.cpp \
     indigohub.cpp \
-    indigolabelcontrol.cpp \
-    textboxsimulator.cpp
+    textboxsimulator.cpp \
+    indigoiconwidget.cpp
 
 HEADERS  += mainwindow.h \
     colorswatch.h \
@@ -48,8 +48,8 @@ HEADERS  += mainwindow.h \
     configmanager.h \
     helper.h \
     indigohub.h \
-    indigolabelcontrol.h \
-    textboxsimulator.h
+    textboxsimulator.h \
+    indigoiconwidget.h
 
 FORMS    += mainwindow.ui
 

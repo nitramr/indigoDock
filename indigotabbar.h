@@ -17,9 +17,14 @@ class IndigoTab : public QWidget
 public:
 
     enum Display{
-        visible,
-        hidden,
-        inactive // currently unused
+        Visible,
+        Hidden
+    };
+
+    // unused
+    enum ActiveState{
+        Enabled,
+        Disabeld
     };
 
     IndigoTab(QIcon icon, QWidget* parent = 0);
@@ -95,7 +100,7 @@ private:
 
 signals:
    void tabMoved(int,int);
-   void scrollToPanel(int);
+   void tabClicked(int);
 
 public slots:
     void addTab(QIcon icon, QString toolTip = "");
