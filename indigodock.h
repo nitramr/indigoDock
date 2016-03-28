@@ -12,26 +12,6 @@
 #include "helper.h"
 
 
-//
-// IndigoSplitter
-//
-
-class IndigoSplitter : public QSplitter
-{
-    Q_OBJECT
-private:
-    void resizeEvent(QResizeEvent *e);
-public:
-    IndigoSplitter(QWidget* parent = 0);
-signals:
-    void resize();
-};
-
-
-//
-// IndigoDock
-//
-
 class IndigoDock : public QDockWidget
 {
     Q_OBJECT
@@ -43,15 +23,19 @@ public:
 
 private:
 
-    IndigoTabBar * wdg_toolbar;
+
     QList<IndigoPanel*> lst_PanelList;
-    QWidget *wdg_dropzone;
-    QWidget * wdg_placeholder;
-    QVBoxLayout * lyt_dropzone;
-    IndigoSplitter *wdg_splitter;
+
     QGridLayout *lyt_main;
+    QVBoxLayout * lyt_dropzone;
+
+    IndigoTabBar * wdg_toolbar;
+    QSplitter *wdg_mainSplitter;
+    QSplitter *wdg_panelSplitter;
     QScrollArea * wdg_scrollArea_dz;
     QScrollArea * wdg_scrollArea_tb;
+    QWidget *wdg_dropzone;
+    QWidget * wdg_placeholder;
 
     int int_padding;
     int int_placeholderHeight;
@@ -64,6 +48,7 @@ private:
 
 protected:
     void resizeEvent(QResizeEvent *e);
+    bool eventFilter(QObject *object, QEvent *event);
 
 signals:
     void panelRemoved(int index);

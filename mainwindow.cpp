@@ -377,6 +377,9 @@ void MainWindow::textPanel(IndigoPanel *parent){
 }
 
 
+
+
+
 /*************************
  *
  * Theme handling

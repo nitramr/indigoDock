@@ -66,7 +66,7 @@ public:
     void setTabSize(int width, int height);
 
 
-protected:   
+protected:
     void paintEvent(QPaintEvent *event);
     void mousePressEvent(QMouseEvent*event);
     void mouseReleaseEvent(QMouseEvent*event);

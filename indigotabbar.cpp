@@ -171,7 +171,7 @@ void IndigoTabBar::mouseMoveEvent(QMouseEvent*event){
 
 
     // ToolTip
-    setToolTip(lst_TabList.at(int_hoverIndex)->toolTip());
+   // setToolTip(lst_TabList.at(int_hoverIndex)->toolTip());
 
 
     // drag proceed
@@ -321,7 +321,10 @@ void IndigoTabBar::paintEvent(QPaintEvent *event)
         QPixmap pix = icon.pixmap(QSize(int_tabWidth, int_tabHeight));
 
         QRect dragFrame(pnt_dragPosition.x(), pnt_dragPosition.y(), int_tabWidth, int_tabHeight);
-        p.fillRect(dragFrame, QColor(this->palette().color(QPalette::Base)));
+        QColor col_background = this->palette().color(QPalette::Base);
+        col_background.setAlpha(128);
+
+        p.fillRect(dragFrame, col_background);
         p.drawPixmap(dragFrame, pix );
 
 
@@ -372,7 +375,7 @@ int IndigoTabBar::fakeTabIndex(int mouseAxis){
 
         // check if there a visibile tab on index
         if(lst_TabList.at(i)->displayState() == IndigoTab::Visible){
-            ++visibleTabs;           
+            ++visibleTabs;
         }
     }
 
@@ -394,7 +397,7 @@ void IndigoTabBar::insertTab(QIcon icon, int index, QString toolTip){
     tab->setDisplayState(IndigoTab::Visible);
     if(toolTip != "") tab->setToolTip(toolTip);
 
-    if(index == -1){       
+    if(index == -1){
         lst_TabList.append(tab);
     }else{
         lst_TabList.insert(index, tab);
@@ -533,4 +536,3 @@ void IndigoTabBar::calculateSize(){
 
 
 }
-

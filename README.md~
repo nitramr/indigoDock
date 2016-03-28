@@ -51,12 +51,13 @@ Here is how you run it:
 * theme support ~~+ icon switch by theme change~~ **(done)**  
 * clean up compile time warnings **(done)**  
 
-## Roadmap v1.1 - Multiple Dock support (to be define)
-* drag and drop panels between more than one dock  
-* load/save workspace  
-* horizontal panel layout  
-
-## Sub Project - Control Element set
+## Roadmap v1.1 - Control Element set
 * AnglePicker **(done)**  
+* Grouped Buttons  
 * Color Preview **(done)**  
 * Origin Setter  
+* Icon Label Container **(done)**  
+
+## Roadmap v1.2 - Multiple Dock support (to be define)
+* drag and drop panels between more than one dock  
+* load/save workspace  
