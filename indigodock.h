@@ -20,13 +20,14 @@ public:
 
     IndigoDock(QWidget *parent = 0);
     void addIndigoPanel(IndigoPanel *panel, int tabIndex = -1);
+    void hoverDock(IndigoPanel *pan);
+    void dropPanel(IndigoPanel *pan);
+    void removePanel(int index);
+    QList<IndigoPanel*>getPanels();
 
 private:
 
-
     QList<IndigoPanel*> lst_PanelList;
-
-    QGridLayout *lyt_main;
     QVBoxLayout * lyt_dropzone;
 
     IndigoTabBar * wdg_toolbar;
@@ -59,10 +60,6 @@ public slots:
     void scrollToPanel(int PanelIndex);
     void scrollToPanel(QString PanelName);
 
-    void hoverDock();
-    void dropPanel();
-
-    void removePanel(int index);
     void movePanel(int oldIndex, int newIndex);
 
 

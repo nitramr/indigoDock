@@ -9,11 +9,19 @@ class IndigoHub: public QWidget
     Q_OBJECT
 public:
     IndigoHub(QWidget *parent = 0);
-    void connectIndigoPanel(IndigoPanel *panel, IndigoDock *indigoDock, IndigoDock *indigoDock2);
+    void addIndigoDock(IndigoDock * dock);
+    void addIndigoPanel(IndigoDock * dock, IndigoPanel * panel, int tabIndex = -1);
+    void scrollToPanel(QString name);
+
+private:
+    QList<IndigoDock*> lst_Docks;
 
 signals:
 
 public slots:
+    void hoverDock();
+    void dropPanel();
+    void removePanel(int index);
 };
 
 #endif // INDIGOHUB_H

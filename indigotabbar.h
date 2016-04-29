@@ -73,6 +73,7 @@ protected:
     void mouseMoveEvent(QMouseEvent*event);
     void leaveEvent(QEvent *event);
 
+
 private:
    int int_tabWidth;
    int int_tabHeight;
@@ -83,6 +84,7 @@ private:
    int int_oldIndex;
    int int_newIndex;
    bool bool_dragProceed;
+   bool bool_hover;
    QPoint pnt_dragPosition;
    int int_realIndex;
    int int_dragIndex;
@@ -93,6 +95,8 @@ private:
 
    int realTabIndex(int mouseAxis);
    int fakeTabIndex(int mouseAxis);
+   int countVisibleTabs();
+   int countHiddenTabs();
 
    void moveTab();
    void calculateSize();
@@ -108,6 +112,8 @@ public slots:
     void removeTab(int index);
     void hideTab(int index);
     void showTab(int index);
+    void hoverTabBar();
+    void leaveTabBar();
 
 };
 

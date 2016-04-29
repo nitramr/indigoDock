@@ -31,8 +31,9 @@ public:
         Light
     };
 
-   // IndigoHub * wdg_indigoHub;
+    IndigoHub * wdg_indigoHub;
     IndigoDock *wdg_indigoDock_r;
+    IndigoDock *wdg_indigoDock_l;
     QWidget *wdg_document;
     TextBoxSimulator *wdg_textbox;
 

@@ -47,6 +47,7 @@ IndigoTabBar::IndigoTabBar(QWidget *parent) :
     int_borderHighlight = 2;
     dbl_transparency = 0.1; // 10%
     bool_dragProceed = false;
+    bool_hover = false;
     int_realIndex = -1; // real index of visible dragged tab
     int_dragIndex = -1; // index of visible dragged tab
     int_minDimension = 0;
@@ -64,7 +65,7 @@ IndigoTabBar::IndigoTabBar(QWidget *parent) :
 
 void IndigoTabBar::mousePressEvent(QMouseEvent*event){
 
-    if(lst_TabList.size() < 0) return;
+    if(countVisibleTabs() <= 0) return;
 
     QPoint mouse = event->pos();
 
@@ -100,7 +101,8 @@ void IndigoTabBar::mousePressEvent(QMouseEvent*event){
 
 void IndigoTabBar::mouseReleaseEvent(QMouseEvent*event){
 
-    if(lst_TabList.size() < 0) return;
+    if(countVisibleTabs() <= 0) return;
+
 
     QPoint mouse = event->pos();
 
@@ -144,7 +146,7 @@ void IndigoTabBar::mouseReleaseEvent(QMouseEvent*event){
 void IndigoTabBar::mouseMoveEvent(QMouseEvent*event){
 
 
-    if(lst_TabList.size() < 0) return;
+    if(countVisibleTabs() <= 0) return;
 
     QPoint mouse = event->pos();
 
@@ -180,7 +182,24 @@ void IndigoTabBar::mouseMoveEvent(QMouseEvent*event){
         int_realIndex = int_oldIndex;
     }
 
+    update();
 
+}
+
+
+
+void IndigoTabBar::hoverTabBar(){
+    bool_hover = true;
+    update();
+
+}
+
+
+
+void IndigoTabBar::leaveTabBar(){
+    int_hoverIndex = -1;
+    int_dragIndex = -1;
+    bool_hover = false;
     update();
 
 }
@@ -191,9 +210,7 @@ void IndigoTabBar::leaveEvent(QEvent *event){
 
     Q_UNUSED(event)
 
-    int_hoverIndex = -1;
-    int_dragIndex = -1;
-    update();
+   leaveTabBar();
 }
 
 
@@ -206,7 +223,7 @@ void IndigoTabBar::paintEvent(QPaintEvent *event)
 
     int visIndex = 0;
 
-    for (int i = 0; i < lst_TabList.count(); ++i){
+    for (int i = 0; i < lst_TabList.size(); ++i){
 
 
         // draw visibile tabs
@@ -305,7 +322,10 @@ void IndigoTabBar::paintEvent(QPaintEvent *event)
 
             // count only visible tabs
             ++visIndex;
+
+
         }
+
     }
 
 
@@ -313,7 +333,7 @@ void IndigoTabBar::paintEvent(QPaintEvent *event)
 
     if(bool_dragProceed){
 
-        if(int_realIndex > lst_TabList.count() || int_realIndex < 0) return;
+        if(int_realIndex > lst_TabList.size() || int_realIndex < 0) return;
 
         IndigoTab *tab = lst_TabList.at(int_realIndex);
 
@@ -331,6 +351,25 @@ void IndigoTabBar::paintEvent(QPaintEvent *event)
     }
 
 
+    // TabBar is empty - show dropZone
+    /*if(/*countHiddenTabs() == lst_TabList.size() && /bool_hover){
+
+        col_colorHighlightAlpha = Helper().blendColor(QColor(this->palette().color(QPalette::Background)),
+                                           QColor(this->palette().color(QPalette::Highlight)),
+                                           dbl_transparency);
+
+        p.fillRect(this->geometry(),
+                   QColor(this->palette().color(QPalette::Highlight)));
+
+        p.fillRect(this->geometry().x()+int_borderHighlight,
+                   this->geometry().y()+int_borderHighlight,
+                   this->geometry().width() -(int_borderHighlight*2),
+                   this->geometry().height() -(int_borderHighlight*2),
+                   col_colorHighlightAlpha);
+
+    }*/
+
+
 }
 
 
@@ -339,7 +378,7 @@ int IndigoTabBar::realTabIndex(int mouseAxis){
 
     int fakeIndex = fakeTabIndex(mouseAxis);
 
-     for (int i = 0; i < lst_TabList.count(); ++i){
+     for (int i = 0; i < lst_TabList.size(); ++i){
 
         // check if there a hidden tab before visible one
         if(lst_TabList.at(i)->displayState() == IndigoTab::Hidden){
@@ -366,10 +405,10 @@ int IndigoTabBar::fakeTabIndex(int mouseAxis){
     int visibleTabs = 0;
 
     // recalculate and limit index by real visible tabs
-    for (int i = 0; i < lst_TabList.count(); ++i){
+    for (int i = 0; i < lst_TabList.size(); ++i){
 
         // all visible tabs are counted & fakeIndex was found
-        if(visibleTabs == fakeIndex || i == lst_TabList.count()-1){
+        if(visibleTabs == fakeIndex || i == lst_TabList.size()-1){
             return visibleTabs;
         }
 
@@ -484,7 +523,7 @@ void IndigoTabBar::setTabOrientation(Orientation tabDirection){
 
     m_tabOrientation = tabDirection;
 
-   calculateSize();
+    calculateSize();
 
 }
 
@@ -496,17 +535,39 @@ int IndigoTabBar::currentIndex(){
 
 
 
+int IndigoTabBar::countHiddenTabs(){
+
+    int counter = 0;
+
+    for( int i=0; i<lst_TabList.size(); ++i ){
+        if(lst_TabList.at(i)->displayState() == IndigoTab::Hidden){
+            ++counter;
+        }
+    }
+
+    return counter;
+}
+
+
+
+int IndigoTabBar::countVisibleTabs(){
+
+    int counter = 0;
+
+    for( int i=0; i<lst_TabList.size(); ++i ){
+        if(lst_TabList.at(i)->displayState() == IndigoTab::Visible){
+            ++counter;
+        }
+    }
+
+    return counter;
+}
+
+
+
 void IndigoTabBar::calculateSize(){
 
-   int items=0;
-
-   for( int i=0; i<lst_TabList.size(); ++i ){
-       if(lst_TabList.at(i)->displayState() == IndigoTab::Visible){
-
-           items +=1;
-       }
-
-   }
+   int items = countVisibleTabs();
 
    switch (m_tabOrientation){
 

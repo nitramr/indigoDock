@@ -59,16 +59,11 @@ IndigoDock::IndigoDock(QWidget *parent) : QDockWidget(parent)
     wdg_scrollArea_tb->setBackgroundRole(QPalette::Base);
 
 
-    lyt_main = new QGridLayout();
-    lyt_main->setSpacing(0);
-    lyt_main->setMargin(0);
-
     wdg_mainSplitter = new QSplitter();
     wdg_mainSplitter->setOrientation(Qt::Horizontal);
     wdg_mainSplitter->setHandleWidth(0);
     wdg_mainSplitter->addWidget(wdg_scrollArea_dz);
     wdg_mainSplitter->addWidget(wdg_scrollArea_tb);
-    wdg_mainSplitter->setLayout(lyt_main);
 
 
     /*QWidget* titleWidget = new QWidget(this);
@@ -93,12 +88,18 @@ IndigoDock::IndigoDock(QWidget *parent) : QDockWidget(parent)
 
 
 
+QList<IndigoPanel*> IndigoDock::getPanels(){
+    return lst_PanelList;
+
+}
+
+
 void IndigoDock::addIndigoPanel(IndigoPanel *panel, int tabIndex){
 
 
-    this->connect(panel, SIGNAL(mouseReleased()), this, SLOT(dropPanel()));
-    this->connect(panel, SIGNAL(mouseMove()), this, SLOT(hoverDock()));
-    this->connect(panel, SIGNAL(isFloating(int)), this, SLOT(removePanel(int)));
+   // this->connect(panel, SIGNAL(mouseReleased()), this, SLOT(dropPanel()));
+    //this->connect(panel, SIGNAL(mouseMove()), this, SLOT(hoverDock()));
+   // this->connect(panel, SIGNAL(isFloating(int)), this, SLOT(removePanel(int)));
     this->connect(panel, SIGNAL(panelClosed(int)), wdg_toolbar, SLOT(hideTab(int)));
     this->connect(panel, SIGNAL(panelShown(int)), wdg_toolbar, SLOT(showTab(int)));
 
@@ -262,6 +263,7 @@ void IndigoDock::updateMinHeight(){
         this->adjustSize();*/
 
         wdg_scrollArea_dz->hide();
+        setMaximumSize(wdg_toolbar->maximumSize());
 
         return;
     }else{
@@ -275,6 +277,9 @@ void IndigoDock::updateMinHeight(){
         wdg_dropzone->setFixedHeight(minHeight + spacer);
 
         wdg_scrollArea_dz->show();
+
+        QRect screen = QApplication::desktop()->screenGeometry();
+        setMaximumSize(screen.width(), screen.height());
 
         update();
     }
@@ -317,14 +322,6 @@ void IndigoDock::updateTabPosition(Qt::DockWidgetArea area){
     case Qt::LeftDockWidgetArea:{
             wdg_toolbar->setTabOrientation(IndigoTabBar::Vertical);
 
-            /*lyt_main->setAlignment(Qt::AlignLeft);
-
-            lyt_main->removeWidget(wdg_scrollArea_tb);
-            lyt_main->removeWidget(wdg_scrollArea_dz);
-
-            lyt_main->addWidget(wdg_scrollArea_tb,1,0);
-            lyt_main->addWidget(wdg_scrollArea_dz,1,1);*/
-
             wdg_mainSplitter->setOrientation(Qt::Horizontal);
             wdg_mainSplitter->addWidget(wdg_scrollArea_tb);
             wdg_mainSplitter->addWidget(wdg_scrollArea_dz);
@@ -337,14 +334,7 @@ void IndigoDock::updateTabPosition(Qt::DockWidgetArea area){
     }
     case Qt::RightDockWidgetArea:{
            wdg_toolbar->setTabOrientation(IndigoTabBar::Vertical);
-          /*  lyt_main->setAlignment(Qt::AlignRight);
 
-            lyt_main->removeWidget(wdg_scrollArea_tb);
-            lyt_main->removeWidget(wdg_scrollArea_dz);
-
-            lyt_main->addWidget(wdg_scrollArea_tb,1,1);
-            lyt_main->addWidget(wdg_scrollArea_dz,1,0);
-*/
             wdg_mainSplitter->setOrientation(Qt::Horizontal);
             wdg_mainSplitter->addWidget(wdg_scrollArea_dz);
             wdg_mainSplitter->addWidget(wdg_scrollArea_tb);
@@ -358,13 +348,6 @@ void IndigoDock::updateTabPosition(Qt::DockWidgetArea area){
     case Qt::TopDockWidgetArea:{
 
             wdg_toolbar->setTabOrientation(IndigoTabBar::Horizontal);
-           /* lyt_main->setAlignment(Qt::AlignTop);
-
-            lyt_main->removeWidget(wdg_scrollArea_tb);
-            lyt_main->removeWidget(wdg_scrollArea_dz);
-
-            lyt_main->addWidget(wdg_scrollArea_tb,1,0);
-            lyt_main->addWidget(wdg_scrollArea_dz,2,0);*/
 
             wdg_mainSplitter->setOrientation(Qt::Vertical);
             wdg_mainSplitter->addWidget(wdg_scrollArea_tb);
@@ -378,13 +361,6 @@ void IndigoDock::updateTabPosition(Qt::DockWidgetArea area){
     case Qt::BottomDockWidgetArea:{
 
            wdg_toolbar->setTabOrientation(IndigoTabBar::Horizontal);
-            /*lyt_main->setAlignment(Qt::AlignBottom);
-
-            lyt_main->removeWidget(wdg_scrollArea_tb);
-            lyt_main->removeWidget(wdg_scrollArea_dz);
-
-            lyt_main->addWidget(wdg_scrollArea_tb,2,0);
-            lyt_main->addWidget(wdg_scrollArea_dz,1,0);*/
 
             wdg_mainSplitter->setOrientation(Qt::Vertical);
             wdg_mainSplitter->addWidget(wdg_scrollArea_dz);
@@ -408,9 +384,9 @@ void IndigoDock::updateTabPosition(Qt::DockWidgetArea area){
 
 
 // TODO: decide if DropZone or TabBar hovered
-void IndigoDock::hoverDock(){
+void IndigoDock::hoverDock(IndigoPanel * pan){
 
-    IndigoPanel *pan = qobject_cast<IndigoPanel *>(sender());
+   // IndigoPanel *pan = qobject_cast<IndigoPanel *>(sender());
     if (!pan) return;
 
     QPoint cursor = this->mapFromGlobal(QCursor::pos());
@@ -459,11 +435,17 @@ void IndigoDock::hoverDock(){
 
             this->addPlaceholder(index);
 
+            // wdg_toolbar->leaveTabBar();
+
 
         }else if (wdg_scrollArea_tb->geometry().contains(cursor) ) {
 
+            //wdg_toolbar->hoverTabBar();
+
             // qDebug() << "hover IconBar" << endl;
-         }
+         }/*else{
+            wdg_toolbar->leaveTabBar();
+        }*/
 
     }else{
         this->removePlaceholder();
@@ -475,13 +457,13 @@ void IndigoDock::hoverDock(){
 
 
 
-void IndigoDock::dropPanel(){
+void IndigoDock::dropPanel(IndigoPanel *pan){
 
     QPoint cursor = this->mapFromGlobal(QCursor::pos());
 
     if (this->rect().contains(cursor) ) {
 
-        IndigoPanel *pan = qobject_cast<IndigoPanel *>(sender());
+       // IndigoPanel *pan = qobject_cast<IndigoPanel *>(sender());
         if (!pan) return;
 
         addPanel(pan, pan->Index());

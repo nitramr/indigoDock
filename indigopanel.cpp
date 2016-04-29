@@ -111,12 +111,13 @@ IndigoPanel::IndigoPanel(QString name, QWidget *parent) :
     setMouseTracking(true);
     setAutoFillBackground( true );
     setBackgroundRole(QPalette::Background);
+    setDockState(IndigoPanel::Docked);
 
     //setWindowFlags(Qt::ToolTip|Qt::WindowStaysOnTopHint|Qt::CustomizeWindowHint);
 
-    this->setObjectName(name);
-    this->setMinimumWidth(220);
-    this->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding));
+    setObjectName(name);
+    setMinimumWidth(220);
+    setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding));
 
     int int_padding = 5;
 
@@ -124,6 +125,8 @@ IndigoPanel::IndigoPanel(QString name, QWidget *parent) :
     wdg_handle = new IndigoPanelHandle(this);
     wdg_handle->installEventFilter(this);
     wdg_handle->setFixedHeight(30);
+
+    setCaption(name);
 
     wdg_normalContainer = new QWidget;
     wdg_normalContainer->setMinimumHeight(100); // simulate fake content - remove for productive usage
