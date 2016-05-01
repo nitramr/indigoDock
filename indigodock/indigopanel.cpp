@@ -1,3 +1,26 @@
+/*******************************************************
+ *
+ * Copyright (C) 2016  Martin Reininger
+ *
+ * This file is part of IndigoDock.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *
+ *******************************************************/
+
+
 #include "indigopanel.h"
 #include <QPushButton>
 #include "qapplication.h"
@@ -105,7 +128,7 @@ void IndigoPanelHandle::paintEvent(QPaintEvent *event)
 
 
 IndigoPanel::IndigoPanel(QString name, QWidget *parent) :
-   QFrame(parent, Qt::ToolTip|Qt::WindowStaysOnTopHint|Qt::CustomizeWindowHint)
+   QFrame(parent)
 {
     // General Properties
     setMouseTracking(true);
@@ -161,8 +184,6 @@ IndigoPanel::IndigoPanel(QString name, QWidget *parent) :
 }
 
 
-// http://doc.qt.io/qt-5/qtwidgets-widgets-shapedclock-example.html
-
 
 bool IndigoPanel::eventFilter(QObject *object, QEvent *event)
 {
@@ -185,12 +206,6 @@ bool IndigoPanel::eventFilter(QObject *object, QEvent *event)
 
             pnt_relativeOffset = point - xy;
 
-
-            /*if(dockState() == IndigoPanel::Floating){
-                //QPixmap pixmap = QWidget::grab();
-                // TODO: replace real QWidget with pixmap proxy
-
-            }*/
             me->accept();
         }
 
@@ -210,14 +225,9 @@ bool IndigoPanel::eventFilter(QObject *object, QEvent *event)
             // undock Panel if not already undocked
             if(dockState() == IndigoPanel::Docked){
 
-                //QPixmap pixmap = QWidget::grab();
-                // TODO: replace real QWidget with pixmap proxy
-
-
                 setParent(wdg_Parent);
 
-                setWindowFlags(Qt::ToolTip
-                               //| Qt::WindowStaysOnTopHint
+                setWindowFlags(Qt::ToolTip                              
                                | Qt::CustomizeWindowHint); // avoid flickering by moving, will replaced by pixmap
 
                 show();
@@ -249,7 +259,6 @@ bool IndigoPanel::eventFilter(QObject *object, QEvent *event)
         if(dockState() == IndigoPanel::Floating){
 
             setWindowFlags(Qt::Tool
-                           //| Qt::WindowStaysOnTopHint
                            | Qt::CustomizeWindowHint);
             show();
 

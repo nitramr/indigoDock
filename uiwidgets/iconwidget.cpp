@@ -1,6 +1,6 @@
-#include "indigoiconwidget.h"
+#include "iconwidget.h"
 
-IndigoIconWidget::IndigoIconWidget(QWidget *parent)
+IconWidget::IconWidget(QWidget *parent)
     : QWidget(parent)
 {
 
@@ -8,7 +8,7 @@ IndigoIconWidget::IndigoIconWidget(QWidget *parent)
 
 
 
-IndigoIconWidget::IndigoIconWidget(QIcon icon, int iconSize, QWidget *parent)
+IconWidget::IconWidget(QIcon icon, int iconSize, QWidget *parent)
     : QWidget(parent)
 {
     setIcon(icon, iconSize);
@@ -16,7 +16,7 @@ IndigoIconWidget::IndigoIconWidget(QIcon icon, int iconSize, QWidget *parent)
 
 
 
-IndigoIconWidget::IndigoIconWidget(QString filePath, int iconSize, QWidget *parent)
+IconWidget::IconWidget(QString filePath, int iconSize, QWidget *parent)
     : QWidget(parent)
 {
     setIcon(filePath, iconSize);
@@ -24,7 +24,7 @@ IndigoIconWidget::IndigoIconWidget(QString filePath, int iconSize, QWidget *pare
 
 
 
-void IndigoIconWidget::setIcon(QIcon icon, int iconSize){
+void IconWidget::setIcon(QIcon icon, int iconSize){
 
     int_iconSize = iconSize;
     pxm_icon = icon.pixmap(icon.actualSize(QSize(int_iconSize, int_iconSize)));
@@ -36,7 +36,7 @@ void IndigoIconWidget::setIcon(QIcon icon, int iconSize){
 
 
 
-void IndigoIconWidget::setIcon(QString filePath, int iconSize){
+void IconWidget::setIcon(QString filePath, int iconSize){
 
     QIcon icon = QIcon(filePath);
     setIcon(icon, iconSize);
@@ -45,7 +45,7 @@ void IndigoIconWidget::setIcon(QString filePath, int iconSize){
 
 
 
-void IndigoIconWidget::paintEvent(QPaintEvent *){
+void IconWidget::paintEvent(QPaintEvent *){
 
 
     QPainter painter(this);

@@ -1,6 +1,6 @@
 /*******************************************************
  *
- * Copyright (C) 2016  Martin Reininger
+ * Copyright (C) 2016  a.l.e
  *
  * This file is part of IndigoDock.
  *
@@ -21,32 +21,25 @@
  *******************************************************/
 
 
-#ifndef CONFIGMANAGER_H
-#define CONFIGMANAGER_H
-#include <QString>
-#include <QSettings>
+#ifndef INDIGOMENUBAR_H
+#define INDIGOMENUBAR_H
 
-class ConfigManager
+#include <QMenuBar>
+
+class QJsonObject;
+
+class IndigoMenuBar : public QMenuBar
 {
 public:
-    ConfigManager();
-
-    QString getIconPath();
-    void setIconPath(QString path);
-    QString getThemePath();
-    void setThemePath(QString path);
-
-
+    IndigoMenuBar();
 private:
+    bool loadSettings();
+    void read(const QJsonObject &json);
+    void fill(const QJsonArray menuMainEntries);
 
-    QString str_SettingsFile;
-    QString str_iconPath;
-    QString str_themePath;
+    QMenu* getMenuItemFromJson(const QJsonObject json);
+    QAction* getActionFromJson(const QJsonObject json, QObject* parent);
+    QString iconPath;
 
-
-signals:
-
-public slots:
 };
-
-#endif // CONFIGMANAGER_H
+#endif // INDIGOMENUBAR_H

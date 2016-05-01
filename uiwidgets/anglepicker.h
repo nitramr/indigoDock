@@ -21,32 +21,40 @@
  *******************************************************/
 
 
-#ifndef CONFIGMANAGER_H
-#define CONFIGMANAGER_H
-#include <QString>
-#include <QSettings>
+#ifndef ANGLEPICKER_H
+#define ANGLEPICKER_H
 
-class ConfigManager
+#include <QWidget>
+#include <QtGui>
+
+
+class AnglePicker : public QWidget
 {
+       Q_OBJECT
+
 public:
-    ConfigManager();
-
-    QString getIconPath();
-    void setIconPath(QString path);
-    QString getThemePath();
-    void setThemePath(QString path);
-
+    AnglePicker(QWidget *parent = 0);
+    AnglePicker(double angle, QWidget *parent = 0);
+    void setAngle(double degree);
+    double Angle();
 
 private:
+    void paintEvent(QPaintEvent*);
+    void mouseMoveEvent(QMouseEvent *event);
+    void init();
 
-    QString str_SettingsFile;
-    QString str_iconPath;
-    QString str_themePath;
-
+    QPoint pnt_center;
+    QPoint pnt_pointer;
+    QRect rct_circleFrame;
+    int int_lineThickness;
+    double int_angle;
+    int int_diameter;
+    double dbl_transparency;
 
 signals:
+    void angleChanged();
 
 public slots:
 };
 
-#endif // CONFIGMANAGER_H
+#endif // ANGLEPICKER_H

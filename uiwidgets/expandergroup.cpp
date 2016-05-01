@@ -1,7 +1,30 @@
-#include "indigoexpandergroup.h"
+/*******************************************************
+ *
+ * Copyright (C) 2016  Martin Reininger
+ *
+ * This file is part of IndigoDock.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *
+ *******************************************************/
+
+
+#include "expandergroup.h"
 #include "configmanager.h"
 
-IndigoExpanderLabel::IndigoExpanderLabel(QWidget *parent) : QLabel(parent),collapse(false)
+ExpanderLabel::ExpanderLabel(QWidget *parent) : QLabel(parent),collapse(false)
 {
     margin_left = 3; // left margin of icon
     spacing = 4; // space around text label
@@ -14,7 +37,7 @@ IndigoExpanderLabel::IndigoExpanderLabel(QWidget *parent) : QLabel(parent),colla
 }
 
 
-void IndigoExpanderLabel::mousePressEvent(QMouseEvent* event)
+void ExpanderLabel::mousePressEvent(QMouseEvent* event)
 {
    if (event->buttons() & Qt::LeftButton)
    {
@@ -32,16 +55,21 @@ void IndigoExpanderLabel::mousePressEvent(QMouseEvent* event)
 }
 
 
-void IndigoExpanderLabel::collapsed(bool collapsed){
+
+void ExpanderLabel::collapsed(bool collapsed){
     collapse = collapsed;
 }
 
-void IndigoExpanderLabel::isCollapsable(bool collapsable){
+
+
+void ExpanderLabel::isCollapsable(bool collapsable){
 
     b_collapsable = collapsable;
 }
 
-void IndigoExpanderLabel::paintEvent(QPaintEvent *)
+
+
+void ExpanderLabel::paintEvent(QPaintEvent *)
 {
 
    QPainter painter(this);
@@ -94,14 +122,16 @@ void IndigoExpanderLabel::paintEvent(QPaintEvent *)
 
 /********************************************************************************************/
 
-IndigoExpanderGroup::IndigoExpanderGroup(bool collapsable, QWidget *parent) : QWidget(parent)
+
+
+ExpanderGroup::ExpanderGroup(bool collapsable, QWidget *parent) : QWidget(parent)
 {
     //this->setStyleSheet("QWidget{background-color:#efcd99;}");
 
     setAutoFillBackground( true );
 
     // set handleBar
-    m_handle = new IndigoExpanderLabel(this);
+    m_handle = new ExpanderLabel(this);
     m_handle->installEventFilter(this);
     m_handle->setFixedHeight(22);
     m_handle->isCollapsable(collapsable);
@@ -127,7 +157,8 @@ IndigoExpanderGroup::IndigoExpanderGroup(bool collapsable, QWidget *parent) : QW
 }
 
 
-void IndigoExpanderGroup::addWidget(QWidget * widget){
+
+void ExpanderGroup::addWidget(QWidget * widget){
 
     if (m_widget) return;
 
@@ -137,17 +168,22 @@ void IndigoExpanderGroup::addWidget(QWidget * widget){
 }
 
 
-void IndigoExpanderGroup::setCaption(const QString text){
+
+void ExpanderGroup::setCaption(const QString text){
 
     m_handle->setText(text);
 }
 
-void IndigoExpanderGroup::isCollapsable(bool collapsable){
+
+
+void ExpanderGroup::isCollapsable(bool collapsable){
 
     m_handle->isCollapsable(collapsable);
 }
 
-void IndigoExpanderGroup::stateSwitch(bool collapse){
+
+
+void ExpanderGroup::stateSwitch(bool collapse){
 
     if(!m_widget) return;
 
@@ -160,4 +196,3 @@ void IndigoExpanderGroup::stateSwitch(bool collapse){
     }
 
 }
-

@@ -1,9 +1,3 @@
-#include "stylefactory.h"
-#include <QDebug>
-#include <QMetaEnum>
-#include <QtMath>
-
-
 /***************************************************************************
  *   Copyright (C) 2005-2015 by the Quassel Project                        *
  *   devel@quassel-irc.org                                                 *
@@ -26,9 +20,15 @@
  * *************************************************************************
 
      This is a modified version of original code on:
-     https://github.com/quassel/quassel/blob/master/src/uisupport/qssparser.cpp
+     https://github.com/quassel/quassel/blob/master/src/uisupport/qssparser.h
 
  */
+
+
+#include "stylefactory.h"
+#include <QDebug>
+#include <QMetaEnum>
+#include <QtMath>
 
 
 StyleFactory::StyleFactory()

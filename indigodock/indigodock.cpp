@@ -1,3 +1,26 @@
+/*******************************************************
+ *
+ * Copyright (C) 2016  Martin Reininger
+ *
+ * This file is part of IndigoDock.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *
+ *******************************************************/
+
+
 #include "indigodock.h"
 
 IndigoDock::IndigoDock(QWidget *parent) : QDockWidget(parent)
@@ -66,19 +89,13 @@ IndigoDock::IndigoDock(QWidget *parent) : QDockWidget(parent)
     wdg_mainSplitter->addWidget(wdg_scrollArea_tb);
 
 
-    /*QWidget* titleWidget = new QWidget(this);
-    titleWidget->setFixedSize(20,20);
-    titleWidget->setBackgroundRole(QPalette::Highlight);
-    titleWidget->setAutoFillBackground(true);
-
-    //setTitleBarWidget( titleWidget );*/
     setWidget(wdg_mainSplitter);
     setMouseTracking(true);
     setAutoFillBackground( true );
     setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding));
 
 
-    connect(this, SIGNAL(panelAdded(QIcon,int, QString)), wdg_toolbar, SLOT(insertTab(QIcon, int, QString)));
+    connect(this, SIGNAL(panelAdded(QIcon, int, QString)), wdg_toolbar, SLOT(insertTab(QIcon, int, QString)));
     connect(this, SIGNAL(panelRemoved(int)), wdg_toolbar, SLOT(removeTab(int)));
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(updateTabPosition(Qt::DockWidgetArea)));
     connect(wdg_toolbar, SIGNAL(tabMoved(int,int)), this, SLOT(movePanel(int,int)));
@@ -96,10 +113,6 @@ QList<IndigoPanel*> IndigoDock::getPanels(){
 
 void IndigoDock::addIndigoPanel(IndigoPanel *panel, int tabIndex){
 
-
-   // this->connect(panel, SIGNAL(mouseReleased()), this, SLOT(dropPanel()));
-    //this->connect(panel, SIGNAL(mouseMove()), this, SLOT(hoverDock()));
-   // this->connect(panel, SIGNAL(isFloating(int)), this, SLOT(removePanel(int)));
     this->connect(panel, SIGNAL(panelClosed(int)), wdg_toolbar, SLOT(hideTab(int)));
     this->connect(panel, SIGNAL(panelShown(int)), wdg_toolbar, SLOT(showTab(int)));
 
@@ -133,9 +146,6 @@ void IndigoDock::addPanel (IndigoPanel *panel, int tabIndex){
         wdg_panelSplitter->insertWidget(tabIndex, panel);
         wdg_panelSplitter->setCollapsible(tabIndex, false);
     }
-
-
-
 
     panel->setDockState(IndigoPanel::Docked);
     panel->show();
@@ -225,8 +235,6 @@ void IndigoDock::scrollToPanel(QString PanelName){
             }
         }
     }
-
-
 }
 
 
@@ -256,16 +264,9 @@ void IndigoDock::updateMinHeight(){
     // hide drop zone if all panels are hidden
     if(countHiddenPanels == lst_PanelList.size()){
 
-        // DO stuff if all panels are hidden
-
-       /* wdg_scrollArea_dz->hide();
-        this->resize(QSize(wdg_toolbar->width(), this->height()));
-        this->adjustSize();*/
-
         wdg_scrollArea_dz->hide();
         setMaximumSize(wdg_toolbar->maximumSize());
 
-        return;
     }else{
 
         int minHeight = wdg_panelSplitter->height();
@@ -315,7 +316,6 @@ void IndigoDock::removePlaceholder (){
 
 
 
-
 void IndigoDock::updateTabPosition(Qt::DockWidgetArea area){
 
     switch(area){
@@ -333,7 +333,7 @@ void IndigoDock::updateTabPosition(Qt::DockWidgetArea area){
         break;
     }
     case Qt::RightDockWidgetArea:{
-           wdg_toolbar->setTabOrientation(IndigoTabBar::Vertical);
+            wdg_toolbar->setTabOrientation(IndigoTabBar::Vertical);
 
             wdg_mainSplitter->setOrientation(Qt::Horizontal);
             wdg_mainSplitter->addWidget(wdg_scrollArea_dz);
@@ -360,7 +360,7 @@ void IndigoDock::updateTabPosition(Qt::DockWidgetArea area){
     }
     case Qt::BottomDockWidgetArea:{
 
-           wdg_toolbar->setTabOrientation(IndigoTabBar::Horizontal);
+            wdg_toolbar->setTabOrientation(IndigoTabBar::Horizontal);
 
             wdg_mainSplitter->setOrientation(Qt::Vertical);
             wdg_mainSplitter->addWidget(wdg_scrollArea_dz);
@@ -391,13 +391,10 @@ void IndigoDock::hoverDock(IndigoPanel * pan){
 
     QPoint cursor = this->mapFromGlobal(QCursor::pos());
 
-   // qDebug() << "CursorPos:" << cursor << "RectZone:" << wdg_scrollArea_dz->geometry() << "RectTabBar:" << wdg_scrollArea_tb->geometry() << endl;
-
     if (this->rect().contains(cursor) ) {
 
 
         if  (wdg_scrollArea_dz->geometry().contains(cursor) ){
-            //qDebug() << "hover DropZone" << endl;
 
             int index = -1;
 
@@ -413,10 +410,7 @@ void IndigoDock::hoverDock(IndigoPanel * pan){
                     QPoint childPosBegin = this->mapFromGlobal(panel->mapToGlobal( QPoint( 0, 0 ) ));
 
                     QRect panRect = QRect(childPosBegin, QPoint(childPosBegin.x() + panel->width(), childPosBegin.y()+panel->height()+2*int_padding + int_placeholderHeight));
-                    /*qDebug() << "IndigoPanel from List:" << panel
-                             << "Position:" << panRect
-                             << "CursorPos:" << cursor
-                             << endl;*/
+
 
                     // Check if mouse is over an IndigoPanel and get Index
                     if (panRect.contains(cursor) ) {
@@ -431,24 +425,19 @@ void IndigoDock::hoverDock(IndigoPanel * pan){
 
             //set Panel Index of floating panel
             pan->setIndex(index);
-            //qDebug() << "Index under mouse" << index << endl;
 
             this->addPlaceholder(index);
-
-            // wdg_toolbar->leaveTabBar();
 
 
         }else if (wdg_scrollArea_tb->geometry().contains(cursor) ) {
 
-            //wdg_toolbar->hoverTabBar();
+            wdg_toolbar->hoverTabBar();
 
-            // qDebug() << "hover IconBar" << endl;
-         }/*else{
-            wdg_toolbar->leaveTabBar();
-        }*/
+         }
 
     }else{
         this->removePlaceholder();
+        wdg_toolbar->leaveTabBar();
     }
 
 

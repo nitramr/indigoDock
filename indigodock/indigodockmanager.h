@@ -21,32 +21,30 @@
  *******************************************************/
 
 
-#ifndef CONFIGMANAGER_H
-#define CONFIGMANAGER_H
-#include <QString>
-#include <QSettings>
+#ifndef INDIGODOCKMANAGER_H
+#define INDIGODOCKMANAGER_H
 
-class ConfigManager
+#include <QWidget>
+#include "indigodock.h"
+
+class IndigoDockManager: public QWidget
 {
+    Q_OBJECT
 public:
-    ConfigManager();
-
-    QString getIconPath();
-    void setIconPath(QString path);
-    QString getThemePath();
-    void setThemePath(QString path);
-
+    IndigoDockManager(QWidget *parent = 0);
+    void addIndigoDock(IndigoDock * dock);
+    void addIndigoPanel(IndigoDock * dock, IndigoPanel * panel, int tabIndex = -1);
+    void scrollToPanel(QString name);
 
 private:
-
-    QString str_SettingsFile;
-    QString str_iconPath;
-    QString str_themePath;
-
+    QList<IndigoDock*> lst_Docks;
 
 signals:
 
 public slots:
+    void hoverDock();
+    void dropPanel();
+    void removePanel(int index);
 };
 
-#endif // CONFIGMANAGER_H
+#endif // INDIGODOCKMANAGER_H

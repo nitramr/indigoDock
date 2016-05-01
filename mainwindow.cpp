@@ -1,15 +1,38 @@
+/*******************************************************
+ *
+ * Copyright (C) 2016  Martin Reininger
+ *
+ * This file is part of IndigoDock.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *
+ *******************************************************/
+
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QtGui>
-#include "indigomenubar.h"
-#include "indigodock.h"
-#include "indigoexpandergroup.h"
+#include "indigodock/indigodock.h"
 
-#include "colorswatch.h"
-#include "anglepicker.h"
+#include "uiwidgets/indigomenubar.h"
+#include "uiwidgets/expandergroup.h"
+#include "uiwidgets/colorswatch.h"
+#include "uiwidgets/anglepicker.h"
+
 #include "stylefactory.h"
 #include "configmanager.h"
-#include "indigolabelcontrol.h"
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -33,18 +56,17 @@ MainWindow::MainWindow(QWidget *parent) :
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q), this, SLOT(close()));
 
 
-
-    // Setup Indigo Hub
-
-    wdg_indigoHub = new IndigoHub(this);
-
-
-
     /*******************
      *
      * IndigoDock Setup
      *
      ******************/
+
+
+    // Setup Indigo Hub
+
+    wdg_indigoDockManager = new IndigoDockManager(this);
+
 
 
     wdg_indigoDock_r = new IndigoDock;
@@ -57,8 +79,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     /* Setup IndigoDocks in Hub */
-    wdg_indigoHub->addIndigoDock(wdg_indigoDock_r);
-    wdg_indigoHub->addIndigoDock(wdg_indigoDock_l);
+    wdg_indigoDockManager->addIndigoDock(wdg_indigoDock_r);
+    wdg_indigoDockManager->addIndigoDock(wdg_indigoDock_l);
 
 
 
@@ -72,22 +94,22 @@ MainWindow::MainWindow(QWidget *parent) :
     IndigoPanel *pan_content = new IndigoPanel("PanContent",wdg_indigoDock_r);
     pan_content->setCaption("Content");
     pan_content->setIcon(QIcon(str_iconPath + "pan-content.png"));
-    wdg_indigoHub->addIndigoPanel(wdg_indigoDock_r,pan_content);
+    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_r,pan_content);
 
     IndigoPanel *pan_alignment = new IndigoPanel("PanAlignment",wdg_indigoDock_r);
     pan_alignment->setCaption("Alignment");
     pan_alignment->setIcon(QIcon(str_iconPath + "pan-alignment.png"));
-    wdg_indigoHub->addIndigoPanel(wdg_indigoDock_r,pan_alignment);
+    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_r,pan_alignment);
 
     IndigoPanel *pan_colours = new IndigoPanel("PanColours",wdg_indigoDock_r);
     pan_colours->setCaption("Colours");
     pan_colours->setIcon(QIcon(str_iconPath + "pan-colour.png"));
-    wdg_indigoHub->addIndigoPanel(wdg_indigoDock_r,pan_colours);
+    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_r,pan_colours);
 
     IndigoPanel *pan_page = new IndigoPanel("PanPage",wdg_indigoDock_r);
     pan_page->setCaption("Page");
     pan_page->setIcon(QIcon(str_iconPath + "pan-page.png"));
-    wdg_indigoHub->addIndigoPanel(wdg_indigoDock_r,pan_page);
+    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_r,pan_page);
 
   /*  IndigoPanel *pan_group = new IndigoPanel("PanGroup",indigoDock_r);
     pan_group->setCaption("Group");
@@ -97,27 +119,27 @@ MainWindow::MainWindow(QWidget *parent) :
     IndigoPanel *pan_line = new IndigoPanel("PanLine",wdg_indigoDock_r);
     pan_line->setCaption("Line");
     pan_line->setIcon(QIcon(str_iconPath + "pan-lines.png"));
-    wdg_indigoHub->addIndigoPanel(wdg_indigoDock_r,pan_line);
+    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_r,pan_line);
 
     IndigoPanel *pan_transparency = new IndigoPanel("PanTransparency",wdg_indigoDock_r);
     pan_transparency ->setCaption("Transparency");
     pan_transparency ->setIcon(QIcon(str_iconPath + "pan-transparency.png"));
-    wdg_indigoHub->addIndigoPanel(wdg_indigoDock_r,pan_transparency);
+    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_r,pan_transparency);
 
     IndigoPanel *pan_table = new IndigoPanel("PanTable",wdg_indigoDock_r);
     pan_table ->setCaption("Table");
     pan_table ->setIcon(QIcon(str_iconPath + "pan-table.png"));
-    wdg_indigoHub->addIndigoPanel(wdg_indigoDock_r,pan_table);
+    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_r,pan_table);
 
     IndigoPanel *pan_layers = new IndigoPanel("PanLayer",wdg_indigoDock_r);
     pan_layers ->setCaption("Layers");
     pan_layers ->setIcon(QIcon(str_iconPath + "pan-layer.png"));
-    wdg_indigoHub->addIndigoPanel(wdg_indigoDock_r,pan_layers);
+    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_r,pan_layers);
 
     IndigoPanel *pan_outlines = new IndigoPanel("PanOutlines",wdg_indigoDock_r);
     pan_outlines ->setCaption("Outlines");
     pan_outlines ->setIcon(QIcon(str_iconPath + "pan-outline.png"));
-    wdg_indigoHub->addIndigoPanel(wdg_indigoDock_r,pan_outlines);
+    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_r,pan_outlines);
 
    /* IndigoPanel *pan_bookmarks = new IndigoPanel("PanBookmarks",indigoDock_r);
     pan_bookmarks ->setCaption("Bookmarks");
@@ -151,12 +173,12 @@ MainWindow::MainWindow(QWidget *parent) :
     IndigoPanel *pan_test = new IndigoPanel("PanTest",wdg_indigoDock_l);
     pan_test ->setCaption("Test");
     pan_test ->setIcon(QIcon(str_iconPath + "pan-image.png"));
-    wdg_indigoHub->addIndigoPanel(wdg_indigoDock_l,pan_test );
+    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_l,pan_test );
 
     IndigoPanel *pan_geometry = new IndigoPanel("PanGeometry",wdg_indigoDock_l);
     pan_geometry ->setCaption("Geometry");
     pan_geometry ->setIcon(QIcon(str_iconPath + "pan-frame.png"));
-    wdg_indigoHub->addIndigoPanel(wdg_indigoDock_l,pan_geometry);
+    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_l,pan_geometry);
 
 
 
@@ -242,19 +264,19 @@ MainWindow::MainWindow(QWidget *parent) :
 // Auto scroll event calls by panel names
 
 void MainWindow::scrollToGeometry(){
-    wdg_indigoHub->scrollToPanel("PanGeometry");
+    wdg_indigoDockManager->scrollToPanel("PanGeometry");
 }
 
 
 
 void MainWindow::scrollToContent(){
-    wdg_indigoHub->scrollToPanel("PanContent");
+    wdg_indigoDockManager->scrollToPanel("PanContent");
 }
 
 
 
 void MainWindow::scrollToPage(){
-    wdg_indigoHub->scrollToPanel("PanPage");
+    wdg_indigoDockManager->scrollToPanel("PanPage");
 }
 
 
@@ -355,7 +377,7 @@ void MainWindow::textPanel(IndigoPanel *parent){
 
 
 
-    IndigoIconWidget *wdg_icon = new IndigoIconWidget(str_iconPath + "pan-image.png", 22);
+    IconWidget *wdg_icon = new IconWidget(str_iconPath + "pan-image.png", 22);
 
     QLineEdit *textBox = new QLineEdit("Icon Test");
     QLineEdit *textBox2 = new QLineEdit("135 °");

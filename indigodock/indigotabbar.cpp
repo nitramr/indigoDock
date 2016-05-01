@@ -1,3 +1,26 @@
+/*******************************************************
+ *
+ * Copyright (C) 2016  Martin Reininger
+ *
+ * This file is part of IndigoDock.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *
+ *******************************************************/
+
+
 #include "indigotabbar.h"
 #include <QDebug>
 #include <QStyle>
@@ -44,8 +67,7 @@ IndigoTabBar::IndigoTabBar(QWidget *parent) :
     int_tabWidth = 32;
     int_hoverIndex = -1; // index of visible hovered tab
     int_gap = 1;
-    int_borderHighlight = 2;
-    dbl_transparency = 0.1; // 10%
+    int_borderHighlight = 3;
     bool_dragProceed = false;
     bool_hover = false;
     int_realIndex = -1; // real index of visible dragged tab
@@ -352,22 +374,36 @@ void IndigoTabBar::paintEvent(QPaintEvent *event)
 
 
     // TabBar is empty - show dropZone
-    /*if(/*countHiddenTabs() == lst_TabList.size() && /bool_hover){
+    if(countHiddenTabs() == lst_TabList.size() && bool_hover){
 
-        col_colorHighlightAlpha = Helper().blendColor(QColor(this->palette().color(QPalette::Background)),
-                                           QColor(this->palette().color(QPalette::Highlight)),
-                                           dbl_transparency);
+        switch (m_tabOrientation){
 
-        p.fillRect(this->geometry(),
-                   QColor(this->palette().color(QPalette::Highlight)));
+            case IndigoTabBar::Vertical:
 
-        p.fillRect(this->geometry().x()+int_borderHighlight,
-                   this->geometry().y()+int_borderHighlight,
-                   this->geometry().width() -(int_borderHighlight*2),
-                   this->geometry().height() -(int_borderHighlight*2),
-                   col_colorHighlightAlpha);
+                p.fillRect(this->geometry().x(),
+                           this->geometry().y(),
+                           int_tabWidth,
+                           int_borderHighlight,
+                           QColor(this->palette().color(QPalette::Highlight)));
 
-    }*/
+
+                break;
+
+            case IndigoTabBar::Horizontal:
+
+                p.fillRect(this->geometry().x(),
+                       this->geometry().y(),
+                       int_borderHighlight,
+                       int_tabHeight,
+                       QColor(this->palette().color(QPalette::Highlight)));
+
+                break;
+
+        }
+
+
+
+    }
 
 
 }

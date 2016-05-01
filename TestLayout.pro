@@ -21,35 +21,35 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp \
-    colorswatch.cpp \
-    indigodock.cpp \
-    indigotabbar.cpp \
-    indigopanel.cpp \
-    indigoexpandergroup.cpp \
-    indigomenubar.cpp \
-    anglepicker.cpp \
+        mainwindow.cpp \    
     stylefactory.cpp \
     configmanager.cpp \
-    helper.cpp \
-    indigohub.cpp \
+    helper.cpp \    
     textboxsimulator.cpp \
-    indigoiconwidget.cpp
+    indigodock/indigodock.cpp \
+    indigodock/indigopanel.cpp \
+    indigodock/indigotabbar.cpp \
+    uiwidgets/anglepicker.cpp \
+    uiwidgets/colorswatch.cpp \
+    uiwidgets/indigomenubar.cpp \
+    uiwidgets/iconwidget.cpp \
+    uiwidgets/expandergroup.cpp \
+    indigodock/indigodockmanager.cpp
 
-HEADERS  += mainwindow.h \
-    colorswatch.h \
-    indigodock.h \
-    indigotabbar.h \
-    indigopanel.h \
-    indigoexpandergroup.h \
-    indigomenubar.h \
-    anglepicker.h \
+HEADERS  += mainwindow.h \    
     stylefactory.h \
     configmanager.h \
-    helper.h \
-    indigohub.h \
+    helper.h \    
     textboxsimulator.h \
-    indigoiconwidget.h
+    indigodock/indigodock.h \
+    indigodock/indigopanel.h \
+    indigodock/indigotabbar.h \
+    uiwidgets/anglepicker.h \
+    uiwidgets/colorswatch.h \
+    uiwidgets/indigomenubar.h \
+    uiwidgets/iconwidget.h \
+    uiwidgets/expandergroup.h \
+    indigodock/indigodockmanager.h
 
 FORMS    += mainwindow.ui
 

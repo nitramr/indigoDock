@@ -1,8 +1,3 @@
-#ifndef STYLEFACTORY_H
-#define STYLEFACTORY_H
-#include <QString>
-#include <QStyle>
-
 /***************************************************************************
  *   Copyright (C) 2005-2015 by the Quassel Project                        *
  *   devel@quassel-irc.org                                                 *
@@ -28,6 +23,12 @@
      https://github.com/quassel/quassel/blob/master/src/uisupport/qssparser.h
 
  */
+
+
+#ifndef STYLEFACTORY_H
+#define STYLEFACTORY_H
+#include <QString>
+#include <QStyle>
 
 
 class StyleFactory
