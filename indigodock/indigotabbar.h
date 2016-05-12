@@ -87,6 +87,7 @@ public:
     void setTabOrientation(Orientation tabDirection);
     void setTabSize(int side);
     void setTabSize(int width, int height);
+    void clear();
 
 
 protected:

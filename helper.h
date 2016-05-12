@@ -32,7 +32,6 @@ public:
     Helper();
     QColor blendColor(QColor color1, QColor color2, double ratio);
 
-
 };
 
 #endif // HELPER_H

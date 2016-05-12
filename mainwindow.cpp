@@ -69,11 +69,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
 
-    wdg_indigoDock_r = new IndigoDock;
+    wdg_indigoDock_r = new IndigoDock("Right");
     wdg_indigoDock_r->setAllowedAreas(Qt::RightDockWidgetArea | Qt::LeftDockWidgetArea | Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea);
     this->addDockWidget(Qt::RightDockWidgetArea, wdg_indigoDock_r);
 
-    wdg_indigoDock_l = new IndigoDock;
+    wdg_indigoDock_l = new IndigoDock("Left");
     wdg_indigoDock_l->setAllowedAreas(Qt::RightDockWidgetArea | Qt::LeftDockWidgetArea | Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea);
     this->addDockWidget(Qt::LeftDockWidgetArea, wdg_indigoDock_l);
 
@@ -230,6 +230,16 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->mainToolBar->addAction(tb_page);
     connect(tb_page, SIGNAL(triggered()), pan_page, SLOT(show()));
     connect(tb_page, SIGNAL(triggered()), this, SLOT(scrollToPage()));
+
+     ui->mainToolBar->addSeparator();
+
+     QAction *tb_loadWS = new QAction("Load Workspace",this);
+     ui->mainToolBar->addAction(tb_loadWS);
+     connect(tb_loadWS, SIGNAL(triggered()), this, SLOT(loadWorkspace()));
+
+     QAction *tb_saveWS = new QAction("Save Workspace",this);
+     ui->mainToolBar->addAction(tb_saveWS);
+     connect(tb_saveWS, SIGNAL(triggered()), this, SLOT(saveWorkspace()));
 
 
     /******************
@@ -407,11 +417,11 @@ void MainWindow::textPanel(IndigoPanel *parent){
 
 void MainWindow::loadTheme(){
 
-    ConfigManager *fm = new ConfigManager();
+    ConfigManager *cm = new ConfigManager();
 
-    str_iconPath = fm->getIconPath();
+    str_iconPath = cm->getIconPath();
 
-    QFile f(fm->getThemePath());
+    QFile f(cm->getThemePath());
 
     if (!f.exists())
     {
@@ -453,12 +463,28 @@ void MainWindow::saveTheme(Theme theme){
 }
 
 
+
 void MainWindow::loadDarkTheme(){
     saveTheme(MainWindow::Dark);
     loadTheme();
 }
 
+
+
 void MainWindow::loadLightTheme(){
     saveTheme(MainWindow::Light);
     loadTheme();
 }
+
+
+
+void MainWindow::loadWorkspace(){
+    wdg_indigoDockManager->loadWorkspace("workspace.xml");
+}
+
+
+
+void MainWindow::saveWorkspace(){
+    wdg_indigoDockManager->saveWorkspace("workspace.xml");
+}
+

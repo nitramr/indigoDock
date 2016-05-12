@@ -136,8 +136,6 @@ IndigoPanel::IndigoPanel(QString name, QWidget *parent) :
     setBackgroundRole(QPalette::Background);
     setDockState(IndigoPanel::Docked);
 
-    //setWindowFlags(Qt::ToolTip|Qt::WindowStaysOnTopHint|Qt::CustomizeWindowHint);
-
     setObjectName(name);
     setMinimumWidth(220);
     setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding));
@@ -150,6 +148,7 @@ IndigoPanel::IndigoPanel(QString name, QWidget *parent) :
     wdg_handle->setFixedHeight(30);
 
     setCaption(name);
+    setAccessibleName(name);
 
     wdg_normalContainer = new QWidget;
     wdg_normalContainer->setMinimumHeight(100); // simulate fake content - remove for productive usage
@@ -222,19 +221,14 @@ bool IndigoPanel::eventFilter(QObject *object, QEvent *event)
 
             QPoint point = me->globalPos();
 
+
             // undock Panel if not already undocked
             if(dockState() == IndigoPanel::Docked){
 
                 setParent(wdg_Parent);
 
-                setWindowFlags(Qt::ToolTip                              
-                               | Qt::CustomizeWindowHint); // avoid flickering by moving, will replaced by pixmap
-
-                show();
-
-                //setParent(m_Parent);
-
                 setDockState(IndigoPanel::Floating);
+
                 emit isFloating(int_index);
 
 
@@ -258,10 +252,7 @@ bool IndigoPanel::eventFilter(QObject *object, QEvent *event)
 
         if(dockState() == IndigoPanel::Floating){
 
-            setWindowFlags(Qt::Tool
-                           | Qt::CustomizeWindowHint);
-            show();
-
+            QFrame::show();
             emit mouseReleased(); // activate reparenting in DropZone*
         }
 
@@ -358,28 +349,37 @@ void IndigoPanel::addWidgetExtend(QLayout *content){
 
 void IndigoPanel::hide(){
 
-     if(dockState() == IndigoPanel::Docked){
+     switch(dockState()){
+     case IndigoPanel::Docked:
          setDockState(IndigoPanel::HiddenDocked);
-         emit panelClosed(Index());
-     }else if(dockState() == IndigoPanel::Floating){
+         break;
+     case IndigoPanel::Floating:
          setDockState(IndigoPanel::HiddenFloating);
-     }
+         break;
+     default:
+break;
 
-     QFrame::hide();
+     }
+     // QFrame::hide();
 }
 
 
 
 void IndigoPanel::show(){
 
-    if(dockState() == IndigoPanel::HiddenDocked){
-        setDockState(IndigoPanel::Docked);
-        emit panelShown(Index());
-    }else if(dockState() == IndigoPanel::HiddenFloating){
-        setDockState(IndigoPanel::Floating);
-    }
 
-    QFrame::show();
+    switch(dockState()){
+    case IndigoPanel::HiddenDocked:
+        setDockState(IndigoPanel::Docked);
+        break;
+    case IndigoPanel::HiddenFloating:
+        setDockState(IndigoPanel::Floating);
+        break;
+    default:
+
+break;
+    }
+   // QFrame::show();
 }
 
 
@@ -396,14 +396,14 @@ void IndigoPanel::expander(){
 
         if(!lyt_extendedArea->isEmpty()){
             wdg_extendedContainer->show();
-            setExpanderState(IndigoPanel::Advanced);
+            m_expander = IndigoPanel::Advanced;
 
             lyt_main->addItem(wdg_spacer);
 
         }else{
             wdg_normalContainer->hide();
             wdg_extendedContainer->hide();
-            setExpanderState(IndigoPanel::Collapsed);
+            m_expander = IndigoPanel::Collapsed;
 
             //resize(s);
         }
@@ -413,7 +413,7 @@ void IndigoPanel::expander(){
 
         wdg_normalContainer->hide();
         wdg_extendedContainer->hide();
-        setExpanderState(IndigoPanel::Collapsed);
+        m_expander = IndigoPanel::Collapsed;
 
         //resize(s);
 
@@ -423,13 +423,13 @@ void IndigoPanel::expander(){
 
         if(!lyt_normalArea->isEmpty()){
             wdg_normalContainer->show();
-            setExpanderState(IndigoPanel::Normal);
+            m_expander = IndigoPanel::Normal;
 
             lyt_main->addItem(wdg_spacer);
 
         }else{
             wdg_extendedContainer->show();
-            setExpanderState(IndigoPanel::Advanced);
+            m_expander = IndigoPanel::Advanced;
 
             lyt_main->addItem(wdg_spacer);
 
@@ -443,24 +443,140 @@ void IndigoPanel::expander(){
 
 
 
-IndigoPanel::IndigoState IndigoPanel::dockState(){
+IndigoPanel::IndigoDockState IndigoPanel::dockState(){
     return m_state;
 }
 
 
 
-void IndigoPanel::setDockState(IndigoPanel::IndigoState state){
+void IndigoPanel::setDockState(IndigoPanel::IndigoDockState state){
     m_state = state;
+
+    qDebug() << "SetDockState" << Index() << endl;
+
+    switch(state){
+        case IndigoPanel::HiddenDocked:
+        case IndigoPanel::HiddenFloating:
+            if(!this->isHidden()){
+                QFrame::hide();
+            }
+            break;
+
+        case IndigoPanel::Floating:
+        case IndigoPanel::Docked:
+        case IndigoPanel::None:
+        default:
+            if(!this->isVisible()){
+                QFrame::show();
+            }
+            break;
+    }
+
 }
 
 
 
-IndigoPanel::IndigoExpander IndigoPanel::expanderState(){
+void IndigoPanel::setDockState(int state){
+
+    switch(state){
+        case 0:{
+            setDockState(IndigoPanel::HiddenDocked);
+            break;
+        }
+        case 1:{
+            setDockState(IndigoPanel::HiddenFloating);
+            break;
+        }
+        case 2:{
+            setDockState(IndigoPanel::Floating);
+            break;
+        }
+        case 3:{
+            setDockState(IndigoPanel::Docked);
+            break;
+        }
+        default:{
+            setDockState(IndigoPanel::None);
+            break;
+        }
+
+    }
+}
+
+
+
+IndigoPanel::IndigoExpanderState IndigoPanel::expanderState(){
     return m_expander;
 }
 
 
 
-void IndigoPanel::setExpanderState(IndigoPanel::IndigoExpander expander){
-    m_expander = expander;
+void IndigoPanel::setExpanderState(IndigoPanel::IndigoExpanderState expanderState){
+    m_expander = expanderState;
+
+
+    lyt_main->removeItem(wdg_spacer);
+
+    switch(expanderState){
+    case IndigoPanel::Normal:
+
+        wdg_normalContainer->show();
+        wdg_extendedContainer->hide();
+        lyt_main->addItem(wdg_spacer);
+
+        break;
+
+    case IndigoPanel::Advanced:
+
+        wdg_normalContainer->show();
+        wdg_extendedContainer->show();
+        lyt_main->addItem(wdg_spacer);
+
+        break;
+
+    case IndigoPanel::Collapsed:
+
+        wdg_normalContainer->hide();
+        wdg_extendedContainer->hide();
+
+        break;
+    }
+
+    this->adjustSize();
+
+
+}
+
+
+
+void IndigoPanel::setExpanderState(int expanderState){
+
+    switch(expanderState){
+        case 0:{
+            setExpanderState(IndigoPanel::Normal);
+            break;
+        }
+        case 1:{
+            setExpanderState(IndigoPanel::Advanced);
+            break;
+        }
+        case 2:{
+            setExpanderState(IndigoPanel::Collapsed);
+            break;
+        }
+        default:{
+            setExpanderState(IndigoPanel::Normal);
+            break;
+        }
+
+    }
+}
+
+
+
+void IndigoPanel::setParent(QWidget * parent){
+
+    QWidget::setParent(parent);
+
+    setWindowFlags(Qt::ToolTip | Qt::CustomizeWindowHint); // avoid flickering by moving
 }

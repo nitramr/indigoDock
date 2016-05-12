@@ -23,7 +23,7 @@
 
 #include "indigodock.h"
 
-IndigoDock::IndigoDock(QWidget *parent) : QDockWidget(parent)
+IndigoDock::IndigoDock(QString name, QWidget *parent) : QDockWidget(parent)
 {
 
 
@@ -93,6 +93,7 @@ IndigoDock::IndigoDock(QWidget *parent) : QDockWidget(parent)
     setMouseTracking(true);
     setAutoFillBackground( true );
     setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding));
+    setAccessibleName(name);
 
 
     connect(this, SIGNAL(panelAdded(QIcon, int, QString)), wdg_toolbar, SLOT(insertTab(QIcon, int, QString)));
@@ -147,8 +148,8 @@ void IndigoDock::addPanel (IndigoPanel *panel, int tabIndex){
         wdg_panelSplitter->setCollapsible(tabIndex, false);
     }
 
-    panel->setDockState(IndigoPanel::Docked);
-    panel->show();
+    panel->setDockState(IndigoPanel::Docked);  
+    //panel->show();
 
     updatePanels();
 
@@ -180,7 +181,7 @@ void IndigoDock::updatePanels(){
 void IndigoDock::removePanel(int index){
 
     lst_PanelList.removeAt(index);
-    updatePanels();
+    updatePanels();  
     emit panelRemoved(index);
 }
 
@@ -248,13 +249,17 @@ void IndigoDock::updateMinHeight(){
     for( int i=0; i<lst_PanelList.size(); ++i )
     {
 
-        if(lst_PanelList.at(i)->dockState() == IndigoPanel::Docked){
+        switch(lst_PanelList.at(i)->dockState()){
 
+        case IndigoPanel::Docked:{
             IndigoPanel * panel = lst_PanelList.at(i);
             lastPanelHeight = panel->height();
-
-        }else if(lst_PanelList.at(i)->dockState() == IndigoPanel::HiddenDocked){
+            break;
+        }
+        default:{
             countHiddenPanels += 1;
+            break;
+        }
 
         }
 
@@ -459,6 +464,8 @@ void IndigoDock::dropPanel(IndigoPanel *pan){
 
         this->removePlaceholder();
 
+        emit panelDropped(pan->Index());
+
     }
 }
 
@@ -495,4 +502,16 @@ bool IndigoDock::eventFilter(QObject *object, QEvent *event)
 
 
     return QWidget::eventFilter(object, event);
+}
+
+
+
+void IndigoDock::clear(){
+
+    lst_PanelList.clear();
+    wdg_toolbar->clear();
+
+    while ( IndigoPanel* pan = findChild<IndigoPanel*>() )
+        pan->setParent(0);
+
 }

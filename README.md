@@ -22,17 +22,15 @@ Here is how you run it:
 1. **Download [QtCreator](http://www.qt.io/download-open-source/) and install**  
 2. **Clone the indigoDock repository to your local machine** ```mkdir indigoDock; cd indigoDock/; git clone git://github.com/nitramr/indigoDock``` **OR just download the indigoDock [.zip file](https://github.com/nitramr/indigoDock/archive/master.zip)**  
 3. **Find and click on the TestLayout.pro which should invoke QtCreator**  
-![testlayout pro](https://cloud.githubusercontent.com/assets/4140247/10866360/21cef028-7ff9-11e5-8c4c-e0e86c682868.png)  
-4. **Click "Projects" (1), choose "Debug" (2), uncheck "Shadow build" (3), choose "Release" (2), uncheck "Shadow build" (3)**  
-![indigodock_settings](https://cloud.githubusercontent.com/assets/15112256/11942773/1b5a8e9c-a839-11e5-8a50-a897ec7a7236.png)  
-5. **Build TestLayout by clicking on the green arrow OR Build > Build Project "TestLayout"**  
-
+![testlayout pro](https://cloud.githubusercontent.com/assets/15112256/14962010/02eca01c-109d-11e6-8f3a-b7a229af5b92.png)  
+4. **Build TestLayout by clicking on the green arrow OR Build > Build Project "TestLayout"**  
 ![build-indigodock-in-qtcreator](https://cloud.githubusercontent.com/assets/4140247/10866388/01e7e67e-7ffa-11e5-852c-0176e022c647.jpg)  
 
 ## Snapshot features:
-* the whole dock is dockable on left or right side of main window  
+* the whole dock is dockable on left, right, top or bottom of main window  
 * the dock contains a tabbar with sortable tabs (drag and drop sorting)  
 * within the container you can add/remove/arrange single panels  
+* drag and drop between more than one dock  
 * container highlighting by panel hovering  
 * application has a theme switcher (dark/light)  
 * setting will saved in a settings file  
@@ -52,9 +50,9 @@ Here is how you run it:
 * clean up compile time warnings **(done)**  
 
 ## Roadmap v1.1 - Multiple Dock support (to be define)
-* drag and drop panels between more than one dock  
+* drag and drop panels between more than one dock **(done)**  
 * load/save workspace  
-* horizontal panel layout  
+* horizontal panel layout **(started)**  
 
 ## Sub Project - Control Element set
 * AnglePicker **(done)**  

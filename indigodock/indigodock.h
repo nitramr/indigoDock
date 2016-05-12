@@ -41,12 +41,13 @@ class IndigoDock : public QDockWidget
 
 public:
 
-    IndigoDock(QWidget *parent = 0);
+    IndigoDock(QString name, QWidget *parent = 0);
     void addIndigoPanel(IndigoPanel *panel, int tabIndex = -1);
     void hoverDock(IndigoPanel *pan);
     void dropPanel(IndigoPanel *pan);
     void removePanel(int index);
     QList<IndigoPanel*>getPanels();
+    void clear();
 
 private:
 
@@ -75,8 +76,9 @@ protected:
     bool eventFilter(QObject *object, QEvent *event);
 
 signals:
-    void panelRemoved(int index);
+    void panelRemoved(int index);  
     void panelAdded(QIcon icon,int index, QString);
+    void panelDropped(int index);
 
 public slots:
 

@@ -64,7 +64,7 @@ class IndigoPanel : public QFrame
     Q_OBJECT
 
 public:
-    enum IndigoState{
+    enum IndigoDockState{
         HiddenDocked,
         HiddenFloating,
         Floating,
@@ -72,7 +72,7 @@ public:
         None
     };
 
-    enum IndigoExpander{
+    enum IndigoExpanderState{
         Normal,
         Advanced,
         Collapsed
@@ -95,11 +95,16 @@ public:
     int Index();
     void setIndex(int index);
 
-    IndigoState dockState();
-    void setDockState(IndigoState state);
+    IndigoDockState dockState();
+    void setDockState(IndigoDockState state);
+    void setDockState(int state);
 
-    IndigoExpander expanderState();
-    void setExpanderState(IndigoExpander expander);
+    IndigoExpanderState expanderState();
+    void setExpanderState(IndigoExpanderState expanderState);
+    void setExpanderState(int expanderState);
+
+    void setParent(QWidget * parent);
+
 
 
 protected:   
@@ -115,8 +120,8 @@ private:
     QPoint pnt_relativeOffset;
     QIcon ico_icon;    
     int int_index; 
-    IndigoState m_state;
-    IndigoExpander m_expander;
+    IndigoDockState m_state;
+    IndigoExpanderState m_expander;
     QWidget *wdg_Parent;
     QSpacerItem *wdg_spacer;
 

@@ -633,3 +633,12 @@ void IndigoTabBar::calculateSize(){
 
 
 }
+
+
+
+void IndigoTabBar::clear(){
+
+    lst_TabList.clear();
+    update();
+
+}

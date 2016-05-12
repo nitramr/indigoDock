@@ -35,9 +35,14 @@ public:
     void addIndigoDock(IndigoDock * dock);
     void addIndigoPanel(IndigoDock * dock, IndigoPanel * panel, int tabIndex = -1);
     void scrollToPanel(QString name);
+    void loadWorkspace(QString file);
+    void saveWorkspace(QString file);
 
 private:
     QList<IndigoDock*> lst_Docks;
+    QList<IndigoPanel*> lst_floatingPanels;
+    QString version;
+
 
 signals:
 
@@ -45,6 +50,7 @@ public slots:
     void hoverDock();
     void dropPanel();
     void removePanel(int index);
+    void panelDropped(int index);
 };
 
 #endif // INDIGODOCKMANAGER_H

@@ -79,6 +79,8 @@ public slots:
     void scrollToGeometry();
     void scrollToContent();
     void scrollToPage();
+    void saveWorkspace();
+    void loadWorkspace();
 
 
 };

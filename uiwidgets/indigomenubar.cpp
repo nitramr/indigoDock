@@ -1,6 +1,6 @@
 /*******************************************************
  *
- * Copyright (C) 2016  a.l.e
+ * Copyright (C) 2016  Ale Rimoldi
  *
  * This file is part of IndigoDock.
  *
