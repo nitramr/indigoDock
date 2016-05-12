@@ -174,7 +174,7 @@ void IndigoDockManager::loadWorkspace(QString file){
 
     if (!xmlFile.open(QIODevice::ReadOnly))
     {
-        QMessageBox::warning(0, "Error!", "Error opening workspace file");
+        QMessageBox::warning(0, "Workspace wont load!", "Workspace file not found! Save Workspace at first to create a file.");
     }
     else
     {
@@ -295,8 +295,8 @@ void IndigoDockManager::loadWorkspace(QString file){
 
                                       //add attribute
                                      // sortPanel->setIndex(indigoPanel.attribute("id").toInt());
-                                      sortPanel->setExpanderState(indigoPanel.attribute("expanderState").toInt());
-                                      sortPanel->setDockState(indigoPanel.attribute("dockState").toInt());
+                                      sortPanel->setExpanderState(indigoPanel.attribute("expanderState", "-1").toInt());
+                                      sortPanel->setDockState(indigoPanel.attribute("dockState", "-1").toInt());
 
 
                                   }
@@ -350,10 +350,10 @@ void IndigoDockManager::loadWorkspace(QString file){
                             floatingPanel->setParent(this);
 
                             //add attribute
-                            floatingPanel->setIndex(indigoPanel.attribute("id").toInt());
-                            floatingPanel->setExpanderState(indigoPanel.attribute("expanderState").toInt());
-                            floatingPanel->setGeometry(indigoPanel.attribute("x").toInt(), indigoPanel.attribute("y").toInt(), floatingPanel->geometry().width(), floatingPanel->geometry().height());
-                            floatingPanel->setDockState(indigoPanel.attribute("dockState").toInt());
+                            floatingPanel->setIndex(indigoPanel.attribute("id", "-1").toInt());
+                            floatingPanel->setExpanderState(indigoPanel.attribute("expanderState", "-1").toInt());
+                            floatingPanel->setGeometry(indigoPanel.attribute("x", "0").toInt(), indigoPanel.attribute("y", "0").toInt(), floatingPanel->geometry().width(), floatingPanel->geometry().height());
+                            floatingPanel->setDockState(indigoPanel.attribute("dockState", "-1").toInt());
 
 
                         }
