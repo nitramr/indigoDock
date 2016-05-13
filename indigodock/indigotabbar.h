@@ -84,9 +84,12 @@ public:
 
     int currentIndex();
     Orientation TabOrientation();
-    void setTabOrientation(Orientation tabDirection);
+    void setTabOrientation(Orientation tabDirection);    
     void setTabSize(int side);
     void setTabSize(int width, int height);
+    bool movingTabs();
+    void setMovingTabs(bool allowMoving);
+
     void clear();
 
 
@@ -108,6 +111,7 @@ private:
    int int_newIndex;
    bool bool_dragProceed;
    bool bool_hover;
+   bool bool_allowDrag;
    QPoint pnt_dragPosition;
    int int_realIndex;
    int int_dragIndex;

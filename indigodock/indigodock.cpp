@@ -37,7 +37,7 @@ IndigoDock::IndigoDock(QString name, QWidget *parent) : QDockWidget(parent)
     int_padding = 3;
     int_placeholderHeight = 3;
 
-    wdg_toolbar = new  IndigoTabBar;
+    wdg_toolbar = new  IndigoTabBar;    
 
     wdg_placeholder = new QWidget();
     wdg_placeholder->setFixedHeight(int_placeholderHeight);
@@ -94,6 +94,7 @@ IndigoDock::IndigoDock(QString name, QWidget *parent) : QDockWidget(parent)
     setAutoFillBackground( true );
     setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding));
     setAccessibleName(name);
+    setObjectName(name);
 
 
     connect(this, SIGNAL(panelAdded(QIcon, int, QString)), wdg_toolbar, SLOT(insertTab(QIcon, int, QString)));
@@ -387,11 +388,8 @@ void IndigoDock::updateTabPosition(Qt::DockWidgetArea area){
 
 
 
-
-// TODO: decide if DropZone or TabBar hovered
 void IndigoDock::hoverDock(IndigoPanel * pan){
 
-   // IndigoPanel *pan = qobject_cast<IndigoPanel *>(sender());
     if (!pan) return;
 
     QPoint cursor = this->mapFromGlobal(QCursor::pos());
@@ -453,16 +451,15 @@ void IndigoDock::hoverDock(IndigoPanel * pan){
 
 void IndigoDock::dropPanel(IndigoPanel *pan){
 
+    if (!pan) return;
+
     QPoint cursor = this->mapFromGlobal(QCursor::pos());
 
     if (this->rect().contains(cursor) ) {
 
-       // IndigoPanel *pan = qobject_cast<IndigoPanel *>(sender());
-        if (!pan) return;
+        this->removePlaceholder();
 
         addPanel(pan, pan->Index());
-
-        this->removePlaceholder();
 
         emit panelDropped(pan->Index());
 

@@ -70,11 +70,13 @@ IndigoTabBar::IndigoTabBar(QWidget *parent) :
     int_borderHighlight = 3;
     bool_dragProceed = false;
     bool_hover = false;
+    bool_allowDrag = true; // allow moving tabs
     int_realIndex = -1; // real index of visible dragged tab
     int_dragIndex = -1; // index of visible dragged tab
     int_minDimension = 0;
 
     setAccessibleName("IndigoTabBar");
+    setObjectName("IndigoTabBar");
     setMouseTracking(true);
     setAutoFillBackground(true);
     setBackgroundRole(QPalette::Background);
@@ -110,7 +112,7 @@ void IndigoTabBar::mousePressEvent(QMouseEvent*event){
 
 
     // drag started
-    if (event->buttons() == Qt::LeftButton) {
+    if (event->buttons() == Qt::LeftButton && bool_allowDrag) {
         int_dragIndex = int_hoverIndex;
     }
 
@@ -156,6 +158,7 @@ void IndigoTabBar::mouseReleaseEvent(QMouseEvent*event){
         // Scroll to position in DropZone after mouse click
         emit tabClicked(int_newIndex);
 
+
     }
 
 
@@ -199,7 +202,7 @@ void IndigoTabBar::mouseMoveEvent(QMouseEvent*event){
 
 
     // drag proceed
-    if (event->buttons() == Qt::LeftButton) {
+    if (event->buttons() == Qt::LeftButton && bool_allowDrag) {
         bool_dragProceed = true;
         int_realIndex = int_oldIndex;
     }
@@ -561,6 +564,18 @@ void IndigoTabBar::setTabOrientation(Orientation tabDirection){
 
     calculateSize();
 
+}
+
+
+
+void IndigoTabBar::setMovingTabs(bool allowMoving){
+    bool_allowDrag = allowMoving;
+}
+
+
+
+bool IndigoTabBar::movingTabs(){
+   return bool_allowDrag;
 }
 
 

@@ -62,6 +62,51 @@ void IndigoDockManager::addIndigoPanel(IndigoDock * dock, IndigoPanel * panel, i
 
 
 
+void IndigoDockManager::addIndigoPanel(IndigoDock * dock, IndigoPanel * panel, IndigoPanel::IndigoDockState dockState, int tabIndex){
+
+    switch(dockState){
+    case IndigoPanel::Docked:
+        if(lst_Docks.contains(dock)){
+            dock->addIndigoPanel(panel, tabIndex);
+        }else{
+            lst_Docks.append(dock);
+            dock->addIndigoPanel(panel, tabIndex);
+        }
+        break;
+    case IndigoPanel::HiddenDocked:
+        if(lst_Docks.contains(dock)){
+            dock->addIndigoPanel(panel);
+            panel->setDockState(IndigoPanel::HiddenDocked);
+        }else{
+            lst_Docks.append(dock);
+            dock->addIndigoPanel(panel);
+            panel->setDockState(IndigoPanel::HiddenDocked);
+        }
+        break;
+    case IndigoPanel::HiddenFloating:
+        addFloatingPanel(panel);
+        panel->setDockState(IndigoPanel::HiddenFloating);
+
+        break;
+    case IndigoPanel::Floating:
+    default:
+        addFloatingPanel(panel);
+        panel->setDockState(IndigoPanel::Floating);
+        break;
+
+    }
+
+
+
+    this->connect(panel, SIGNAL(mouseMove()), this, SLOT(hoverDock()));
+    this->connect(panel, SIGNAL(mouseReleased()), this, SLOT(dropPanel()));
+    this->connect(panel, SIGNAL(isFloating(int)), this, SLOT(removePanel(int)));
+
+
+}
+
+
+
 void IndigoDockManager::removePanel(int index){
 
     IndigoPanel *pan = qobject_cast<IndigoPanel *>(sender());
@@ -75,11 +120,10 @@ void IndigoDockManager::removePanel(int index){
 
             if(lst_Docks.at(i)->getPanels().contains(pan)){
 
-                lst_Docks.at(i)->removePanel(index);
+                lst_Docks.at(i)->removePanel(index);           
 
-                qDebug() << "pan is:" << pan << endl;
-
-                lst_floatingPanels.append(pan);
+                //lst_floatingPanels.append(pan);
+                addFloatingPanel(pan);
 
                 return;
             }
@@ -118,9 +162,7 @@ void IndigoDockManager::hoverDock(){
 
         for( int i=0; i<lst_Docks.count(); ++i )
         {
-
              lst_Docks.at(i)->hoverDock(pan);
-
         }
 
     }
@@ -152,16 +194,23 @@ void IndigoDockManager::panelDropped(int index){
     IndigoDock *dock = qobject_cast<IndigoDock *>(sender());
     if (!dock) return;
 
-    IndigoPanel *pan = dock->getPanels().at(index);
-
-     qDebug() << "Panel dropped" << endl;
+    IndigoPanel *pan = dock->getPanels().at(index);   
 
     if(lst_floatingPanels.contains(pan)){
         int index = lst_floatingPanels.indexOf(pan);
-        lst_floatingPanels.removeAt(index);
-        qDebug() << "Pan was removed from Floating List" << endl;
+        lst_floatingPanels.removeAt(index);     
     }
 
+}
+
+
+void IndigoDockManager::addFloatingPanel(IndigoPanel * panel){
+
+    if(!lst_floatingPanels.contains(panel)){
+        lst_floatingPanels.append(panel);
+        panel->setParent(this);
+
+    }
 }
 
 
@@ -263,7 +312,7 @@ void IndigoDockManager::loadWorkspace(QString file){
 
                     IndigoDock * sortDock = lst_tmpDocks.at(i);
 
-                    if (sortDock->accessibleName() == indigoDock.attribute("name","")){
+                    if (sortDock->objectName() == indigoDock.attribute("name","")){
 
 
 
@@ -289,12 +338,11 @@ void IndigoDockManager::loadWorkspace(QString file){
                               {
                                   IndigoPanel * sortPanel = lst_tmpPanels.at(i);
 
-                                  if (sortPanel->accessibleName() == indigoPanel.attribute("name", "")){
+                                  if (sortPanel->objectName() == indigoPanel.attribute("name", "")){
 
                                       sortDock->addIndigoPanel(sortPanel);
 
                                       //add attribute
-                                     // sortPanel->setIndex(indigoPanel.attribute("id").toInt());
                                       sortPanel->setExpanderState(indigoPanel.attribute("expanderState", "-1").toInt());
                                       sortPanel->setDockState(indigoPanel.attribute("dockState", "-1").toInt());
 
@@ -342,12 +390,9 @@ void IndigoDockManager::loadWorkspace(QString file){
                     {
                         IndigoPanel * floatingPanel = lst_tmpPanels.at(i);
 
-                        if (floatingPanel->accessibleName() == indigoPanel.attribute("name", "")){
+                        if (floatingPanel->objectName() == indigoPanel.attribute("name", "")){
 
-                            if(!lst_floatingPanels.contains(floatingPanel))
-                                lst_floatingPanels.append(floatingPanel);
-
-                            floatingPanel->setParent(this);
+                            addFloatingPanel(floatingPanel);
 
                             //add attribute
                             floatingPanel->setIndex(indigoPanel.attribute("id", "-1").toInt());
@@ -368,6 +413,10 @@ void IndigoDockManager::loadWorkspace(QString file){
             }
 
         }
+
+
+        lst_tmpDocks.clear();
+        lst_tmpPanels.clear();
 
 
         xmlFile.close();
@@ -412,7 +461,7 @@ void IndigoDockManager::saveWorkspace(QString file){
 
                 xmlWriter.writeStartElement("IndigoDock");
                 xmlWriter.writeAttribute("id",QString::number(i));
-                xmlWriter.writeAttribute("name",dock->accessibleName());
+                xmlWriter.writeAttribute("name",dock->objectName());
                 xmlWriter.writeAttribute("position","");
 
 
@@ -420,15 +469,13 @@ void IndigoDockManager::saveWorkspace(QString file){
 
                     for( int p=0; p<dock->getPanels().count(); ++p )
                     {
-                        IndigoPanel *pan = dock->getPanels().at(p);
+                        IndigoPanel *sortPanel = dock->getPanels().at(p);
 
                         xmlWriter.writeStartElement("IndigoPanel");
-                        xmlWriter.writeAttribute("id",QString::number(pan->Index()));
-                        xmlWriter.writeAttribute("name",pan->accessibleName());
-                        xmlWriter.writeAttribute("expanderState",QString::number(pan->expanderState()));
-                        xmlWriter.writeAttribute("dockState",QString::number(pan->dockState())); // only Docked & HiddenDocked will be available
-                        //xmlWriter.writeAttribute("x",QString::number(pan->geometry().x()));
-                        //xmlWriter.writeAttribute("y",QString::number(pan->geometry().y()));
+                        xmlWriter.writeAttribute("id",QString::number(sortPanel->Index()));
+                        xmlWriter.writeAttribute("name",sortPanel->objectName());
+                        xmlWriter.writeAttribute("expanderState",QString::number(sortPanel->expanderState()));
+                        xmlWriter.writeAttribute("dockState",QString::number(sortPanel->dockState())); // only Docked & HiddenDocked will be available
                         xmlWriter.writeEndElement();
                     }
                 }
@@ -440,7 +487,6 @@ void IndigoDockManager::saveWorkspace(QString file){
 
         }
 
-        qDebug() << lst_floatingPanels.size() << endl;
 
         // Floating Panels
         if(lst_floatingPanels.size() > 0){
@@ -454,7 +500,7 @@ void IndigoDockManager::saveWorkspace(QString file){
 
                 xmlWriter.writeStartElement("IndigoPanel");
                 xmlWriter.writeAttribute("id",QString::number(fPanel->Index()));
-                xmlWriter.writeAttribute("name",fPanel->accessibleName());
+                xmlWriter.writeAttribute("name",fPanel->objectName());
                 xmlWriter.writeAttribute("expanderState",QString::number(fPanel->expanderState()));
                 xmlWriter.writeAttribute("dockState",QString::number(fPanel->dockState())); // only Floating & HiddenFloating will be available
                 xmlWriter.writeAttribute("x",QString::number(fPanel->geometry().x()));
@@ -476,6 +522,5 @@ void IndigoDockManager::saveWorkspace(QString file){
 
     }
 
-     qDebug() << "Save Workspace end" << endl;
 
 }

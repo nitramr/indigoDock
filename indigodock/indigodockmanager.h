@@ -34,6 +34,7 @@ public:
     IndigoDockManager(QWidget *parent = 0);
     void addIndigoDock(IndigoDock * dock);
     void addIndigoPanel(IndigoDock * dock, IndigoPanel * panel, int tabIndex = -1);
+    void addIndigoPanel(IndigoDock * dock, IndigoPanel * panel, IndigoPanel::IndigoDockState dockState, int tabIndex = -1);
     void scrollToPanel(QString name);
     void loadWorkspace(QString file);
     void saveWorkspace(QString file);
@@ -42,6 +43,7 @@ private:
     QList<IndigoDock*> lst_Docks;
     QList<IndigoPanel*> lst_floatingPanels;
     QString version;
+    void addFloatingPanel(IndigoPanel * panel);
 
 
 signals:

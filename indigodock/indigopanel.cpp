@@ -127,28 +127,15 @@ void IndigoPanelHandle::paintEvent(QPaintEvent *event)
 //
 
 
-IndigoPanel::IndigoPanel(QString name, QWidget *parent) :
-   QFrame(parent)
+IndigoPanel::IndigoPanel(QString name, QWidget *dock) :
+   QFrame(dock)
 {
-    // General Properties
-    setMouseTracking(true);
-    setAutoFillBackground( true );
-    setBackgroundRole(QPalette::Background);
-    setDockState(IndigoPanel::Docked);
-
-    setObjectName(name);
-    setMinimumWidth(220);
-    setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding));
-
     int int_padding = 5;
 
     // Widgets
     wdg_handle = new IndigoPanelHandle(this);
     wdg_handle->installEventFilter(this);
     wdg_handle->setFixedHeight(30);
-
-    setCaption(name);
-    setAccessibleName(name);
 
     wdg_normalContainer = new QWidget;
     wdg_normalContainer->setMinimumHeight(100); // simulate fake content - remove for productive usage
@@ -159,7 +146,7 @@ IndigoPanel::IndigoPanel(QString name, QWidget *parent) :
     lyt_extendedArea = new QVBoxLayout(wdg_extendedContainer);
     lyt_extendedArea->setMargin(int_padding);
 
-    wdg_Parent = parent;
+    //wdg_Parent = dock;
 
     // Layouts
     lyt_main = new QVBoxLayout;
@@ -179,6 +166,25 @@ IndigoPanel::IndigoPanel(QString name, QWidget *parent) :
     m_state = IndigoPanel::None;
     m_expander = IndigoPanel::Normal;
     wdg_extendedContainer->hide();
+
+    // General Properties
+    setMouseTracking(true);
+    setAutoFillBackground( true );
+    setBackgroundRole(QPalette::Background);
+    setMinimumWidth(220);
+    setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding));
+    setCaption(name);
+    setAccessibleName(name);
+    setObjectName(name);
+
+}
+
+
+
+IndigoPanel::IndigoPanel(QString name, QIcon icon, int iconSize, QWidget *dock) :
+    IndigoPanel(name, dock)
+{
+    setIcon(icon, iconSize);
 
 }
 
@@ -205,7 +211,6 @@ bool IndigoPanel::eventFilter(QObject *object, QEvent *event)
 
             pnt_relativeOffset = point - xy;
 
-            me->accept();
         }
 
 
@@ -225,18 +230,14 @@ bool IndigoPanel::eventFilter(QObject *object, QEvent *event)
             // undock Panel if not already undocked
             if(dockState() == IndigoPanel::Docked){
 
-                setParent(wdg_Parent);
+                emit isFloating(int_index);
 
                 setDockState(IndigoPanel::Floating);
-
-                emit isFloating(int_index);
 
 
             }
 
             move(point - pnt_relativeOffset);
-            me->accept();
-
             emit mouseMove(); // activate DropZone hover*
 
 
@@ -249,10 +250,7 @@ bool IndigoPanel::eventFilter(QObject *object, QEvent *event)
     case QEvent::MouseButtonRelease:
     {
 
-
         if(dockState() == IndigoPanel::Floating){
-
-            QFrame::show();
             emit mouseReleased(); // activate reparenting in DropZone*
         }
 
@@ -357,10 +355,9 @@ void IndigoPanel::hide(){
          setDockState(IndigoPanel::HiddenFloating);
          break;
      default:
-break;
+        break;
 
      }
-     // QFrame::hide();
 }
 
 
@@ -376,18 +373,13 @@ void IndigoPanel::show(){
         setDockState(IndigoPanel::Floating);
         break;
     default:
-
-break;
+        break;
     }
-   // QFrame::show();
 }
 
 
 
 void IndigoPanel::expander(){
-
-   // QSize s = sizeHint();
-   // s.setHeight(this->m_handle->height());
 
     lyt_main->removeItem(wdg_spacer);
 
@@ -405,7 +397,6 @@ void IndigoPanel::expander(){
             wdg_extendedContainer->hide();
             m_expander = IndigoPanel::Collapsed;
 
-            //resize(s);
         }
         break;
 
@@ -414,8 +405,6 @@ void IndigoPanel::expander(){
         wdg_normalContainer->hide();
         wdg_extendedContainer->hide();
         m_expander = IndigoPanel::Collapsed;
-
-        //resize(s);
 
         break;
 
@@ -451,8 +440,6 @@ IndigoPanel::IndigoDockState IndigoPanel::dockState(){
 
 void IndigoPanel::setDockState(IndigoPanel::IndigoDockState state){
     m_state = state;
-
-    qDebug() << "SetDockState" << Index() << endl;
 
     switch(state){
         case IndigoPanel::HiddenDocked:
