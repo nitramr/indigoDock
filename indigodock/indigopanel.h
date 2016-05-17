@@ -104,10 +104,6 @@ public:
     void setExpanderState(IndigoExpanderState expanderState);
     void setExpanderState(int expanderState);
 
-    void setParent(QWidget * parent);
-
-
-
 protected:   
     bool eventFilter(QObject *object, QEvent *e);
 

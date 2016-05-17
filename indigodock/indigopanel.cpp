@@ -177,6 +177,7 @@ IndigoPanel::IndigoPanel(QString name, QWidget *dock) :
     setAccessibleName(name);
     setObjectName(name);
 
+
 }
 
 
@@ -205,6 +206,7 @@ bool IndigoPanel::eventFilter(QObject *object, QEvent *event)
 
 
             qDebug() << "PanelIndex is:" << Index() << endl;
+            qDebug() << "Parent = " << parent() << endl;
 
             QPoint point = me->globalPos();
             QPoint xy = this->mapToGlobal(QPoint(0,0));
@@ -234,7 +236,6 @@ bool IndigoPanel::eventFilter(QObject *object, QEvent *event)
 
                 setDockState(IndigoPanel::Floating);
 
-
             }
 
             move(point - pnt_relativeOffset);
@@ -251,7 +252,9 @@ bool IndigoPanel::eventFilter(QObject *object, QEvent *event)
     {
 
         if(dockState() == IndigoPanel::Floating){
+
             emit mouseReleased(); // activate reparenting in DropZone*
+            update();
         }
 
         break;
@@ -355,7 +358,8 @@ void IndigoPanel::hide(){
          setDockState(IndigoPanel::HiddenFloating);
          break;
      default:
-        break;
+         QFrame::hide();
+         break;
 
      }
 }
@@ -363,7 +367,6 @@ void IndigoPanel::hide(){
 
 
 void IndigoPanel::show(){
-
 
     switch(dockState()){
     case IndigoPanel::HiddenDocked:
@@ -373,6 +376,7 @@ void IndigoPanel::show(){
         setDockState(IndigoPanel::Floating);
         break;
     default:
+        QFrame::show();
         break;
     }
 }
@@ -442,22 +446,30 @@ void IndigoPanel::setDockState(IndigoPanel::IndigoDockState state){
     m_state = state;
 
     switch(state){
-        case IndigoPanel::HiddenDocked:
-        case IndigoPanel::HiddenFloating:
-            if(!this->isHidden()){
-                QFrame::hide();
-            }
-            break;
+    case IndigoPanel::HiddenDocked:
+        QFrame::hide();
+        break;
 
-        case IndigoPanel::Floating:
-        case IndigoPanel::Docked:
-        case IndigoPanel::None:
-        default:
-            if(!this->isVisible()){
-                QFrame::show();
-            }
-            break;
+    case IndigoPanel::HiddenFloating:
+        setWindowFlags(Qt::Tool | Qt::CustomizeWindowHint);
+        QFrame::hide();
+        break;
+
+    case IndigoPanel::Floating:
+        setWindowFlags(Qt::Tool | Qt::CustomizeWindowHint);
+        QFrame::show();
+        break;
+
+    case IndigoPanel::Docked:
+    case IndigoPanel::None:
+    default:
+
+        QFrame::show();
+
+        break;
     }
+
+    update();
 
 }
 
@@ -557,13 +569,4 @@ void IndigoPanel::setExpanderState(int expanderState){
         }
 
     }
-}
-
-
-
-void IndigoPanel::setParent(QWidget * parent){
-
-    QWidget::setParent(parent);
-
-    setWindowFlags(Qt::ToolTip | Qt::CustomizeWindowHint); // avoid flickering by moving
 }

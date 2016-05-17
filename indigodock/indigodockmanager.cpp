@@ -91,7 +91,7 @@ void IndigoDockManager::addIndigoPanel(IndigoDock * dock, IndigoPanel * panel, I
     case IndigoPanel::Floating:
     default:
         addFloatingPanel(panel);
-        panel->setDockState(IndigoPanel::Floating);
+        panel->setDockState(IndigoPanel::Floating);     
         break;
 
     }
@@ -103,6 +103,18 @@ void IndigoDockManager::addIndigoPanel(IndigoDock * dock, IndigoPanel * panel, I
     this->connect(panel, SIGNAL(isFloating(int)), this, SLOT(removePanel(int)));
 
 
+}
+
+
+
+void IndigoDockManager::addFloatingPanel(IndigoPanel * panel){
+
+    if(!lst_floatingPanels.contains(panel)){
+        lst_floatingPanels.append(panel);      
+        panel->setParent(this);
+        qDebug() << "addFloatingPanel" << panel->objectName() << endl;
+
+    }
 }
 
 
@@ -203,15 +215,6 @@ void IndigoDockManager::panelDropped(int index){
 
 }
 
-
-void IndigoDockManager::addFloatingPanel(IndigoPanel * panel){
-
-    if(!lst_floatingPanels.contains(panel)){
-        lst_floatingPanels.append(panel);
-        panel->setParent(this);
-
-    }
-}
 
 
 void IndigoDockManager::loadWorkspace(QString file){
@@ -394,11 +397,27 @@ void IndigoDockManager::loadWorkspace(QString file){
 
                             addFloatingPanel(floatingPanel);
 
+                            int i_FrameX = floatingPanel->frameGeometry().x();
+                            int i_FrameY = floatingPanel->frameGeometry().y();
+                            int i_FrameW = floatingPanel->frameGeometry().width();
+                            int i_FrameH = floatingPanel->frameGeometry().height();
+
+                            int i_GeoX = floatingPanel->geometry().x();
+                            int i_GeoY = floatingPanel->geometry().y();
+                            int i_GeoW = floatingPanel->geometry().width();
+                            int i_GeoH = floatingPanel->geometry().height();
+
+                            QRect rect_frame = QRect(i_FrameX, i_FrameY, i_FrameW, i_FrameH);
+                            QRect rect_geo = QRect(i_GeoX, i_GeoY, i_GeoW, i_GeoH);
+
+                            qDebug() << rect_frame << rect_geo << endl;
+
                             //add attribute
                             floatingPanel->setIndex(indigoPanel.attribute("id", "-1").toInt());
                             floatingPanel->setExpanderState(indigoPanel.attribute("expanderState", "-1").toInt());
                             floatingPanel->setGeometry(indigoPanel.attribute("x", "0").toInt(), indigoPanel.attribute("y", "0").toInt(), floatingPanel->geometry().width(), floatingPanel->geometry().height());
                             floatingPanel->setDockState(indigoPanel.attribute("dockState", "-1").toInt());
+
 
 
                         }

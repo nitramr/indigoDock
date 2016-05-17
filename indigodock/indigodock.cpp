@@ -37,7 +37,7 @@ IndigoDock::IndigoDock(QString name, QWidget *parent) : QDockWidget(parent)
     int_padding = 3;
     int_placeholderHeight = 3;
 
-    wdg_toolbar = new  IndigoTabBar;    
+    wdg_toolbar = new IndigoTabBar;
 
     wdg_placeholder = new QWidget();
     wdg_placeholder->setFixedHeight(int_placeholderHeight);
@@ -149,7 +149,7 @@ void IndigoDock::addPanel (IndigoPanel *panel, int tabIndex){
         wdg_panelSplitter->setCollapsible(tabIndex, false);
     }
 
-    panel->setDockState(IndigoPanel::Docked);  
+    panel->setDockState(IndigoPanel::Docked);
     //panel->show();
 
     updatePanels();
