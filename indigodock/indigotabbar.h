@@ -125,6 +125,8 @@ private:
    int countVisibleTabs();
    int countHiddenTabs();
 
+   int limitTabRange(int TabIndex);
+
    void moveTab();
    void calculateSize();
 

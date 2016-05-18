@@ -353,6 +353,7 @@ void IndigoPanel::hide(){
      switch(dockState()){
      case IndigoPanel::Docked:
          setDockState(IndigoPanel::HiddenDocked);
+         emit panelClosed(Index());
          break;
      case IndigoPanel::Floating:
          setDockState(IndigoPanel::HiddenFloating);
@@ -371,6 +372,7 @@ void IndigoPanel::show(){
     switch(dockState()){
     case IndigoPanel::HiddenDocked:
         setDockState(IndigoPanel::Docked);
+        emit panelShown(Index());
         break;
     case IndigoPanel::HiddenFloating:
         setDockState(IndigoPanel::Floating);
@@ -463,9 +465,7 @@ void IndigoPanel::setDockState(IndigoPanel::IndigoDockState state){
     case IndigoPanel::Docked:
     case IndigoPanel::None:
     default:
-
         QFrame::show();
-
         break;
     }
 

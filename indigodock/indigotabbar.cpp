@@ -89,22 +89,24 @@ IndigoTabBar::IndigoTabBar(QWidget *parent) :
 
 void IndigoTabBar::mousePressEvent(QMouseEvent*event){
 
-    if(countVisibleTabs() <= 0) return;
+    int visTabs = countVisibleTabs();
+
+    if(visTabs <= 0) return;
 
     QPoint mouse = event->pos();
 
-
     switch (m_tabOrientation){
 
-        case IndigoTabBar::Vertical:
+        case IndigoTabBar::Vertical:{
             int_hoverIndex = mouse.y() / (int_tabHeight + int_gap);
-            int_oldIndex = realTabIndex(mouse.y()/ (int_tabHeight + int_gap));
+
+            int_oldIndex = realTabIndex(mouse.y() / (int_tabHeight + int_gap));
 
             break;
-
+}
         case IndigoTabBar::Horizontal:
             int_hoverIndex = mouse.x() / (int_tabWidth + int_gap);
-            int_oldIndex = realTabIndex(mouse.x()/ (int_tabWidth + int_gap));
+            int_oldIndex = realTabIndex(mouse.x() / (int_tabWidth + int_gap));
 
             break;
 
@@ -112,8 +114,10 @@ void IndigoTabBar::mousePressEvent(QMouseEvent*event){
 
 
     // drag started
-    if (event->buttons() == Qt::LeftButton && bool_allowDrag) {
+    if (event->buttons() == Qt::LeftButton && bool_allowDrag && (int_hoverIndex >= 0 && int_hoverIndex < visTabs)) {
+        int_hoverIndex = limitTabRange(int_hoverIndex);
         int_dragIndex = int_hoverIndex;
+
     }
 
 
@@ -125,7 +129,9 @@ void IndigoTabBar::mousePressEvent(QMouseEvent*event){
 
 void IndigoTabBar::mouseReleaseEvent(QMouseEvent*event){
 
-    if(countVisibleTabs() <= 0) return;
+    int visTabs = countVisibleTabs();
+
+    if(visTabs <= 0) return;
 
 
     QPoint mouse = event->pos();
@@ -133,12 +139,12 @@ void IndigoTabBar::mouseReleaseEvent(QMouseEvent*event){
     switch (m_tabOrientation){
 
         case IndigoTabBar::Vertical:
-            int_newIndex = realTabIndex(mouse.y()/ (int_tabHeight + int_gap));
+            int_newIndex = realTabIndex(mouse.y() / (int_tabHeight + int_gap));
 
             break;
 
         case IndigoTabBar::Horizontal:
-        int_newIndex = realTabIndex(mouse.x()/ (int_tabWidth + int_gap));
+        int_newIndex = realTabIndex(mouse.x() / (int_tabWidth + int_gap));
 
         break;
 
@@ -156,8 +162,9 @@ void IndigoTabBar::mouseReleaseEvent(QMouseEvent*event){
     }else{
 
         // Scroll to position in DropZone after mouse click
-        emit tabClicked(int_newIndex);
-
+        if(int_hoverIndex >= 0 && int_hoverIndex < visTabs){
+            emit tabClicked(int_newIndex);
+        }
 
     }
 
@@ -170,8 +177,9 @@ void IndigoTabBar::mouseReleaseEvent(QMouseEvent*event){
 
 void IndigoTabBar::mouseMoveEvent(QMouseEvent*event){
 
+    int visTabs = countVisibleTabs();
 
-    if(countVisibleTabs() <= 0) return;
+    if(visTabs <= 0) return;
 
     QPoint mouse = event->pos();
 
@@ -193,21 +201,40 @@ void IndigoTabBar::mouseMoveEvent(QMouseEvent*event){
     }
 
 
-    if (int_hoverIndex >= lst_TabList.size()-1) int_hoverIndex = lst_TabList.size()-1;
-    else if (int_hoverIndex < 0) int_hoverIndex = 0;
+    if(int_hoverIndex >= 0 && int_hoverIndex < visTabs){
+
+        // ToolTip
+       // setToolTip(lst_TabList.at(int_hoverIndex)->toolTip());
 
 
-    // ToolTip
-   // setToolTip(lst_TabList.at(int_hoverIndex)->toolTip());
-
-
-    // drag proceed
-    if (event->buttons() == Qt::LeftButton && bool_allowDrag) {
-        bool_dragProceed = true;
-        int_realIndex = int_oldIndex;
+        // drag proceed
+        if (event->buttons() == Qt::LeftButton && bool_allowDrag) {
+            bool_dragProceed = true;
+            int_realIndex = int_oldIndex;
+        }
     }
 
     update();
+
+}
+
+
+
+int IndigoTabBar::limitTabRange(int TabIndex){
+
+    int limitTab = TabIndex;
+    int limit = countVisibleTabs();
+
+    if(limitTab >= limit){
+        limitTab = limit;
+    }
+    if(limitTab < 0){
+        limitTab = -1;
+    }
+
+   // qDebug() << "limitTab Index" << limitTab << endl;
+
+    return limitTab;
 
 }
 
@@ -251,7 +278,7 @@ void IndigoTabBar::paintEvent(QPaintEvent *event)
     for (int i = 0; i < lst_TabList.size(); ++i){
 
 
-        // draw visibile tabs
+        // draw visible tabs
         IndigoTab *tab = lst_TabList.at(i);
 
         if(tab->displayState() == IndigoTab::Visible){
@@ -288,26 +315,8 @@ void IndigoTabBar::paintEvent(QPaintEvent *event)
             QPixmap pix = icon.pixmap(QSize(int_tabWidth, int_tabHeight));
 
 
-            // draw highlighter
-           /* if(int_hoverIndex == visIndex && bool_dragProceed){
-
-
-                col_colorHighlightAlpha = Helper().blendColor(QColor(this->palette().color(QPalette::Background)),
-                                                   QColor(this->palette().color(QPalette::Highlight)),
-                                                   dbl_transparency);
-
-                p.fillRect(tabRect,
-                           QColor(this->palette().color(QPalette::Highlight)));
-
-                p.fillRect(tabRect.x()+int_borderHighlight,
-                           tabRect.y()+int_borderHighlight,
-                           tabRect.width() -(int_borderHighlight*2),
-                           tabRect.height() -(int_borderHighlight*2),
-                           col_colorHighlightAlpha);
-
-
-             // clear hovered background
-            }else */if(int_hoverIndex == visIndex && bool_dragProceed == false){
+            // draw hovered background
+            if(int_hoverIndex == visIndex && bool_dragProceed == false){
 
                 p.fillRect(tabRect,
                            QColor(this->palette().color(QPalette::Base)));
@@ -323,19 +332,22 @@ void IndigoTabBar::paintEvent(QPaintEvent *event)
                     p.drawPixmap(offsetRect, pix );
 
 
+
                 }else if(visIndex >= int_hoverIndex && visIndex < int_dragIndex && bool_dragProceed){
 
                     QRect offsetRect(xP, yP, int_tabWidth, int_tabHeight);
                     p.drawPixmap(offsetRect, pix );
 
+
                 }else{
                     p.drawPixmap(tabRect, pix );
+
                 }
 
             }
 
             // draw clicked tab if no drag proceed
-            if(int_dragIndex == visIndex && bool_dragProceed == false){
+            if(int_dragIndex == visIndex && !bool_dragProceed){
                 p.drawPixmap(tabRect, pix );
             }
 
@@ -381,26 +393,25 @@ void IndigoTabBar::paintEvent(QPaintEvent *event)
 
         switch (m_tabOrientation){
 
-            case IndigoTabBar::Vertical:
+        case IndigoTabBar::Vertical:
 
-                p.fillRect(this->geometry().x(),
-                           this->geometry().y(),
-                           int_tabWidth,
-                           int_borderHighlight,
-                           QColor(this->palette().color(QPalette::Highlight)));
+            p.fillRect(this->geometry().x(),
+                       this->geometry().y(),
+                       int_tabWidth,
+                       int_borderHighlight,
+                       QColor(this->palette().color(QPalette::Highlight)));
 
+            break;
 
-                break;
+        case IndigoTabBar::Horizontal:
 
-            case IndigoTabBar::Horizontal:
-
-                p.fillRect(this->geometry().x(),
+            p.fillRect(this->geometry().x(),
                        this->geometry().y(),
                        int_borderHighlight,
                        int_tabHeight,
                        QColor(this->palette().color(QPalette::Highlight)));
 
-                break;
+            break;
 
         }
 
