@@ -109,6 +109,7 @@ private:
    int int_hoverIndex;
    int int_oldIndex;
    int int_newIndex;
+   bool bool_dragStart;
    bool bool_dragProceed;
    bool bool_hover;
    bool bool_allowDrag;
