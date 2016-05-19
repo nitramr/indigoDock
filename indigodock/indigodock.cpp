@@ -28,10 +28,10 @@ IndigoDock::IndigoDock(QString name, QWidget *parent) : QDockWidget(parent)
 
 
     QString styleSheetScroll( "QScrollArea {"
-                                "border: 0px solid transparent;"
-                            "}"
+                              "border: 0px solid transparent;"
+                              "}"
 
-            );
+                              );
 
 
     int_padding = 3;
@@ -101,7 +101,7 @@ IndigoDock::IndigoDock(QString name, QWidget *parent) : QDockWidget(parent)
     connect(this, SIGNAL(panelRemoved(int)), wdg_toolbar, SLOT(removeTab(int)));
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(updateTabPosition(Qt::DockWidgetArea)));
     connect(wdg_toolbar, SIGNAL(tabMoved(int,int)), this, SLOT(movePanel(int,int)));
-    connect(wdg_toolbar, SIGNAL(tabClicked(int)), this, SLOT(scrollToPanel(int))); 
+    connect(wdg_toolbar, SIGNAL(tabClicked(int)), this, SLOT(scrollToPanel(int)));
 
 }
 
@@ -182,7 +182,7 @@ void IndigoDock::updatePanels(){
 void IndigoDock::removePanel(int index){
 
     lst_PanelList.removeAt(index);
-    updatePanels();  
+    updatePanels();
     emit panelRemoved(index);
 }
 
@@ -234,6 +234,7 @@ void IndigoDock::scrollToPanel(QString PanelName){
             if(lst_PanelList.at(i)->objectName() == PanelName){
 
                 this->scrollToPanel(i);
+                return;
             }
         }
     }
@@ -326,54 +327,54 @@ void IndigoDock::updateTabPosition(Qt::DockWidgetArea area){
 
     switch(area){
     case Qt::LeftDockWidgetArea:{
-            wdg_toolbar->setTabOrientation(IndigoTabBar::Vertical);
+        wdg_toolbar->setTabOrientation(IndigoTabBar::Vertical);
 
-            wdg_mainSplitter->setOrientation(Qt::Horizontal);
-            wdg_mainSplitter->addWidget(wdg_scrollArea_tb);
-            wdg_mainSplitter->addWidget(wdg_scrollArea_dz);
+        wdg_mainSplitter->setOrientation(Qt::Horizontal);
+        wdg_mainSplitter->addWidget(wdg_scrollArea_tb);
+        wdg_mainSplitter->addWidget(wdg_scrollArea_dz);
 
 
-            wdg_scrollArea_tb->setMinimumSize(QSize(wdg_toolbar->width(), wdg_toolbar->width()));
-            wdg_scrollArea_tb->setMaximumSize(wdg_toolbar->maximumSize());            
+        wdg_scrollArea_tb->setMinimumSize(QSize(wdg_toolbar->width(), wdg_toolbar->width()));
+        wdg_scrollArea_tb->setMaximumSize(wdg_toolbar->maximumSize());
 
         break;
     }
     case Qt::RightDockWidgetArea:{
-            wdg_toolbar->setTabOrientation(IndigoTabBar::Vertical);
+        wdg_toolbar->setTabOrientation(IndigoTabBar::Vertical);
 
-            wdg_mainSplitter->setOrientation(Qt::Horizontal);
-            wdg_mainSplitter->addWidget(wdg_scrollArea_dz);
-            wdg_mainSplitter->addWidget(wdg_scrollArea_tb);
+        wdg_mainSplitter->setOrientation(Qt::Horizontal);
+        wdg_mainSplitter->addWidget(wdg_scrollArea_dz);
+        wdg_mainSplitter->addWidget(wdg_scrollArea_tb);
 
-            wdg_scrollArea_tb->setMinimumSize(QSize(wdg_toolbar->width(), wdg_toolbar->width()));
-            wdg_scrollArea_tb->setMaximumSize(wdg_toolbar->maximumSize());
+        wdg_scrollArea_tb->setMinimumSize(QSize(wdg_toolbar->width(), wdg_toolbar->width()));
+        wdg_scrollArea_tb->setMaximumSize(wdg_toolbar->maximumSize());
 
 
         break;
     }
     case Qt::TopDockWidgetArea:{
 
-            wdg_toolbar->setTabOrientation(IndigoTabBar::Horizontal);
+        wdg_toolbar->setTabOrientation(IndigoTabBar::Horizontal);
 
-            wdg_mainSplitter->setOrientation(Qt::Vertical);
-            wdg_mainSplitter->addWidget(wdg_scrollArea_tb);
-            wdg_mainSplitter->addWidget(wdg_scrollArea_dz);
+        wdg_mainSplitter->setOrientation(Qt::Vertical);
+        wdg_mainSplitter->addWidget(wdg_scrollArea_tb);
+        wdg_mainSplitter->addWidget(wdg_scrollArea_dz);
 
-            wdg_scrollArea_tb->setMinimumSize(QSize(wdg_toolbar->height(), wdg_toolbar->height()));
-            wdg_scrollArea_tb->setMaximumSize(wdg_toolbar->maximumSize());
+        wdg_scrollArea_tb->setMinimumSize(QSize(wdg_toolbar->height(), wdg_toolbar->height()));
+        wdg_scrollArea_tb->setMaximumSize(wdg_toolbar->maximumSize());
 
         break;
     }
     case Qt::BottomDockWidgetArea:{
 
-            wdg_toolbar->setTabOrientation(IndigoTabBar::Horizontal);
+        wdg_toolbar->setTabOrientation(IndigoTabBar::Horizontal);
 
-            wdg_mainSplitter->setOrientation(Qt::Vertical);
-            wdg_mainSplitter->addWidget(wdg_scrollArea_dz);
-            wdg_mainSplitter->addWidget(wdg_scrollArea_tb);
+        wdg_mainSplitter->setOrientation(Qt::Vertical);
+        wdg_mainSplitter->addWidget(wdg_scrollArea_dz);
+        wdg_mainSplitter->addWidget(wdg_scrollArea_tb);
 
-            wdg_scrollArea_tb->setMinimumSize(QSize(wdg_toolbar->height(), wdg_toolbar->height()));
-            wdg_scrollArea_tb->setMaximumSize(wdg_toolbar->maximumSize());
+        wdg_scrollArea_tb->setMinimumSize(QSize(wdg_toolbar->height(), wdg_toolbar->height()));
+        wdg_scrollArea_tb->setMaximumSize(wdg_toolbar->maximumSize());
 
 
         break;
@@ -436,7 +437,7 @@ void IndigoDock::hoverDock(IndigoPanel * pan){
 
             wdg_toolbar->hoverTabBar();
 
-         }
+        }
 
     }else{
         this->removePlaceholder();
@@ -470,8 +471,8 @@ void IndigoDock::dropPanel(IndigoPanel *pan){
 
 void IndigoDock::resizeEvent(QResizeEvent *e){
 
-     QWidget::resizeEvent(e);
-     updateMinHeight();
+    QWidget::resizeEvent(e);
+    updateMinHeight();
 
 }
 

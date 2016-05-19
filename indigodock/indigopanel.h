@@ -35,10 +35,17 @@ class IndigoPanelHandle : public QWidget
 {
         Q_OBJECT
 public:
+
+    enum IndigoExpanderState{
+        Normal = 0,
+        Advanced = 1
+    };
+
     IndigoPanelHandle(QWidget* parent = 0);
     QString Caption();
     void setCaption(QString title, int fontSize);
     void setIcon(QIcon icon, int iconSize);
+    void setExpanderState(IndigoExpanderState expanderState);
 
 protected:
     void paintEvent(QPaintEvent *event);
@@ -49,7 +56,7 @@ private:
     QString str_title;
     int int_fontSize;
     QToolButton * wdg_btnClose;
-    QToolButton * wdg_btnFloat;
+    QToolButton * wdg_btnExpander;
 
 
 signals:
@@ -72,18 +79,12 @@ public:
         None = 4
     };
 
-    enum IndigoExpanderState{
-        Normal = 0,
-        Advanced = 1,
-        Collapsed = 2
-    };
+
 
     IndigoPanel(QString name, QWidget* dock = 0);
     IndigoPanel(QString name, QIcon icon, int iconSize = 22, QWidget* dock = 0);
     void addWidgetNormal(QWidget *content);
     void addWidgetNormal(QLayout *content);
-    void addWidgetExtend(QWidget *content);
-    void addWidgetExtend(QLayout *content);
 
     IndigoPanelHandle * wdg_handle;
 
@@ -100,8 +101,8 @@ public:
     void setDockState(IndigoDockState state);
     void setDockState(int state);
 
-    IndigoExpanderState expanderState();
-    void setExpanderState(IndigoExpanderState expanderState);
+    IndigoPanelHandle::IndigoExpanderState expanderState();
+    void setExpanderState(IndigoPanelHandle::IndigoExpanderState expanderState);
     void setExpanderState(int expanderState);
 
 protected:   
@@ -109,16 +110,14 @@ protected:
 
 private:   
     QWidget *wdg_normalContainer;
-    QWidget *wdg_extendedContainer;
     QVBoxLayout *lyt_normalArea;
-    QVBoxLayout *lyt_extendedArea;
     QVBoxLayout *lyt_main;
 
     QPoint pnt_relativeOffset;
     QIcon ico_icon;    
     int int_index; 
     IndigoDockState m_state;
-    IndigoExpanderState m_expander;
+    IndigoPanelHandle::IndigoExpanderState m_expander;
     QSpacerItem *wdg_spacer;
 
 signals:
@@ -127,6 +126,8 @@ signals:
     void isFloating(int index);
     void panelClosed(int index);
     void panelShown(int index);
+    void isAdvanced();
+    void isNormal();
 
 public slots:
     void show();

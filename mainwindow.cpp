@@ -370,15 +370,24 @@ void MainWindow::textPanel(IndigoPanel *parent){
     QLineEdit *textBox = new QLineEdit("Icon Test");
     QLineEdit *textBox2 = new QLineEdit("135 °");
     AnglePicker * aPicker = new AnglePicker(135);
-
+    QLabel * lbl_ext1 = new QLabel("Extended Features 1");
+    QLabel * lbl_ext2 = new QLabel("Extended Features 2");
+    lbl_ext1->hide();
+    lbl_ext2->hide();
 
     QFormLayout *qfl1 = new QFormLayout();
     qfl1->setMargin(0);
+    qfl1->addRow( lbl_ext1 );
     qfl1->addRow( wdg_icon, textBox );
     qfl1->addRow( aPicker, textBox2 );
-
+    qfl1->addRow( lbl_ext2 );
 
     parent->addWidgetNormal(qfl1);
+
+    connect(parent, SIGNAL(isAdvanced()), lbl_ext1, SLOT(show()));
+    connect(parent, SIGNAL(isNormal()), lbl_ext1, SLOT(hide()));
+    connect(parent, SIGNAL(isAdvanced()), lbl_ext2, SLOT(show()));
+    connect(parent, SIGNAL(isNormal()), lbl_ext2, SLOT(hide()));
 
 }
 
