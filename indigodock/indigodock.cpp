@@ -34,8 +34,8 @@ IndigoDock::IndigoDock(QString name, QWidget *parent) : QDockWidget(parent)
                               );
 
 
-    int_padding = 3;
-    int_placeholderHeight = 3;
+    int_padding = 2;
+    int_placeholderHeight = int_padding;
 
     wdg_toolbar = new IndigoTabBar;
 

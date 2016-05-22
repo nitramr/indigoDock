@@ -382,6 +382,8 @@ void IndigoPanel::show(){
         QFrame::show();
         break;
     }
+
+    update();
 }
 
 
@@ -391,7 +393,6 @@ void IndigoPanel::expander(){
     lyt_main->removeItem(wdg_spacer);
 
 
-
     switch(expanderState()){
     case IndigoPanelHandle::Normal:
 
@@ -399,8 +400,6 @@ void IndigoPanel::expander(){
         m_expander = IndigoPanelHandle::Advanced;
         wdg_handle->setExpanderState(m_expander);
         emit isAdvanced();
-        qDebug() << "Panel isAdvanced signal was fired" << endl;
-
         break;
 
     case IndigoPanelHandle::Advanced:
@@ -409,13 +408,10 @@ void IndigoPanel::expander(){
         m_expander = IndigoPanelHandle::Normal;
         wdg_handle->setExpanderState(m_expander);
         emit isNormal();
-        qDebug() << "Panel isNormal signal was fired" << endl;
         break;
-
 
     }
 
-    // this->adjustSize();
 }
 
 
@@ -432,17 +428,13 @@ void IndigoPanel::setExpanderState(IndigoPanelHandle::IndigoExpanderState expand
     switch(expanderState){
     case IndigoPanelHandle::Normal:
         wdg_handle->setExpanderState(expanderState);
-        emit isNormal();
-         qDebug() << "Panel isNormal signal was fired" << endl;
-
+        emit isNormal();       
         break;
 
     case IndigoPanelHandle::Advanced:
 
         wdg_handle->setExpanderState(expanderState);
         emit isAdvanced();
-         qDebug() << "Panel isAdvanced signal was fired" << endl;
-
         break;
     }
 
@@ -490,12 +482,16 @@ void IndigoPanel::setDockState(IndigoPanel::IndigoDockState state){
 
     case IndigoPanel::HiddenFloating:
         setWindowFlags(Qt::Tool | Qt::CustomizeWindowHint);
+        this->adjustSize();
         QFrame::hide();
+
         break;
 
     case IndigoPanel::Floating:
         setWindowFlags(Qt::Tool | Qt::CustomizeWindowHint);
+        this->adjustSize();
         QFrame::show();
+
         break;
 
     case IndigoPanel::Docked:

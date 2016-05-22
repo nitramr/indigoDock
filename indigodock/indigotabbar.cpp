@@ -67,7 +67,7 @@ IndigoTabBar::IndigoTabBar(QWidget *parent) :
     int_tabWidth = 32;
     int_hoverIndex = -1; // index of visible hovered tab
     int_gap = 1;
-    int_borderHighlight = 3;
+    int_borderHighlight = 2;
     bool_dragStart = false;
     bool_dragProceed = false;
     bool_hover = false;
@@ -404,6 +404,7 @@ void IndigoTabBar::paintEvent(QPaintEvent *event)
 
             p.fillRect(this->geometry().x(),
                        this->geometry().y(),
+                       //visIndex * (int_tabHeight + int_gap),
                        int_tabWidth,
                        int_borderHighlight,
                        QColor(this->palette().color(QPalette::Highlight)));
@@ -413,6 +414,7 @@ void IndigoTabBar::paintEvent(QPaintEvent *event)
         case IndigoTabBar::Horizontal:
 
             p.fillRect(this->geometry().x(),
+                       //visIndex * (int_tabWidth + int_gap),
                        this->geometry().y(),
                        int_borderHighlight,
                        int_tabHeight,
