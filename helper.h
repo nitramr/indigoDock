@@ -25,6 +25,7 @@
 #define HELPER_H
 
 #include <QColor>
+#include <QWidget>
 
 class Helper
 {
@@ -33,5 +34,7 @@ public:
     QColor blendColor(QColor color1, QColor color2, double ratio);
 
 };
+
+
 
 #endif // HELPER_H

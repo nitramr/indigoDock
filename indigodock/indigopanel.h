@@ -118,7 +118,7 @@ private:
     int int_index; 
     IndigoDockState m_state;
     IndigoPanelHandle::IndigoExpanderState m_expander;
-    QSpacerItem *wdg_spacer;
+   // QSpacerItem *wdg_spacer;
 
 signals:
     void mouseReleased();

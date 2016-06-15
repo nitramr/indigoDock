@@ -37,4 +37,6 @@ QColor Helper::blendColor(QColor color1, QColor color2, double ratio){
                 color1.blue()* (1-ratio) + color2.blue()*ratio,
                 255);
 
+
+
 }

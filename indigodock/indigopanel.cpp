@@ -38,6 +38,7 @@ IndigoPanelHandle::IndigoPanelHandle(QWidget *parent) :
 {
 
     setAutoFillBackground( true );
+    setFixedHeight(30);
 
     str_title = "";
 
@@ -157,27 +158,18 @@ IndigoPanel::IndigoPanel(QString name, QWidget *dock) :
     // Widgets
     wdg_handle = new IndigoPanelHandle(this);
     wdg_handle->installEventFilter(this);
-    wdg_handle->setFixedHeight(30);
 
     wdg_normalContainer = new QWidget;
-  // wdg_normalContainer->setMinimumHeight(100); // simulate fake content - remove for productive usage
     lyt_normalArea = new QVBoxLayout(wdg_normalContainer);
     lyt_normalArea->setMargin(int_padding);
-
-
-    //wdg_Parent = dock;
 
     // Layouts
     lyt_main = new QVBoxLayout;
     lyt_main->setMargin(0);
-    setLayout(lyt_main);
-
     lyt_main->addWidget(wdg_handle);
     lyt_main->addWidget(wdg_normalContainer);
     lyt_main->setAlignment(Qt::AlignTop);
-
-    wdg_spacer = new QSpacerItem(10, 0, QSizePolicy::Ignored, QSizePolicy::MinimumExpanding);
-    lyt_main->addSpacerItem(wdg_spacer);
+    setLayout(lyt_main);
 
     // Extended Properties
     int_index = -1;
@@ -188,8 +180,8 @@ IndigoPanel::IndigoPanel(QString name, QWidget *dock) :
     setMouseTracking(true);
     setAutoFillBackground( true );
     setBackgroundRole(QPalette::Background);
-    setMinimumWidth(220);
-    setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding));
+    setMinimumWidth(200);
+    setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding));
     setCaption(name);
     setAccessibleName(name);
     setObjectName(name);
@@ -277,6 +269,12 @@ bool IndigoPanel::eventFilter(QObject *object, QEvent *event)
         break;
 
     }
+
+
+    case QEvent::MouseButtonDblClick:
+
+        expander();
+        break;
 
     default:
         break;
@@ -389,8 +387,6 @@ void IndigoPanel::show(){
 
 
 void IndigoPanel::expander(){
-
-    lyt_main->removeItem(wdg_spacer);
 
 
     switch(expanderState()){

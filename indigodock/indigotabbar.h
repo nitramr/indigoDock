@@ -73,18 +73,13 @@ class IndigoTabBar : public QWidget
     Q_OBJECT
 public:
 
-    enum Orientation{
-        Horizontal,
-        Vertical
-    };
-
     IndigoTabBar(QWidget* parent = 0);
 
     QList<IndigoTab*> lst_TabList;
 
     int currentIndex();
-    Orientation TabOrientation();
-    void setTabOrientation(Orientation tabDirection);    
+    Qt::Orientation TabOrientation();
+    void setTabOrientation(Qt::Orientation tabDirection);
     void setTabSize(int side);
     void setTabSize(int width, int height);
     bool movingTabs();
@@ -118,7 +113,7 @@ private:
    int int_dragIndex;
    int int_minDimension;
 
-   Orientation m_tabOrientation;
+   Qt::Orientation m_tabOrientation;
    QColor col_colorHighlightAlpha;
 
    int realTabIndex(int mouseAxis);

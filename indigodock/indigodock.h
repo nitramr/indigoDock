@@ -52,7 +52,7 @@ public:
 private:
 
     QList<IndigoPanel*> lst_PanelList;
-    QVBoxLayout * lyt_dropzone;
+    QBoxLayout * lyt_dropzone;
 
     IndigoTabBar * wdg_toolbar;
     QSplitter *wdg_mainSplitter;
@@ -61,14 +61,19 @@ private:
     QScrollArea * wdg_scrollArea_tb;
     QWidget *wdg_dropzone;
     QWidget * wdg_placeholder;
+    Qt::Orientation m_orientation;
+
 
     int int_padding;
     int int_placeholderHeight;
+    int int_minheight;
+    int int_minWidth;
 
     void updatePanels();
     void addPlaceholder (int index = -1);
     void removePlaceholder ();
     void addPanel (IndigoPanel *panel, int tabIndex);
+    void calculateSize();
 
 
 protected:

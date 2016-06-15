@@ -35,6 +35,7 @@ Here is how you run it:
 * application has a theme switcher (dark/light)  
 * setting will saved in a settings file  
 * auto scroll to active panel by click on link icon  
+* panel stack float horizontal or vertical based on dock orientation  
 
 
 ## Issues:
@@ -52,7 +53,8 @@ Here is how you run it:
 ## Roadmap v1.1 - Multiple Dock support
 * drag and drop panels between more than one dock **(done)**  
 * load/save workspace **(started)**  
-* horizontal panel layout **(started)**  
+* horizontal panel layout **(done)**  
+* floating panel layout  
 
 ## Sub Project - Control Element set
 * AnglePicker **(done)**  
