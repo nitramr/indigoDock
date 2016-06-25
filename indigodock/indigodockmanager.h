@@ -36,8 +36,9 @@ public:
     void addIndigoPanel(IndigoDock * dock, IndigoPanel * panel, int tabIndex = -1);
     void addIndigoPanel(IndigoDock * dock, IndigoPanel * panel, IndigoPanel::IndigoDockState dockState, int tabIndex = -1);
     void scrollToPanel(QString name);
-    void loadWorkspace(QString file);
-    void saveWorkspace(QString file);
+
+    QByteArray saveWorkspace();
+    void loadWorkspace(QByteArray workspaceArray);
 
 private:
     QList<IndigoDock*> lst_Docks;

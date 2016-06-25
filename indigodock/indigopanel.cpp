@@ -213,10 +213,6 @@ bool IndigoPanel::eventFilter(QObject *object, QEvent *event)
 
         if (me->buttons() == Qt::LeftButton) {
 
-
-            qDebug() << "PanelIndex is:" << Index() << endl;
-            qDebug() << "Parent = " << parent() << endl;
-
             QPoint point = me->globalPos();
             QPoint xy = this->mapToGlobal(QPoint(0,0));
 
@@ -248,6 +244,7 @@ bool IndigoPanel::eventFilter(QObject *object, QEvent *event)
             }
 
             move(point - pnt_relativeOffset);
+
             emit mouseMove(); // activate DropZone hover*
 
 

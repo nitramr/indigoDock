@@ -217,25 +217,17 @@ void IndigoDockManager::panelDropped(int index){
 
 
 
-void IndigoDockManager::loadWorkspace(QString file){
+void IndigoDockManager::loadWorkspace(QByteArray workspaceArray){
 
 
     qDebug() << "Load Workspace" << endl;
 
-    QFile xmlFile(file);
-
-    if (!xmlFile.open(QIODevice::ReadOnly))
-    {
-        QMessageBox::warning(0, "Workspace wont load!", "Workspace file not found! Save Workspace at first to create a file.");
-    }
-    else
-    {
-
         QList<IndigoDock*> lst_tmpDocks;
         QList<IndigoPanel*> lst_tmpPanels;
 
+
         QDomDocument doc;
-        doc.setContent(xmlFile.readAll());
+        doc.setContent(workspaceArray);
 
         QDomElement root = doc.documentElement();
         QDomElement indigoDock;
@@ -316,16 +308,6 @@ void IndigoDockManager::loadWorkspace(QString file){
                     IndigoDock * sortDock = lst_tmpDocks.at(i);
 
                     if (sortDock->objectName() == indigoDock.attribute("name","")){
-
-
-
-                      /*qDebug() << "Dock"
-                               << "id" << indigoDock.attribute("id")
-                               << "name" << indigoDock.attribute("name")
-                               << "position" << indigoDock.attribute("position");
-                       */
-
-                      // Add atrributes of dock
 
 
                       // add sorted panels
@@ -438,108 +420,100 @@ void IndigoDockManager::loadWorkspace(QString file){
         lst_tmpPanels.clear();
 
 
-        xmlFile.close();
-    }
-
-
 }
 
 
 
-void IndigoDockManager::saveWorkspace(QString file){
+
+QByteArray IndigoDockManager::saveWorkspace(){
+
+qDebug() << "Save Workspace start" << endl;
 
 
-    qDebug() << "Save Workspace start" << endl;
-
-    QXmlStreamWriter xmlWriter;
-    QFile xmlFile(file);
-
-    if (!xmlFile.open(QIODevice::WriteOnly))
-    {
-        QMessageBox::warning(0, "Error!", "Error opening workspace file");
-    }
-    else
-    {
-
-        xmlWriter.setDevice(&xmlFile);
-        xmlWriter.setAutoFormatting(true);
+QByteArray qba_panels;
 
 
-        xmlWriter.writeStartDocument();
 
-        xmlWriter.writeStartElement("IndigoDockManager");
-        xmlWriter.writeAttribute("version",version);        
+QXmlStreamWriter xmlWriter(&qba_panels);
 
-        // Docks
-        if(lst_Docks.size() > 0){
-
-            for( int i=0; i<lst_Docks.count(); ++i )
-            {
-
-                IndigoDock *dock = lst_Docks.at(i);
-
-                xmlWriter.writeStartElement("IndigoDock");
-                xmlWriter.writeAttribute("id",QString::number(i));
-                xmlWriter.writeAttribute("name",dock->objectName());
-                xmlWriter.writeAttribute("position","");
+    xmlWriter.setAutoFormatting(true);
 
 
-                if(dock->getPanels().size() > 0){
+    xmlWriter.writeStartDocument();
 
-                    for( int p=0; p<dock->getPanels().count(); ++p )
-                    {
-                        IndigoPanel *sortPanel = dock->getPanels().at(p);
+    xmlWriter.writeStartElement("IndigoDockManager");
+    xmlWriter.writeAttribute("version",version);
 
-                        xmlWriter.writeStartElement("IndigoPanel");
-                        xmlWriter.writeAttribute("id",QString::number(sortPanel->Index()));
-                        xmlWriter.writeAttribute("name",sortPanel->objectName());
-                        xmlWriter.writeAttribute("expanderState",QString::number(sortPanel->expanderState()));
-                        xmlWriter.writeAttribute("dockState",QString::number(sortPanel->dockState())); // only Docked & HiddenDocked will be available
-                        xmlWriter.writeEndElement();
-                    }
+    // Docks
+    if(lst_Docks.size() > 0){
+
+        for( int i=0; i<lst_Docks.count(); ++i )
+        {
+
+            IndigoDock *dock = lst_Docks.at(i);
+
+
+            xmlWriter.writeStartElement("IndigoDock");
+            //xmlWriter.writeAttribute("id",QString::number(i));
+            xmlWriter.writeAttribute("name",dock->objectName());
+
+
+            if(dock->getPanels().size() > 0){
+
+                for( int p=0; p<dock->getPanels().count(); ++p )
+                {
+                    IndigoPanel *sortPanel = dock->getPanels().at(p);
+
+                    xmlWriter.writeStartElement("IndigoPanel");
+                    xmlWriter.writeAttribute("id",QString::number(sortPanel->Index()));
+                    xmlWriter.writeAttribute("name",sortPanel->objectName());
+                    xmlWriter.writeAttribute("expanderState",QString::number(sortPanel->expanderState()));
+                    xmlWriter.writeAttribute("dockState",QString::number(sortPanel->dockState())); // only Docked & HiddenDocked will be available
+                    xmlWriter.writeEndElement();
                 }
-
-
-                xmlWriter.writeEndElement();
-
             }
 
-        }
-
-
-        // Floating Panels
-        if(lst_floatingPanels.size() > 0){
-
-            xmlWriter.writeStartElement("FloatingPanels");
-
-            for( int i=0; i<lst_floatingPanels.count(); ++i )
-            {
-
-                IndigoPanel *fPanel = lst_floatingPanels.at(i);
-
-                xmlWriter.writeStartElement("IndigoPanel");
-                xmlWriter.writeAttribute("id",QString::number(fPanel->Index()));
-                xmlWriter.writeAttribute("name",fPanel->objectName());
-                xmlWriter.writeAttribute("expanderState",QString::number(fPanel->expanderState()));
-                xmlWriter.writeAttribute("dockState",QString::number(fPanel->dockState())); // only Floating & HiddenFloating will be available
-                xmlWriter.writeAttribute("x",QString::number(fPanel->geometry().x()));
-                xmlWriter.writeAttribute("y",QString::number(fPanel->geometry().y()));
-                xmlWriter.writeEndElement();
-
-
-            }
 
             xmlWriter.writeEndElement();
 
         }
 
+    }
+
+
+    // Floating Panels
+    if(lst_floatingPanels.size() > 0){
+
+        xmlWriter.writeStartElement("FloatingPanels");
+
+        for( int i=0; i<lst_floatingPanels.count(); ++i )
+        {
+
+            IndigoPanel *fPanel = lst_floatingPanels.at(i);
+
+            xmlWriter.writeStartElement("IndigoPanel");
+            xmlWriter.writeAttribute("id",QString::number(fPanel->Index()));
+            xmlWriter.writeAttribute("name",fPanel->objectName());
+            xmlWriter.writeAttribute("expanderState",QString::number(fPanel->expanderState()));
+            xmlWriter.writeAttribute("dockState",QString::number(fPanel->dockState())); // only Floating & HiddenFloating will be available
+            xmlWriter.writeAttribute("x",QString::number(fPanel->geometry().x()));
+            xmlWriter.writeAttribute("y",QString::number(fPanel->geometry().y()));
+            xmlWriter.writeEndElement();
+
+
+        }
 
         xmlWriter.writeEndElement();
-        xmlWriter.writeEndDocument();
-
-        xmlFile.close();
 
     }
 
 
+    xmlWriter.writeEndElement();
+    xmlWriter.writeEndDocument();
+
+
+
+
+    return qba_panels;
 }
+

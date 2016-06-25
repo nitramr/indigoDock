@@ -51,8 +51,7 @@ IndigoDock::IndigoDock(QString name, QWidget *parent) : QDockWidget(parent)
     wdg_panelSplitter->setOrientation(Qt::Vertical);
     wdg_panelSplitter->move(this->pos());
     wdg_panelSplitter->installEventFilter(this);
-   //wdg_panelSplitter->setAutoFillBackground(true); //tmp
-   // wdg_panelSplitter->setBackgroundRole(QPalette::Light); //tmp
+
 
     lyt_dropzone = new QBoxLayout(QBoxLayout::TopToBottom);
     lyt_dropzone->setMargin(int_padding);
@@ -66,7 +65,6 @@ IndigoDock::IndigoDock(QString name, QWidget *parent) : QDockWidget(parent)
     wdg_dropzone->setMinimumWidth(int_minWidth);
     wdg_dropzone->setMinimumHeight(int_minheight);
     wdg_dropzone->setBackgroundRole(QPalette::Base);
-    //wdg_dropzone->setBackgroundRole(QPalette::Link); //tmp
 
 
     wdg_scrollArea_dz = new QScrollArea;
@@ -304,8 +302,6 @@ void IndigoDock::updateMinHeight(){
     }
 
 
-    qDebug() << "lastPanelDimension" << lastPanelDimension << endl;
-
     // hide drop zone if all panels are hidden
     if(countHiddenPanels == lst_PanelList.size()){
 
@@ -390,6 +386,13 @@ void IndigoDock::removePlaceholder (){
 }
 
 
+Qt::Orientation IndigoDock::Orientation(){
+
+     return m_orientation;
+
+}
+
+
 
 void IndigoDock::updateTabPosition(Qt::DockWidgetArea area){
 
@@ -455,8 +458,6 @@ void IndigoDock::updateTabPosition(Qt::DockWidgetArea area){
 
 void IndigoDock::calculateSize(){
 
-   // int int_minDimension = 0;
-
     switch (m_orientation){
 
     case Qt::Vertical:
@@ -476,8 +477,6 @@ void IndigoDock::calculateSize(){
         wdg_scrollArea_dz->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         wdg_scrollArea_dz->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
-        wdg_dropzone->setMinimumWidth(int_minWidth);
-        wdg_dropzone->setMinimumHeight(int_minheight);
 
         break;
 
@@ -499,23 +498,28 @@ void IndigoDock::calculateSize(){
         wdg_scrollArea_dz->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
         wdg_scrollArea_dz->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-        wdg_dropzone->setMinimumWidth(int_minWidth);
-        wdg_dropzone->setMinimumHeight(int_minheight);
+
 
         break;
+
     default:
         break;
 
     }
 
+    wdg_dropzone->setMinimumWidth(int_minWidth);
+    wdg_dropzone->setMinimumHeight(int_minheight);
 
+    //wdg_dropzone->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
+
+    qDebug() << "Dock Size Calculation is done!" << endl;
 }
 
 
 
 void IndigoDock::resizeEvent(QResizeEvent *e){
 
-    QWidget::resizeEvent(e);
+    QWidget::resizeEvent(e);   
     updateMinHeight();
 
 }

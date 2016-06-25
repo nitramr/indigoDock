@@ -48,6 +48,7 @@ public:
     void removePanel(int index);
     QList<IndigoPanel*>getPanels();
     void clear();
+    Qt::Orientation Orientation();  
 
 private:
 

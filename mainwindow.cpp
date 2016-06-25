@@ -466,12 +466,39 @@ void MainWindow::loadLightTheme(){
 
 
 void MainWindow::loadWorkspace(){
-    wdg_indigoDockManager->loadWorkspace("workspace.xml");
+
+    QString m_sSettingsFile = QApplication::applicationDirPath() + "/workspace.ini";
+    QSettings settings(m_sSettingsFile, QSettings::IniFormat);
+
+
+    settings.beginGroup("Main");
+   // restoreGeometry(settings.value("Geometry").toByteArray());
+    restoreState(settings.value("State").toByteArray());
+    settings.endGroup();
+
+    settings.beginGroup("IndigoDock");
+    wdg_indigoDockManager->loadWorkspace(settings.value("Panels").toByteArray());
+    settings.endGroup();
+
 }
 
 
 
 void MainWindow::saveWorkspace(){
-    wdg_indigoDockManager->saveWorkspace("workspace.xml");
+
+
+    QString m_sSettingsFile = QApplication::applicationDirPath() + "/workspace.ini";  
+    QSettings settings(m_sSettingsFile, QSettings::IniFormat);
+
+
+    settings.beginGroup("Main");
+   // settings.setValue("Geometry", saveGeometry());
+    settings.setValue("State", saveState());
+    settings.endGroup();
+
+    settings.beginGroup("IndigoDock");
+    settings.setValue("Panels", wdg_indigoDockManager->saveWorkspace());
+    settings.endGroup();
+
 }
 
