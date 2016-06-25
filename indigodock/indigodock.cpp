@@ -32,6 +32,8 @@ IndigoDock::IndigoDock(QString name, QWidget *parent) : QDockWidget(parent)
                               "}"
 
                               );
+    QString styleSheetTitleBar("QDockWidget::title { font: bold;"
+                                                "text-align: center; color:red; }");
 
 
     int_padding = 2;
@@ -99,6 +101,10 @@ IndigoDock::IndigoDock(QString name, QWidget *parent) : QDockWidget(parent)
     setObjectName(name);
 
 
+    setWindowTitle("::::");
+    setStyleSheet(styleSheetTitleBar);
+
+
     connect(this, SIGNAL(panelAdded(QIcon, int, QString)), wdg_toolbar, SLOT(insertTab(QIcon, int, QString)));
     connect(this, SIGNAL(panelRemoved(int)), wdg_toolbar, SLOT(removeTab(int)));
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(updateTabPosition(Qt::DockWidgetArea)));
@@ -152,7 +158,6 @@ void IndigoDock::addPanel (IndigoPanel *panel, int tabIndex){
     }
 
     panel->setDockState(IndigoPanel::Docked);
-    //panel->show();
 
     updatePanels();
 
@@ -462,6 +467,8 @@ void IndigoDock::calculateSize(){
 
     case Qt::Vertical:
 
+        setFeatures(DockWidgetClosable|DockWidgetMovable|DockWidgetFloatable);
+
         // Toolbar
         wdg_toolbar->setTabOrientation(m_orientation);
 
@@ -481,6 +488,8 @@ void IndigoDock::calculateSize(){
         break;
 
     case Qt::Horizontal:
+
+        setFeatures(DockWidgetVerticalTitleBar|DockWidgetClosable|DockWidgetMovable|DockWidgetFloatable);
 
         // Toolbar
         wdg_toolbar->setTabOrientation(m_orientation);
@@ -510,9 +519,6 @@ void IndigoDock::calculateSize(){
     wdg_dropzone->setMinimumWidth(int_minWidth);
     wdg_dropzone->setMinimumHeight(int_minheight);
 
-    //wdg_dropzone->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
-
-    qDebug() << "Dock Size Calculation is done!" << endl;
 }
 
 

@@ -46,12 +46,15 @@ MainWindow::MainWindow(QWidget *parent) :
     loadTheme();
 
 
-
-    setMouseTracking(true);
-
     IndigoMenuBar *menuBar = new IndigoMenuBar();
     menuBar->setNativeMenuBar(true);
     setMenuBar(menuBar);
+
+    setMouseTracking(true);
+    setDockOptions(AllowNestedDocks|AnimatedDocks);
+
+
+
 
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q), this, SLOT(close()));
 

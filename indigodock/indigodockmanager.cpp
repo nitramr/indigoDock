@@ -112,7 +112,7 @@ void IndigoDockManager::addFloatingPanel(IndigoPanel * panel){
     if(!lst_floatingPanels.contains(panel)){
         lst_floatingPanels.append(panel);      
         panel->setParent(this);
-        qDebug() << "addFloatingPanel" << panel->objectName() << endl;
+        qDebug() << "addFloatingPanel" << panel->objectName() << endl;      
 
     }
 }
@@ -218,9 +218,6 @@ void IndigoDockManager::panelDropped(int index){
 
 
 void IndigoDockManager::loadWorkspace(QByteArray workspaceArray){
-
-
-    qDebug() << "Load Workspace" << endl;
 
         QList<IndigoDock*> lst_tmpDocks;
         QList<IndigoPanel*> lst_tmpPanels;
@@ -379,28 +376,15 @@ void IndigoDockManager::loadWorkspace(QByteArray workspaceArray){
 
                             addFloatingPanel(floatingPanel);
 
-                            int i_FrameX = floatingPanel->frameGeometry().x();
-                            int i_FrameY = floatingPanel->frameGeometry().y();
-                            int i_FrameW = floatingPanel->frameGeometry().width();
-                            int i_FrameH = floatingPanel->frameGeometry().height();
-
-                            int i_GeoX = floatingPanel->geometry().x();
-                            int i_GeoY = floatingPanel->geometry().y();
-                            int i_GeoW = floatingPanel->geometry().width();
-                            int i_GeoH = floatingPanel->geometry().height();
-
-                            QRect rect_frame = QRect(i_FrameX, i_FrameY, i_FrameW, i_FrameH);
-                            QRect rect_geo = QRect(i_GeoX, i_GeoY, i_GeoW, i_GeoH);
-
-                            qDebug() << rect_frame << rect_geo << endl;
-
                             //add attribute
                             floatingPanel->setIndex(indigoPanel.attribute("id", "-1").toInt());
-                            floatingPanel->setExpanderState(indigoPanel.attribute("expanderState", "-1").toInt());
-                            floatingPanel->setGeometry(indigoPanel.attribute("x", "0").toInt(), indigoPanel.attribute("y", "0").toInt(), floatingPanel->geometry().width(), floatingPanel->geometry().height());
                             floatingPanel->setDockState(indigoPanel.attribute("dockState", "-1").toInt());
-
-
+                            floatingPanel->setExpanderState(indigoPanel.attribute("expanderState", "-1").toInt());                            
+                            floatingPanel->setGeometry(indigoPanel.attribute("x", "0").toInt(),
+                                                       indigoPanel.attribute("y", "0").toInt(),
+                                                       indigoPanel.attribute("width", QString(floatingPanel->geometry().width())).toInt(),
+                                                       indigoPanel.attribute("height", QString(floatingPanel->geometry().height())).toInt()
+                                                       );
 
                         }
 
@@ -427,11 +411,8 @@ void IndigoDockManager::loadWorkspace(QByteArray workspaceArray){
 
 QByteArray IndigoDockManager::saveWorkspace(){
 
-qDebug() << "Save Workspace start" << endl;
-
 
 QByteArray qba_panels;
-
 
 
 QXmlStreamWriter xmlWriter(&qba_panels);
@@ -498,6 +479,8 @@ QXmlStreamWriter xmlWriter(&qba_panels);
             xmlWriter.writeAttribute("dockState",QString::number(fPanel->dockState())); // only Floating & HiddenFloating will be available
             xmlWriter.writeAttribute("x",QString::number(fPanel->geometry().x()));
             xmlWriter.writeAttribute("y",QString::number(fPanel->geometry().y()));
+            xmlWriter.writeAttribute("width",QString::number(fPanel->geometry().width()));
+            xmlWriter.writeAttribute("height",QString::number(fPanel->geometry().height()));
             xmlWriter.writeEndElement();
 
 

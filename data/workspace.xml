@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<IndigoDockManager version="1.0">
-    <IndigoDock id="1" position="left">
-	<IndigoPanel id="" name="" expanderState="" dockState="" x="" y=""></IndigoPanel>
-    </IndigoDock>
-
-
-</IndigoDockManager>

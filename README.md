@@ -40,6 +40,7 @@ Here is how you run it:
 
 ## Issues:
 * tabbar icon doesn't update by theme switch (not implemented)  
+* empty dock occur resize issue  
 
 
 ## Roadmap v1.0 - Framework
@@ -52,7 +53,7 @@ Here is how you run it:
 
 ## Roadmap v1.1 - Multiple Dock support
 * drag and drop panels between more than one dock **(done)**  
-* load/save workspace **(started)**  
+* load/save workspace **(done)**  
 * horizontal panel layout **(done)**  
 * floating panel layout  
 
