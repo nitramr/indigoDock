@@ -14,7 +14,7 @@ Experimental Qt Docking extension written for Scribus1.5>=
 * Discussions occcuring in the [Scribus UI/UX sub-forums](http://forums.scribus.net/index.php/topic,1617.0.html).  
 
 ## Current Development Snapshot
-![snapshot-9c2d3ad](https://cloud.githubusercontent.com/assets/4140247/12284558/1a9f278a-b976-11e5-8402-4f50e6f9fbf9.gif)
+![indigodock showreel](https://cloud.githubusercontent.com/assets/15112256/16357320/3490f50c-3af3-11e6-8ca1-8ae7f204bb1f.gif)
 
 
 ## How to Install indigoDock
@@ -47,7 +47,7 @@ Here is how you run it:
 * sorting panels by drag and drop **(done)**  
 * automatic tab orientation switch by docking on left site **(done)**  
 * function to scroll wanted panel to top by click on related icon or using a shortcut **(done)**  
-* panel mode (normal/advanced/collapsed) **(done)**  
+* panel mode (normal/advanced/~~collapsed~~) **(done)**  
 * theme support ~~+ icon switch by theme change~~ **(done)**  
 * clean up compile time warnings **(done)**  
 
