@@ -49,6 +49,9 @@ public:
     QList<IndigoPanel*>getPanels();
     void clear();
     Qt::Orientation Orientation();  
+    void setMinimumDropzoneHeight(int height);
+    void setMinimumDropzoneWidth(int width);
+    void setMinimumDropzoneSize(int width, int height);
 
 private:
 
@@ -64,10 +67,9 @@ private:
     QWidget * wdg_placeholder;
     Qt::Orientation m_orientation;
 
-
     int int_padding;
     int int_placeholderHeight;
-    int int_minheight;
+    int int_minHeight;
     int int_minWidth;
 
     void updatePanels();

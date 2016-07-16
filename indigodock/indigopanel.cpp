@@ -38,7 +38,7 @@ IndigoPanelHandle::IndigoPanelHandle(QWidget *parent) :
 {
 
     setAutoFillBackground( true );
-    setFixedHeight(30);
+    setFixedHeight(24);
 
     str_title = "";
 
@@ -155,19 +155,33 @@ IndigoPanel::IndigoPanel(QString name, QWidget *dock) :
 {
     int int_padding = 5;
 
+    QString styleSheetScroll( "QScrollArea {"
+                              "border: 0px solid transparent;"
+                              "}"
+                              );
+
     // Widgets
     wdg_handle = new IndigoPanelHandle(this);
     wdg_handle->installEventFilter(this);
 
-    wdg_normalContainer = new QWidget;
+    wdg_normalContainer = new QWidget;  
     lyt_normalArea = new QVBoxLayout(wdg_normalContainer);
     lyt_normalArea->setMargin(int_padding);
+
+ /*  wdg_scrollArea = new QScrollArea;
+    wdg_scrollArea->setWidget(wdg_normalContainer);
+    wdg_scrollArea->setStyleSheet( styleSheetScroll);
+    wdg_scrollArea->setWidgetResizable(true);
+    wdg_scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    wdg_scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    wdg_scrollArea->setBackgroundRole(QPalette::Highlight);*/
 
     // Layouts
     lyt_main = new QVBoxLayout;
     lyt_main->setMargin(0);
     lyt_main->addWidget(wdg_handle);
     lyt_main->addWidget(wdg_normalContainer);
+   // lyt_main->addWidget(wdg_scrollArea);
     lyt_main->setAlignment(Qt::AlignTop);
     setLayout(lyt_main);
 

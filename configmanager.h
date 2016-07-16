@@ -39,10 +39,9 @@ public:
 
 private:
 
-    QString str_SettingsFile;
-    QString str_iconPath;
-    QString str_themePath;
-
+    QString str_SettingsFile;  
+    void writeSetting(QString key, QString value);
+    QString readSetting(QString key, QString defaultValue);
 
 signals:
 

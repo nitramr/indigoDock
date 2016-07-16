@@ -73,10 +73,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     wdg_indigoDock_r = new IndigoDock("Right");
+    wdg_indigoDock_r->setMinimumDropzoneSize(200, 110);
     wdg_indigoDock_r->setAllowedAreas(Qt::RightDockWidgetArea | Qt::LeftDockWidgetArea | Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea);
     this->addDockWidget(Qt::RightDockWidgetArea, wdg_indigoDock_r);
 
     wdg_indigoDock_l = new IndigoDock("Left");
+    wdg_indigoDock_l->setMinimumDropzoneSize(200, 110);
     wdg_indigoDock_l->setAllowedAreas(Qt::RightDockWidgetArea | Qt::LeftDockWidgetArea | Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea);
     this->addDockWidget(Qt::LeftDockWidgetArea, wdg_indigoDock_l);
 

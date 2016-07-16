@@ -40,7 +40,6 @@ Here is how you run it:
 
 ## Issues:
 * tabbar icon doesn't update by theme switch (not implemented)  
-* empty dock occur resize issue  
 
 
 ## Roadmap v1.0 - Framework

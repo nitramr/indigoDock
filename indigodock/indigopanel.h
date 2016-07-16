@@ -30,6 +30,7 @@
 #include <QLayout>
 #include <QLabel>
 #include <QToolButton>
+#include <QScrollArea>
 
 class IndigoPanelHandle : public QWidget
 {
@@ -112,6 +113,8 @@ private:
     QWidget *wdg_normalContainer;
     QVBoxLayout *lyt_normalArea;
     QVBoxLayout *lyt_main;
+    QScrollArea * wdg_scrollArea;
+
 
     QPoint pnt_relativeOffset;
     QIcon ico_icon;    

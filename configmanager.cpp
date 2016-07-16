@@ -30,37 +30,47 @@ ConfigManager::ConfigManager()
     // read setting file
     str_SettingsFile = "settings.ini";
 
+}
+
+
+
+QString ConfigManager::readSetting(QString key, QString defaultValue){
+
     QSettings settings(str_SettingsFile, QSettings::IniFormat);
+    return settings.value(key, defaultValue).toString();
+}
 
-    // load settings
-    str_iconPath = settings.value("path/iconPath", ":/data/icons/dark/").toString();
-    str_themePath = settings.value("path/themePath", ":/data/qss/scribus-dark.qss").toString();
 
+
+void ConfigManager::writeSetting(QString key, QString value){
+
+    QSettings settings(str_SettingsFile, QSettings::IniFormat);
+    settings.setValue(key, value);
 }
 
 
 
 QString ConfigManager::getIconPath(){
-    return str_iconPath;
+
+    return readSetting("path/iconPath", ":/data/icons/dark/");
 }
 
 
 
 QString ConfigManager::getThemePath(){
-    return str_themePath;
+
+    return readSetting("path/themePath", ":/data/qss/scribus-dark.qss");
 }
 
 
 
 void ConfigManager::setIconPath(QString path){
-    QSettings settings(str_SettingsFile, QSettings::IniFormat);
-    settings.setValue("path/iconPath", path);
+    writeSetting("path/iconPath", path);
 }
 
 
 
 void ConfigManager::setThemePath(QString path){
-    QSettings settings(str_SettingsFile, QSettings::IniFormat);
-    settings.setValue("path/themePath", path);
+    writeSetting("path/themePath", path);
 }
 

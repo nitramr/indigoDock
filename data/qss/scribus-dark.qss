@@ -78,3 +78,11 @@ IndigoDock QScrollBar:horizontal {
 height: 10px;
 }
 
+IndigoPanel QScrollBar:vertical {
+width: 10px;
+}
+
+IndigoPanel QScrollBar:horizontal {
+height: 10px;
+}
+
