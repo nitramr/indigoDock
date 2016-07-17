@@ -24,6 +24,16 @@ IconWidget::IconWidget(QString filePath, int iconSize, QWidget *parent)
 
 
 
+void IconWidget::paintEvent(QPaintEvent *){
+
+    QPainter painter(this);
+
+    painter.drawPixmap(0,0,width(), height(), pxm_icon);
+
+}
+
+
+
 void IconWidget::setIcon(QIcon icon, int iconSize){
 
     int_iconSize = iconSize;
@@ -40,16 +50,5 @@ void IconWidget::setIcon(QString filePath, int iconSize){
 
     QIcon icon = QIcon(filePath);
     setIcon(icon, iconSize);
-
-}
-
-
-
-void IconWidget::paintEvent(QPaintEvent *){
-
-
-    QPainter painter(this);
-
-    painter.drawPixmap(0,0,width(), height(), pxm_icon);
 
 }

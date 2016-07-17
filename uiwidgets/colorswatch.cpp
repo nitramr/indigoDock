@@ -178,6 +178,31 @@ void ColorSwatch::paintEvent(QPaintEvent*) {
 
 
 
+void ColorSwatch::placeContourButton(){
+    if (!btn_Contour) return;
+
+    btn_Contour->setFixedSize(int_btnSize,int_btnSize);
+    btn_Contour->move(int_conSize + int_valveWidth, 0);
+
+}
+
+
+
+void ColorSwatch::placeFillButton(){
+    if(!btn_Fill) return;
+
+    btn_Fill->setFixedSize(int_btnSize,int_btnSize);
+    btn_Fill->move(int_conSize + int_valveWidth, int_conSize - btn_Fill->height());
+}
+
+
+/**********************
+ *
+ * Settings
+ *
+ * *******************/
+
+
 void ColorSwatch::setContourBrush(QBrush brush){
     brsh_contour = brush;
     update();
@@ -203,23 +228,3 @@ void ColorSwatch::setFillButton(QPushButton *btnFill){
     btn_Fill = btnFill;
     placeFillButton();
 }
-
-
-
-void ColorSwatch::placeContourButton(){
-    if (!btn_Contour) return;
-
-    btn_Contour->setFixedSize(int_btnSize,int_btnSize);
-    btn_Contour->move(int_conSize + int_valveWidth, 0);
-
-}
-
-
-
-void ColorSwatch::placeFillButton(){
-    if(!btn_Fill) return;
-
-    btn_Fill->setFixedSize(int_btnSize,int_btnSize);
-    btn_Fill->move(int_conSize + int_valveWidth, int_conSize - btn_Fill->height());
-}
-

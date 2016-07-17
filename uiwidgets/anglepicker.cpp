@@ -130,6 +130,12 @@ void AnglePicker::mouseMoveEvent(QMouseEvent *event) {
 }
 
 
+/**********************
+ *
+ * Settings
+ *
+ * *******************/
+
 
 double AnglePicker::Angle() {
 

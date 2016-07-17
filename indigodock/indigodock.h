@@ -41,17 +41,26 @@ class IndigoDock : public QDockWidget
 
 public:
 
-    IndigoDock(QString name, QWidget *parent = 0);
+    IndigoDock(QWidget *parent = 0);
+
     void addIndigoPanel(IndigoPanel *panel, int tabIndex = -1);
     void hoverDock(IndigoPanel *pan);
     void dropPanel(IndigoPanel *pan);
     void removePanel(int index);
     QList<IndigoPanel*>getPanels();
     void clear();
-    Qt::Orientation Orientation();  
-    void setMinimumDropzoneHeight(int height);
-    void setMinimumDropzoneWidth(int width);
-    void setMinimumDropzoneSize(int width, int height);
+    Qt::Orientation Orientation();
+    void setMinimumPanelHeight(int height);
+    void setMinimumPanelWidth(int width);
+    void setMinimumPanelSize(QSize size);
+    QSize minimumPanelSize();
+    void setMovableTabs(bool allow);
+    bool movableTabs();
+
+    void hideTab(int index);
+    void showTab(int index);
+    void panelRemoved(int index);
+    void panelAdded(QIcon icon,int index, QString);
 
 private:
 
@@ -71,27 +80,31 @@ private:
     int int_placeholderHeight;
     int int_minHeight;
     int int_minWidth;
+    int int_toolBarIndex;
+    int int_minPanelWidth;
+    int int_minPanelHeight;
 
     void updatePanels();
     void addPlaceholder (int index = -1);
     void removePlaceholder ();
-    void addPanel (IndigoPanel *panel, int tabIndex);
     void calculateSize();
+    void updatePanelSize();
 
 
 protected:
     void resizeEvent(QResizeEvent *e);
     bool eventFilter(QObject *object, QEvent *event);
 
-signals:
-    void panelRemoved(int index);  
-    void panelAdded(QIcon icon,int index, QString);
+signals:  
+
     void panelDropped(int index);
+    void dockDestroyed();
 
 public slots:
 
     void scrollToPanel(int PanelIndex);
     void scrollToPanel(QString PanelName);
+
 
     void movePanel(int oldIndex, int newIndex);
 

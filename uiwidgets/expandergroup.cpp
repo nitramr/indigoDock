@@ -24,6 +24,16 @@
 #include "expandergroup.h"
 #include "configmanager.h"
 
+
+/*#####################
+ #
+ #
+ # ExpanderLabel
+ #
+ #
+ ####################*/
+
+
 ExpanderLabel::ExpanderLabel(QWidget *parent) : QLabel(parent),collapse(false)
 {
     margin_left = 3; // left margin of icon
@@ -35,6 +45,13 @@ ExpanderLabel::ExpanderLabel(QWidget *parent) : QLabel(parent),collapse(false)
 
 
 }
+
+
+/**********************
+ *
+ * Events
+ *
+ * *******************/
 
 
 void ExpanderLabel::mousePressEvent(QMouseEvent* event)
@@ -52,19 +69,6 @@ void ExpanderLabel::mousePressEvent(QMouseEvent* event)
    {
      event->ignore();
    }
-}
-
-
-
-void ExpanderLabel::collapsed(bool collapsed){
-    collapse = collapsed;
-}
-
-
-
-void ExpanderLabel::isCollapsable(bool collapsable){
-
-    b_collapsable = collapsable;
 }
 
 
@@ -120,8 +124,34 @@ void ExpanderLabel::paintEvent(QPaintEvent *)
    //QLabel::paintEvent(e);
 }
 
-/********************************************************************************************/
 
+/**********************
+ *
+ * Settings
+ *
+ * *******************/
+
+
+void ExpanderLabel::collapsed(bool collapsed){
+    collapse = collapsed;
+}
+
+
+
+void ExpanderLabel::isCollapsable(bool collapsable){
+
+    b_collapsable = collapsable;
+}
+
+
+
+/*#####################
+ #
+ #
+ # ExpanderGroup
+ #
+ #
+ ####################*/
 
 
 ExpanderGroup::ExpanderGroup(bool collapsable, QWidget *parent) : QWidget(parent)
@@ -167,6 +197,12 @@ void ExpanderGroup::addWidget(QWidget * widget){
     m_contentArea->addWidget(m_widget,0, Qt::AlignTop);
 }
 
+
+/**********************
+ *
+ * Settings
+ *
+ * *******************/
 
 
 void ExpanderGroup::setCaption(const QString text){

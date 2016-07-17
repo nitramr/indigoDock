@@ -73,19 +73,20 @@ class IndigoPanel : public QFrame
 
 public:
     enum IndigoDockState{
+
         HiddenDocked = 0,
-        HiddenFloating = 1,
-        Floating = 2,
-        Docked = 3,
-        None = 4
+        Floating = 1,
+        Docked = 2,
+        None = 3
+
     };
 
 
 
     IndigoPanel(QString name, QWidget* dock = 0);
     IndigoPanel(QString name, QIcon icon, int iconSize = 22, QWidget* dock = 0);
-    void addWidgetNormal(QWidget *content);
-    void addWidgetNormal(QLayout *content);
+    void addWidget(QWidget *content);
+    void addWidget(QLayout *content);
 
     IndigoPanelHandle * wdg_handle;
 

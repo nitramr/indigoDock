@@ -29,9 +29,13 @@
 #include <QStyleOptionDockWidget>
 
 
-//
-// IndigoPanelHandle
-//
+/*#####################
+ #
+ #
+ # IndigoPanelHandle
+ #
+ #
+ #####################*/
 
 IndigoPanelHandle::IndigoPanelHandle(QWidget *parent) :
     QWidget(parent)
@@ -60,12 +64,13 @@ IndigoPanelHandle::IndigoPanelHandle(QWidget *parent) :
 
     // Main LayoutContainer
     QHBoxLayout * mainLayout = new QHBoxLayout;
-    mainLayout->setMargin(4);
-    setLayout(mainLayout);
-
-    mainLayout->addStretch(1);
+    mainLayout->setMargin(2);
+    mainLayout->setSpacing(0);
+    mainLayout->addStretch(0);
     mainLayout->addWidget(wdg_btnExpander);
     mainLayout->addWidget(wdg_btnClose);
+
+    setLayout(mainLayout);
 
     // Actions
     connect(wdg_btnClose, SIGNAL (clicked()), parent, SLOT (hide()));
@@ -74,46 +79,11 @@ IndigoPanelHandle::IndigoPanelHandle(QWidget *parent) :
 }
 
 
-
-void IndigoPanelHandle::setCaption(QString title, int fontSize){
-
-    str_title = title;
-    int_fontSize = fontSize;
-}
-
-QString IndigoPanelHandle::Caption(){
-    return str_title;
-}
-
-
-
-void IndigoPanelHandle::setIcon(QIcon icon, int iconSize){
-
-    ico_icon = icon;
-    int_iconSize = iconSize;
-}
-
-
-void IndigoPanelHandle::setExpanderState(IndigoExpanderState expanderState){
-
-
-    QStyleOptionDockWidget opt;
-    // SP_TitleBarUnshadeButton // http://doc.qt.io/qt-4.8/qstyle.html
-
-    switch(expanderState){
-
-    case IndigoPanelHandle::Advanced:
-        wdg_btnExpander->setIcon(style()->standardIcon(QStyle::SP_TitleBarShadeButton, &opt, this));
-        break;
-
-    case IndigoPanelHandle::Normal:
-    default:
-        wdg_btnExpander->setIcon(style()->standardIcon(QStyle::SP_TitleBarUnshadeButton, &opt, this));
-        break;
-
-    }
-
-}
+/**********************
+ *
+ * Events
+ *
+ * *******************/
 
 
 void IndigoPanelHandle::paintEvent(QPaintEvent *event)
@@ -144,10 +114,64 @@ void IndigoPanelHandle::paintEvent(QPaintEvent *event)
 }
 
 
+/**********************
+ *
+ * Settings
+ *
+ * *******************/
 
-//
-// IndigoPanel
-//
+
+void IndigoPanelHandle::setCaption(QString title, int fontSize){
+
+    str_title = title;
+    int_fontSize = fontSize;
+}
+
+
+
+QString IndigoPanelHandle::Caption(){
+    return str_title;
+}
+
+
+
+void IndigoPanelHandle::setIcon(QIcon icon, int iconSize){
+
+    ico_icon = icon;
+    int_iconSize = iconSize;
+}
+
+
+
+void IndigoPanelHandle::setExpanderState(IndigoExpanderState expanderState){
+
+
+    QStyleOptionDockWidget opt;
+    // SP_TitleBarUnshadeButton // http://doc.qt.io/qt-4.8/qstyle.html
+
+    switch(expanderState){
+
+    case IndigoPanelHandle::Advanced:
+        wdg_btnExpander->setIcon(style()->standardIcon(QStyle::SP_TitleBarShadeButton, &opt, this));
+        break;
+
+    case IndigoPanelHandle::Normal:
+    default:
+        wdg_btnExpander->setIcon(style()->standardIcon(QStyle::SP_TitleBarUnshadeButton, &opt, this));
+        break;
+
+    }
+
+}
+
+
+/*#####################
+ #
+ #
+ # IndigoPanel
+ #
+ #
+ #####################*/
 
 
 IndigoPanel::IndigoPanel(QString name, QWidget *dock) :
@@ -164,11 +188,11 @@ IndigoPanel::IndigoPanel(QString name, QWidget *dock) :
     wdg_handle = new IndigoPanelHandle(this);
     wdg_handle->installEventFilter(this);
 
-    wdg_normalContainer = new QWidget;  
+    wdg_normalContainer = new QWidget;
     lyt_normalArea = new QVBoxLayout(wdg_normalContainer);
     lyt_normalArea->setMargin(int_padding);
 
- /*  wdg_scrollArea = new QScrollArea;
+    /*  wdg_scrollArea = new QScrollArea;
     wdg_scrollArea->setWidget(wdg_normalContainer);
     wdg_scrollArea->setStyleSheet( styleSheetScroll);
     wdg_scrollArea->setWidgetResizable(true);
@@ -181,7 +205,7 @@ IndigoPanel::IndigoPanel(QString name, QWidget *dock) :
     lyt_main->setMargin(0);
     lyt_main->addWidget(wdg_handle);
     lyt_main->addWidget(wdg_normalContainer);
-   // lyt_main->addWidget(wdg_scrollArea);
+    // lyt_main->addWidget(wdg_scrollArea);
     lyt_main->setAlignment(Qt::AlignTop);
     setLayout(lyt_main);
 
@@ -194,12 +218,11 @@ IndigoPanel::IndigoPanel(QString name, QWidget *dock) :
     setMouseTracking(true);
     setAutoFillBackground( true );
     setBackgroundRole(QPalette::Background);
-    setMinimumWidth(200);
+    setMinimumWidth(150);
     setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding));
     setCaption(name);
     setAccessibleName(name);
     setObjectName(name);
-
 
 }
 
@@ -212,6 +235,73 @@ IndigoPanel::IndigoPanel(QString name, QIcon icon, int iconSize, QWidget *dock) 
 
 }
 
+
+
+void IndigoPanel::hide(){
+
+    switch(dockState()){
+    case IndigoPanel::Docked:
+        setDockState(IndigoPanel::HiddenDocked);
+        emit panelClosed(Index());
+        qDebug() << "emit: panelClosed(...);" << endl;
+        break;
+    default:
+        QFrame::hide();
+        break;
+
+    }
+}
+
+
+
+void IndigoPanel::show(){
+
+    switch(dockState()){
+    case IndigoPanel::HiddenDocked:
+        setDockState(IndigoPanel::Docked);
+        emit panelShown(Index());
+        qDebug() << "emit: panelShow(...);" << endl;
+        break;
+    default:
+        QFrame::show();
+        break;
+    }
+
+    update();
+}
+
+
+
+void IndigoPanel::expander(){
+
+
+    switch(expanderState()){
+    case IndigoPanelHandle::Normal:
+
+
+        m_expander = IndigoPanelHandle::Advanced;
+        wdg_handle->setExpanderState(m_expander);
+        emit isAdvanced();
+        qDebug() << "emit: isAdvanced();" << endl;
+        break;
+
+    case IndigoPanelHandle::Advanced:
+
+
+        m_expander = IndigoPanelHandle::Normal;
+        wdg_handle->setExpanderState(m_expander);
+        emit isNormal();
+        qDebug() << "emit: isNormal();" << endl;
+        break;
+    }
+}
+
+
+/**********************
+ *
+ * Events
+ *
+ * *******************/
 
 
 bool IndigoPanel::eventFilter(QObject *object, QEvent *event)
@@ -231,12 +321,9 @@ bool IndigoPanel::eventFilter(QObject *object, QEvent *event)
             QPoint xy = this->mapToGlobal(QPoint(0,0));
 
             pnt_relativeOffset = point - xy;
-
         }
 
-
         break;
-
     }
 
     case QEvent::MouseMove:
@@ -248,6 +335,8 @@ bool IndigoPanel::eventFilter(QObject *object, QEvent *event)
             QPoint point = me->globalPos();
 
 
+
+
             // undock Panel if not already undocked
             if(dockState() == IndigoPanel::Docked){
 
@@ -257,13 +346,13 @@ bool IndigoPanel::eventFilter(QObject *object, QEvent *event)
 
             }
 
+
             move(point - pnt_relativeOffset);
 
             emit mouseMove(); // activate DropZone hover*
 
 
         }
-
 
         break;
     }
@@ -274,11 +363,11 @@ bool IndigoPanel::eventFilter(QObject *object, QEvent *event)
         if(dockState() == IndigoPanel::Floating){
 
             emit mouseReleased(); // activate reparenting in DropZone*
+            qDebug() << "emit: mouseReleased();" << endl;
             update();
         }
 
         break;
-
     }
 
 
@@ -292,9 +381,15 @@ bool IndigoPanel::eventFilter(QObject *object, QEvent *event)
     }
 
 
-
     return QFrame::eventFilter(object, event);
 }
+
+
+/**********************
+ *
+ * Settings
+ *
+ * *******************/
 
 
 
@@ -303,8 +398,15 @@ void IndigoPanel::setCaption(const QString title, int fontSize){
 }
 
 
+
 QString IndigoPanel::Caption(){
     return wdg_handle->Caption();
+}
+
+
+
+QIcon IndigoPanel::Icon(){
+    return ico_icon;
 }
 
 
@@ -312,12 +414,6 @@ QString IndigoPanel::Caption(){
 void IndigoPanel::setIcon(QIcon icon, int iconSize){
     ico_icon = icon;
     wdg_handle->setIcon(icon, iconSize); // iconSize will used for icon in caption bar
-}
-
-
-
-QIcon IndigoPanel::Icon(){
-    return ico_icon;
 }
 
 
@@ -342,83 +438,18 @@ void IndigoPanel::setIndex(int index){
 
 
 
-void IndigoPanel::addWidgetNormal(QWidget *content){
+void IndigoPanel::addWidget(QWidget *content){
     lyt_normalArea->addWidget(content);
-
 }
 
-void IndigoPanel::addWidgetNormal(QLayout *content){
+
+
+void IndigoPanel::addWidget(QLayout *content){
 
     QWidget *widget = new QWidget();
     widget->setLayout(content);
 
-    lyt_normalArea->addWidget(widget);
-
-}
-
-
-
-void IndigoPanel::hide(){
-
-    switch(dockState()){
-    case IndigoPanel::Docked:
-        setDockState(IndigoPanel::HiddenDocked);
-        emit panelClosed(Index());
-        break;
-    case IndigoPanel::Floating:
-        setDockState(IndigoPanel::HiddenFloating);
-        break;
-    default:
-        QFrame::hide();
-        break;
-
-    }
-}
-
-
-
-void IndigoPanel::show(){
-
-    switch(dockState()){
-    case IndigoPanel::HiddenDocked:
-        setDockState(IndigoPanel::Docked);
-        emit panelShown(Index());
-        break;
-    case IndigoPanel::HiddenFloating:
-        setDockState(IndigoPanel::Floating);
-        break;
-    default:
-        QFrame::show();
-        break;
-    }
-
-    update();
-}
-
-
-
-void IndigoPanel::expander(){
-
-
-    switch(expanderState()){
-    case IndigoPanelHandle::Normal:
-
-
-        m_expander = IndigoPanelHandle::Advanced;
-        wdg_handle->setExpanderState(m_expander);
-        emit isAdvanced();
-        break;
-
-    case IndigoPanelHandle::Advanced:
-
-
-        m_expander = IndigoPanelHandle::Normal;
-        wdg_handle->setExpanderState(m_expander);
-        emit isNormal();
-        break;
-
-    }
-
+    addWidget(widget);
 }
 
 
@@ -435,19 +466,17 @@ void IndigoPanel::setExpanderState(IndigoPanelHandle::IndigoExpanderState expand
     switch(expanderState){
     case IndigoPanelHandle::Normal:
         wdg_handle->setExpanderState(expanderState);
-        emit isNormal();       
+        emit isNormal();
+        qDebug() << "emit: isNormal();" << endl;
         break;
 
     case IndigoPanelHandle::Advanced:
 
         wdg_handle->setExpanderState(expanderState);
         emit isAdvanced();
+        qDebug() << "emit: isAdvanced();" << endl;
         break;
     }
-
-   // this->adjustSize();
-
-
 }
 
 
@@ -487,18 +516,10 @@ void IndigoPanel::setDockState(IndigoPanel::IndigoDockState state){
         QFrame::hide();
         break;
 
-    case IndigoPanel::HiddenFloating:
-        setWindowFlags(Qt::Tool | Qt::CustomizeWindowHint);
-        this->adjustSize();
-        QFrame::hide();
-
-        break;
-
     case IndigoPanel::Floating:
         setWindowFlags(Qt::Tool | Qt::CustomizeWindowHint);
         this->adjustSize();
         QFrame::show();
-
         break;
 
     case IndigoPanel::Docked:
@@ -522,14 +543,10 @@ void IndigoPanel::setDockState(int state){
         break;
     }
     case 1:{
-        setDockState(IndigoPanel::HiddenFloating);
-        break;
-    }
-    case 2:{
         setDockState(IndigoPanel::Floating);
         break;
     }
-    case 3:{
+    case 2:{
         setDockState(IndigoPanel::Docked);
         break;
     }

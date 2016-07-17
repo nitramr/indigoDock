@@ -48,8 +48,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     IndigoMenuBar *menuBar = new IndigoMenuBar();
     menuBar->setNativeMenuBar(true);
-    setMenuBar(menuBar);
 
+    setMenuBar(menuBar);
     setMouseTracking(true);
     setDockOptions(AllowNestedDocks|AnimatedDocks);
 
@@ -69,24 +69,19 @@ MainWindow::MainWindow(QWidget *parent) :
     // Setup IndigoDockManager
 
     wdg_indigoDockManager = new IndigoDockManager(this);
+    wdg_indigoDockManager->setMinimumPanelSize(QSize(200,100));
 
-
-
-    wdg_indigoDock_r = new IndigoDock("Right");
-    wdg_indigoDock_r->setMinimumDropzoneSize(200, 110);
-    wdg_indigoDock_r->setAllowedAreas(Qt::RightDockWidgetArea | Qt::LeftDockWidgetArea | Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea);
-    this->addDockWidget(Qt::RightDockWidgetArea, wdg_indigoDock_r);
-
-    wdg_indigoDock_l = new IndigoDock("Left");
-    wdg_indigoDock_l->setMinimumDropzoneSize(200, 110);
-    wdg_indigoDock_l->setAllowedAreas(Qt::RightDockWidgetArea | Qt::LeftDockWidgetArea | Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea);
-    this->addDockWidget(Qt::LeftDockWidgetArea, wdg_indigoDock_l);
+    wdg_indigoDock_r = new IndigoDock();
+    wdg_indigoDock_l = new IndigoDock();
 
 
     /* Setup IndigoDocks in Manager */
-    wdg_indigoDockManager->addIndigoDock(wdg_indigoDock_r);
-    wdg_indigoDockManager->addIndigoDock(wdg_indigoDock_l);
+    wdg_indigoDockManager->addIndigoDock(wdg_indigoDock_l, Qt::LeftDockWidgetArea );
+    wdg_indigoDockManager->addIndigoDock(wdg_indigoDock_r, Qt::RightDockWidgetArea );
 
+
+    // Update Size for left panel (test case only)
+    //wdg_indigoDock_l->setMinimumPanelWidth(150);
 
 
     /*****************
@@ -108,10 +103,8 @@ MainWindow::MainWindow(QWidget *parent) :
     IndigoPanel *pan_page = new IndigoPanel("Page",QIcon(str_iconPath + "pan-page.png"));
     wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_r,pan_page);
 
-    /*  IndigoPanel *pan_group = new IndigoPanel("PanGroup",indigoDock_r);
-    pan_group->setCaption("Group");
-    pan_group->setIcon(QIcon(str_iconPath + "pan-image.png"));
-    indigoDock_r->addIndigoPanel(pan_group);*/
+   // IndigoPanel *pan_group = new IndigoPanel("Groups",QIcon(str_iconPath + "pan-image.png"));
+   // wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_r,pan_group);
 
     IndigoPanel *pan_line = new IndigoPanel("Line",QIcon(str_iconPath + "pan-lines.png"));
     wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_r,pan_line);
@@ -387,7 +380,7 @@ void MainWindow::textPanel(IndigoPanel *parent){
     qfl1->addRow( aPicker, textBox2 );
     qfl1->addRow( lbl_ext2 );
 
-    parent->addWidgetNormal(qfl1);
+    parent->addWidget(qfl1);
 
     connect(parent, SIGNAL(isAdvanced()), lbl_ext1, SLOT(show()));
     connect(parent, SIGNAL(isNormal()), lbl_ext1, SLOT(hide()));
@@ -476,13 +469,13 @@ void MainWindow::loadWorkspace(){
     QSettings settings(m_sSettingsFile, QSettings::IniFormat);
 
 
+    settings.beginGroup("IndigoDock");
+    wdg_indigoDockManager->loadWorkspace(settings.value("Panels").toByteArray());
+    settings.endGroup();
+
     settings.beginGroup("Main");
    // restoreGeometry(settings.value("Geometry").toByteArray());
     restoreState(settings.value("State").toByteArray());
-    settings.endGroup();
-
-    settings.beginGroup("IndigoDock");
-    wdg_indigoDockManager->loadWorkspace(settings.value("Panels").toByteArray());
     settings.endGroup();
 
 }

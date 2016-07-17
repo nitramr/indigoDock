@@ -82,8 +82,8 @@ public:
     void setTabOrientation(Qt::Orientation tabDirection);
     void setTabSize(int side);
     void setTabSize(int width, int height);
-    bool movingTabs();
-    void setMovingTabs(bool allowMoving);
+    bool movableTabs();
+    void setMovableTabs(bool allowMoving);
 
     void clear();
 
@@ -132,13 +132,14 @@ signals:
    void tabClicked(int);
 
 public slots:
-    void addTab(QIcon icon, QString toolTip = "");
-    void insertTab(QIcon icon, int index, QString toolTip = "");
-    void removeTab(int index);
-    void hideTab(int index);
-    void showTab(int index);
-    void hoverTabBar();
-    void leaveTabBar();
+
+   void addTab(QIcon icon, QString toolTip = "");
+   void insertTab(QIcon icon, int index, QString toolTip = "");
+   void removeTab(int index);
+   void hideTab(int index);
+   void showTab(int index);
+   void hoverTabBar();
+   void leaveTabBar();
 
 };
 
