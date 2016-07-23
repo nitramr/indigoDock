@@ -108,6 +108,7 @@ private:
    bool bool_dragProceed;
    bool bool_hover;
    bool bool_allowDrag;
+   bool bool_enableTooltip;
    QPoint pnt_dragPosition;
    int int_realIndex;
    int int_dragIndex;
@@ -125,6 +126,7 @@ private:
 
    void moveTab();
    void calculateSize();
+   void leaveTabBar();
 
 
 signals:
@@ -138,8 +140,6 @@ public slots:
    void removeTab(int index);
    void hideTab(int index);
    void showTab(int index);
-   void hoverTabBar();
-   void leaveTabBar();
 
 };
 

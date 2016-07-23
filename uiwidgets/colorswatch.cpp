@@ -198,7 +198,7 @@ void ColorSwatch::placeFillButton(){
 
 /**********************
  *
- * Settings
+ * Properties
  *
  * *******************/
 

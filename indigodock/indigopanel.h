@@ -31,6 +31,7 @@
 #include <QLabel>
 #include <QToolButton>
 #include <QScrollArea>
+#include "uiwidgets/flowlayout.h"
 
 class IndigoPanelHandle : public QWidget
 {
@@ -42,7 +43,7 @@ public:
         Advanced = 1
     };
 
-    IndigoPanelHandle(QWidget* parent = 0);
+    IndigoPanelHandle(QWidget* parent);
     QString Caption();
     void setCaption(QString title, int fontSize);
     void setIcon(QIcon icon, int iconSize);
@@ -64,6 +65,7 @@ signals:
 
 public slots:
 };
+
 
 /**********************************************************/
 
@@ -111,8 +113,9 @@ protected:
     bool eventFilter(QObject *object, QEvent *e);
 
 private:   
-    QWidget *wdg_normalContainer;
-    QVBoxLayout *lyt_normalArea;
+   // QWidget *wdg_normalContainer;
+   // QVBoxLayout *lyt_normalArea;
+    FlowLayout * lyt_normalArea;
     QVBoxLayout *lyt_main;
     QScrollArea * wdg_scrollArea;
 
@@ -127,7 +130,7 @@ private:
 signals:
     void mouseReleased();
     void mouseMove();
-    void isFloating(int index);
+    void isFloating();
     void panelClosed(int index);
     void panelShown(int index);
     void isAdvanced();
@@ -136,7 +139,7 @@ signals:
 public slots:
     void show();
     void hide();
-    void expander();
+    void toggleExpander();
 };
 
 #endif // INDIGOPANEL_H

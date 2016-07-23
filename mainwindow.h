@@ -50,6 +50,7 @@ private:
     Ui::MainWindow *ui;
     QString str_iconPath;
     void textPanel(IndigoPanel *parent);
+    void fluidPanel(IndigoPanel *panel);
 
 public:
 
@@ -61,6 +62,7 @@ public:
     IndigoDockManager * wdg_indigoDockManager;
     IndigoDock *wdg_indigoDock_r;
     IndigoDock *wdg_indigoDock_l;
+    IndigoDock *wdg_indigoDock_f;
     QWidget *wdg_document;
     TextBoxSimulator *wdg_textbox;
 

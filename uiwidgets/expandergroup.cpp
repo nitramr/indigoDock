@@ -127,7 +127,7 @@ void ExpanderLabel::paintEvent(QPaintEvent *)
 
 /**********************
  *
- * Settings
+ * Properties
  *
  * *******************/
 
@@ -200,7 +200,7 @@ void ExpanderGroup::addWidget(QWidget * widget){
 
 /**********************
  *
- * Settings
+ * Properties
  *
  * *******************/
 

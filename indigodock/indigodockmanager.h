@@ -33,12 +33,11 @@ class IndigoDockManager: public QWidget
 public:
     IndigoDockManager(QMainWindow *parent = 0);
 
-    void addIndigoDock(IndigoDock *dock, Qt::DockWidgetArea area);
-    void addIndigoDock(IndigoDock *dock);
-
-    void addIndigoPanel(IndigoDock * dock, IndigoPanel * panel, int tabIndex = -1);
-    void addIndigoPanel(IndigoDock * dock, IndigoPanel * panel, IndigoPanel::IndigoDockState dockState, int tabIndex = -1);
+    void addIndigoDock(IndigoDock *dock, Qt::DockWidgetArea area = Qt::LeftDockWidgetArea);
+    void addIndigoPanel(IndigoPanel * panel, IndigoPanel::IndigoDockState dockState = IndigoPanel::Docked, bool isNewPanel = true, int tabIndex = -1);
+    void addIndigoPanel(IndigoDock * dock, IndigoPanel * panel, IndigoPanel::IndigoDockState dockState = IndigoPanel::Docked, bool isNewPanel = true, int tabIndex = -1);
     void scrollToPanel(QString name);
+    void removePanel(IndigoPanel * panel);
 
     QByteArray saveWorkspace();
     void loadWorkspace(QByteArray workspaceArray);
@@ -52,7 +51,9 @@ public:
 private:
     QList<IndigoDock*> lst_Docks;
     QString version;
-    void addFloatingDock(IndigoPanel * panel);
+    void connectPanel(IndigoPanel *panel);  
+    void removeDock(IndigoDock *dock);
+    void removeAllDocks(QList<IndigoPanel *> &lst_outPanel, QList<IndigoDock *> &lst_outDock);
 
     int int_minimumPanelHeight;
     int int_minimumPanelWidth;
@@ -63,8 +64,7 @@ signals:
 public slots:
     void hoverDock();
     void dropPanel();
-    void removePanel(int index);
-    void removeDock();
+    void dragoutPanel();
     void showTab(int);
     void hideTab(int);
 };

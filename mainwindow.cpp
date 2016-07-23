@@ -24,12 +24,14 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QtGui>
+
 #include "indigodock/indigodock.h"
 
 #include "uiwidgets/indigomenubar.h"
 #include "uiwidgets/expandergroup.h"
 #include "uiwidgets/colorswatch.h"
 #include "uiwidgets/anglepicker.h"
+#include "uiwidgets/flowlayout.h"
 
 #include "stylefactory.h"
 #include "configmanager.h"
@@ -69,15 +71,17 @@ MainWindow::MainWindow(QWidget *parent) :
     // Setup IndigoDockManager
 
     wdg_indigoDockManager = new IndigoDockManager(this);
-    wdg_indigoDockManager->setMinimumPanelSize(QSize(200,100));
+    wdg_indigoDockManager->setMinimumPanelSize(QSize(180,100));
 
     wdg_indigoDock_r = new IndigoDock();
     wdg_indigoDock_l = new IndigoDock();
+   // wdg_indigoDock_f = new IndigoDock();
 
 
     /* Setup IndigoDocks in Manager */
     wdg_indigoDockManager->addIndigoDock(wdg_indigoDock_l, Qt::LeftDockWidgetArea );
     wdg_indigoDockManager->addIndigoDock(wdg_indigoDock_r, Qt::RightDockWidgetArea );
+    // wdg_indigoDockManager->addIndigoDock(wdg_indigoDock_f, Qt::RightDockWidgetArea );
 
 
     // Update Size for left panel (test case only)
@@ -92,7 +96,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     IndigoPanel *pan_content = new IndigoPanel("Content",QIcon(str_iconPath + "pan-content.png"));
-    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_r,pan_content, IndigoPanel::Floating);
+    wdg_indigoDockManager->addIndigoPanel(pan_content, IndigoPanel::Floating);
 
     IndigoPanel *pan_alignment = new IndigoPanel("Alignment",QIcon(str_iconPath + "pan-alignment.png"));
     wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_r,pan_alignment);
@@ -168,6 +172,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     textPanel(pan_content);
 
+    fluidPanel(pan_geometry);
+
 
 
 
@@ -193,18 +199,18 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QAction *tb_img = new QAction("Geometry",this);
     ui->mainToolBar->addAction(tb_img);
-    connect(tb_img, SIGNAL(triggered()), pan_geometry, SLOT(show()));
+   // connect(tb_img, SIGNAL(triggered()), pan_geometry, SLOT(show()));
     connect(tb_img, SIGNAL(triggered()), this, SLOT(scrollToGeometry()));
 
     QAction *tb_text = new QAction("Content",this);
     ui->mainToolBar->addAction(tb_text);
-    connect(tb_text, SIGNAL(triggered()), pan_content, SLOT(show()));
+    //connect(tb_text, SIGNAL(triggered()), pan_content, SLOT(show()));
     connect(tb_text, SIGNAL(triggered()), this, SLOT(scrollToContent()));
 
 
     QAction *tb_page = new QAction("Page",this);
     ui->mainToolBar->addAction(tb_page);
-    connect(tb_page, SIGNAL(triggered()), pan_page, SLOT(show()));
+    //connect(tb_page, SIGNAL(triggered()), pan_page, SLOT(show()));
     connect(tb_page, SIGNAL(triggered()), this, SLOT(scrollToPage()));
 
     ui->mainToolBar->addSeparator();
@@ -389,6 +395,65 @@ void MainWindow::textPanel(IndigoPanel *parent){
 
 }
 
+
+
+void MainWindow::fluidPanel(IndigoPanel *panel){
+
+
+    QLineEdit * edit1 = new QLineEdit();
+    QLineEdit * edit2 = new QLineEdit();
+    QLineEdit * edit3 = new QLineEdit();
+    QLineEdit * edit4 = new QLineEdit();
+    QLineEdit * edit5 = new QLineEdit();
+
+
+    QBoxLayout * lyt_1 = new QBoxLayout(QBoxLayout::TopToBottom);
+    lyt_1->setMargin(0);
+    lyt_1->addWidget(edit1);
+    lyt_1->addWidget(edit2);
+
+    QBoxLayout * lyt_2 = new QBoxLayout(QBoxLayout::TopToBottom);
+    lyt_2->setMargin(0);
+    lyt_2->addWidget(edit3);
+
+    QBoxLayout * lyt_3 = new QBoxLayout(QBoxLayout::TopToBottom);
+    lyt_3->setMargin(0);
+    lyt_3->addWidget(edit4);
+    lyt_3->addWidget(edit5);
+
+
+    QWidget * box1 = new QWidget();
+    box1->setLayout(lyt_1);
+
+    QWidget * box2 = new QWidget();
+    box2->setLayout(lyt_2);
+
+    QWidget * box3 = new QWidget();
+    box3->setLayout(lyt_3);
+
+
+   /* FlowLayout *flowLayout = new FlowLayout(0,2,2);
+    flowLayout->setContentsMargins(0,0,0,0);
+    flowLayout->setMargin(0);
+
+
+    flowLayout->addWidget(box1);
+    flowLayout->addWidget(box2);
+    flowLayout->addWidget(box3);
+    flowLayout->addWidget(new QPushButton(tr("Short")));
+    flowLayout->addWidget(new QPushButton(tr("Even longer button text")));
+
+    panel->addWidget(flowLayout);*/
+
+
+    panel->addWidget(box1);
+    panel->addWidget(box2);
+    panel->addWidget(box3);
+    panel->addWidget(new QPushButton(tr("Short")));
+    panel->addWidget(new QPushButton(tr("Even longer button text")));
+
+
+}
 
 
 

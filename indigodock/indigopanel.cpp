@@ -74,7 +74,7 @@ IndigoPanelHandle::IndigoPanelHandle(QWidget *parent) :
 
     // Actions
     connect(wdg_btnClose, SIGNAL (clicked()), parent, SLOT (hide()));
-    connect(wdg_btnExpander, SIGNAL (clicked()), parent, SLOT (expander()));
+    connect(wdg_btnExpander, SIGNAL (clicked()), parent, SLOT (toggleExpander()));
 
 }
 
@@ -116,7 +116,7 @@ void IndigoPanelHandle::paintEvent(QPaintEvent *event)
 
 /**********************
  *
- * Settings
+ * Properties
  *
  * *******************/
 
@@ -188,9 +188,11 @@ IndigoPanel::IndigoPanel(QString name, QWidget *dock) :
     wdg_handle = new IndigoPanelHandle(this);
     wdg_handle->installEventFilter(this);
 
-    wdg_normalContainer = new QWidget;
-    lyt_normalArea = new QVBoxLayout(wdg_normalContainer);
-    lyt_normalArea->setMargin(int_padding);
+    lyt_normalArea = new FlowLayout(int_padding);
+
+   // wdg_normalContainer = new QWidget;
+   // lyt_normalArea = new QVBoxLayout(wdg_normalContainer);
+   // lyt_normalArea->setMargin(int_padding);
 
     /*  wdg_scrollArea = new QScrollArea;
     wdg_scrollArea->setWidget(wdg_normalContainer);
@@ -204,7 +206,9 @@ IndigoPanel::IndigoPanel(QString name, QWidget *dock) :
     lyt_main = new QVBoxLayout;
     lyt_main->setMargin(0);
     lyt_main->addWidget(wdg_handle);
-    lyt_main->addWidget(wdg_normalContainer);
+    lyt_main->addLayout(lyt_normalArea);
+    //lyt_main->setSizeConstraint(QLayout::SetMinimumSize);
+    //lyt_main->addWidget(wdg_normalContainer);
     // lyt_main->addWidget(wdg_scrollArea);
     lyt_main->setAlignment(Qt::AlignTop);
     setLayout(lyt_main);
@@ -242,7 +246,7 @@ void IndigoPanel::hide(){
     switch(dockState()){
     case IndigoPanel::Docked:
         setDockState(IndigoPanel::HiddenDocked);
-        emit panelClosed(Index());
+        emit panelClosed(Index()); // used for tab
         qDebug() << "emit: panelClosed(...);" << endl;
         break;
     default:
@@ -259,7 +263,7 @@ void IndigoPanel::show(){
     switch(dockState()){
     case IndigoPanel::HiddenDocked:
         setDockState(IndigoPanel::Docked);
-        emit panelShown(Index());
+        emit panelShown(Index()); // used for tab
         qDebug() << "emit: panelShow(...);" << endl;
         break;
     default:
@@ -272,12 +276,11 @@ void IndigoPanel::show(){
 
 
 
-void IndigoPanel::expander(){
+void IndigoPanel::toggleExpander(){
 
 
     switch(expanderState()){
     case IndigoPanelHandle::Normal:
-
 
         m_expander = IndigoPanelHandle::Advanced;
         wdg_handle->setExpanderState(m_expander);
@@ -285,8 +288,8 @@ void IndigoPanel::expander(){
         qDebug() << "emit: isAdvanced();" << endl;
         break;
 
-    case IndigoPanelHandle::Advanced:
 
+    case IndigoPanelHandle::Advanced:
 
         m_expander = IndigoPanelHandle::Normal;
         wdg_handle->setExpanderState(m_expander);
@@ -332,34 +335,32 @@ bool IndigoPanel::eventFilter(QObject *object, QEvent *event)
 
         if (me->buttons() == Qt::LeftButton) {
 
-            QPoint point = me->globalPos();
-
-
-
 
             // undock Panel if not already undocked
             if(dockState() == IndigoPanel::Docked){
-
-                emit isFloating(int_index);
+                emit isFloating();
 
                 setDockState(IndigoPanel::Floating);
-
             }
 
+          //  setWindowState(Qt::WindowActive);
 
+            QPoint point = me->globalPos();
             move(point - pnt_relativeOffset);
+
 
             emit mouseMove(); // activate DropZone hover*
 
 
+
         }
+
 
         break;
     }
 
     case QEvent::MouseButtonRelease:
     {
-
         if(dockState() == IndigoPanel::Floating){
 
             emit mouseReleased(); // activate reparenting in DropZone*
@@ -370,10 +371,9 @@ bool IndigoPanel::eventFilter(QObject *object, QEvent *event)
         break;
     }
 
-
     case QEvent::MouseButtonDblClick:
 
-        expander();
+        toggleExpander();
         break;
 
     default:
@@ -434,6 +434,7 @@ int IndigoPanel::Index(){
  */
 void IndigoPanel::setIndex(int index){
     int_index = index;
+
 }
 
 

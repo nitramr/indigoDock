@@ -34,7 +34,8 @@ SOURCES += main.cpp\
     uiwidgets/indigomenubar.cpp \
     uiwidgets/iconwidget.cpp \
     uiwidgets/expandergroup.cpp \
-    indigodock/indigodockmanager.cpp
+    indigodock/indigodockmanager.cpp \
+    uiwidgets/flowlayout.cpp
 
 HEADERS  += mainwindow.h \    
     stylefactory.h \
@@ -49,7 +50,8 @@ HEADERS  += mainwindow.h \
     uiwidgets/indigomenubar.h \
     uiwidgets/iconwidget.h \
     uiwidgets/expandergroup.h \
-    indigodock/indigodockmanager.h
+    indigodock/indigodockmanager.h \
+    uiwidgets/flowlayout.h
 
 FORMS    += mainwindow.ui
 
