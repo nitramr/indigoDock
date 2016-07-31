@@ -111,6 +111,7 @@ IndigoTabBar::IndigoTabBar(QWidget *parent) :
     int_realIndex = -1; // real index of visible dragged tab
     int_dragIndex = -1; // index of visible dragged tab
     int_minDimension = 0;
+    int_dragTolerance = 5; // mouse offset after mouse click to start drag event
 
 
     setAccessibleName("IndigoTabBar");
@@ -371,6 +372,7 @@ void IndigoTabBar::mousePressEvent(QMouseEvent*event){
     if(visTabs <= 0) return;
 
     QPoint mouse = event->pos();
+    pnt_mouseDown = mouse;
 
     switch (m_tabOrientation){
 
@@ -392,7 +394,7 @@ void IndigoTabBar::mousePressEvent(QMouseEvent*event){
     if(int_hoverIndex >= 0 && int_hoverIndex < visTabs){
         // drag started
         if (event->buttons() == Qt::LeftButton && bool_allowDrag) {
-            bool_dragStart = true;
+           // bool_dragStart = true;
             int_hoverIndex = limitTabRange(int_hoverIndex);
             int_dragIndex = int_hoverIndex;
 
@@ -415,13 +417,19 @@ void IndigoTabBar::mouseMoveEvent(QMouseEvent*event){
 
     case Qt::Vertical:
         int_hoverIndex = mouse.y() / (int_tabHeight + int_gap);
-        pnt_dragPosition = QPoint(0,event->pos().y() - (int_tabHeight/2));
+        pnt_dragPosition = QPoint(0, mouse.y() - (int_tabHeight/2));
+
+        if((pnt_mouseDown.y() - int_dragTolerance > mouse.y() && event->buttons() == Qt::LeftButton) || (pnt_mouseDown.y() + int_dragTolerance < mouse.y() && event->buttons() == Qt::LeftButton))
+            bool_dragStart = true;
 
         break;
 
     case Qt::Horizontal:
         int_hoverIndex = mouse.x() / (int_tabWidth + int_gap);
-        pnt_dragPosition = QPoint(event->pos().x() - (int_tabWidth/2), 0);
+        pnt_dragPosition = QPoint(mouse.x() - (int_tabWidth/2), 0);
+
+        if((pnt_mouseDown.x() - int_dragTolerance > mouse.x() && event->buttons() == Qt::LeftButton) || (pnt_mouseDown.x() + int_dragTolerance < mouse.x() && event->buttons() == Qt::LeftButton))
+            bool_dragStart = true;
 
         break;
     }
@@ -439,8 +447,10 @@ void IndigoTabBar::mouseMoveEvent(QMouseEvent*event){
 
         // drag proceed
         if (event->buttons() == Qt::LeftButton && bool_allowDrag && bool_dragStart) {
-            bool_dragProceed = true;
-            int_realIndex = int_oldIndex;
+
+                bool_dragProceed = true;
+                int_realIndex = int_oldIndex;
+
         }
     }
 
@@ -541,7 +551,7 @@ void IndigoTabBar::paintEvent(QPaintEvent *event)
 
 
             QIcon icon = tab->Icon();
-            QPixmap pix = icon.pixmap(QSize(int_tabWidth, int_tabHeight));
+            QPixmap pix = icon.pixmap(QSize(int_tabWidth*devicePixelRatio(), int_tabHeight*devicePixelRatio()));
 
 
             // draw hovered background
@@ -601,7 +611,7 @@ void IndigoTabBar::paintEvent(QPaintEvent *event)
         IndigoTab *tab = lst_TabList.at(int_realIndex);
 
         QIcon icon = tab->Icon();
-        QPixmap pix = icon.pixmap(QSize(int_tabWidth, int_tabHeight));
+        QPixmap pix = icon.pixmap(QSize(int_tabWidth *devicePixelRatio(), int_tabHeight *devicePixelRatio()));
 
         QRect dragFrame(pnt_dragPosition.x(), pnt_dragPosition.y(), int_tabWidth, int_tabHeight);
         QColor col_background = this->palette().color(QPalette::Base);

@@ -29,6 +29,9 @@ IndigoDockManager::IndigoDockManager(QMainWindow *parent) : QWidget(parent){
     version = "1.0"; // workspace manager version
     int_minimumPanelHeight = 50;
     int_minimumPanelWidth = 100;
+    int_fadeSpeed = 100;
+
+    setFixedSize(0,0);
 
 }
 
@@ -65,16 +68,12 @@ void IndigoDockManager::addIndigoDock(IndigoDock *dock, Qt::DockWidgetArea area)
             dock->setAccessibleName("IndigoDock"+count);
             dock->setObjectName("IndigoDock"+count);
             dock->setMinimumPanelSize(minimumPanelSize()); // set min size
-            // dock->setFloating(false);
-
 
             main->addDockWidget(area,dock);
 
         }else{
             qDebug() << "Dock exists in DockManager list" << dock << endl;
         }
-
-
 
     }
 
@@ -95,8 +94,6 @@ void IndigoDockManager::removeDock(IndigoDock * dock){
         return;
 
     }
-
-
 }
 
 
@@ -154,15 +151,35 @@ void IndigoDockManager::addIndigoPanel(IndigoDock * dock, IndigoPanel * panel, I
     // add dock if needed
     addIndigoDock(dock);
 
-    // add panel
-    dock->addIndigoPanel(panel, dockState, tabIndex);
 
     // set floating options
     if(dockState == IndigoPanel::Floating){
+
+        dock->setWindowOpacity(0);
+        dock->show();
+        dock->adjustSize();
+
+        int titleHeight = dock->style()->pixelMetric(QStyle::PM_TitleBarHeight);
+        int titleMargin = dock->style()->pixelMetric(QStyle::PM_DockWidgetTitleMargin);
+
+        QPoint pntOffset(0, titleHeight + titleMargin);
+
         dock->setFloating(true);
-        dock->move(panel->pos());
+        dock->move(panel->pos() - pntOffset);
+
+        QPropertyAnimation *animation;
+        animation = new QPropertyAnimation(dock, "windowOpacity");
+        animation->setDuration(int_fadeSpeed);
+        animation->setStartValue(0);
+        animation->setEndValue(1);
+        animation->start();
+
+        //dock->setWindowOpacity(1);
 
     }
+
+    // add panel
+    dock->addIndigoPanel(panel, dockState, tabIndex);
 
 
 }
@@ -202,12 +219,17 @@ void IndigoDockManager::removePanel(IndigoPanel * panel){
 
             if(dock->getPanels().size() <= 0){
 
+               /* QPropertyAnimation *animation;
+                animation = new QPropertyAnimation(dock, "windowOpacity");
+                animation->setDuration(int_fadeSpeed);
+                animation->setStartValue(1);
+                animation->setEndValue(0);
+                animation->start();*/
 
-                this->removeDock(dock);
+                dock->hide();
+                lst_removeDocks.append(dock); // add remove candidate
 
             }
-
-            qDebug() << "Remove Panel:" << "Dock" << dock << "Panel index" << index << endl;
 
             return;
         }
@@ -294,6 +316,7 @@ void IndigoDockManager::dropPanel(){
     IndigoPanel *pan = qobject_cast<IndigoPanel *>(sender());
     if (!pan) return;
 
+    // try to add panel if it hover a dock
     IndigoDock * dock;
     foreach(dock, lst_Docks){
 
@@ -305,13 +328,23 @@ void IndigoDockManager::dropPanel(){
     // create floating dock if panel is not already docked
     if (pan->dockState() == IndigoPanel::Floating){
 
-        //addFloatingDock(pan, false);
+        addIndigoPanel(pan, pan->dockState(), false);
 
-        addIndigoPanel(NULL,pan, pan->dockState(), false);
-
-        return;
     }
 
+
+    // remove remove-candidate docks
+
+    if (lst_removeDocks.size() <= 0) return;
+
+    IndigoDock * remDock;
+    foreach(remDock, lst_removeDocks){
+
+        removeDock(remDock);
+
+    }
+
+    lst_removeDocks.clear();
 
 }
 
@@ -368,7 +401,6 @@ void IndigoDockManager::loadWorkspace(QByteArray workspaceArray){
             while(!indigoPanel.isNull())
             {
 
-
                 IndigoPanel * sortPanel;
                 foreach(sortPanel, lst_tmpPanels){
 
@@ -380,12 +412,10 @@ void IndigoDockManager::loadWorkspace(QByteArray workspaceArray){
                         sortPanel->setExpanderState(indigoPanel.attribute("expanderState", "-1").toInt());
                         sortPanel->setDockState(indigoPanel.attribute("dockState", "-1").toInt());
 
-
                     }
                 }
 
                 indigoPanel = indigoPanel.nextSiblingElement("IndigoPanel");
-
 
             }
 
@@ -393,8 +423,6 @@ void IndigoDockManager::loadWorkspace(QByteArray workspaceArray){
             addIndigoDock(newDock, Qt::LeftDockWidgetArea);
 
             i++;
-
-
 
         }
 
@@ -407,7 +435,6 @@ void IndigoDockManager::loadWorkspace(QByteArray workspaceArray){
 
     lst_tmpDocks.clear();
     lst_tmpPanels.clear();
-
 
 }
 

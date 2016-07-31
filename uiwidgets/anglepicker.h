@@ -47,7 +47,7 @@ private:
     QPoint pnt_pointer;
     QRect rct_circleFrame;
     int int_lineThickness;
-    double int_angle;
+    double dbl_angle;
     int int_diameter;
     double dbl_transparency;
 

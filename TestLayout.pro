@@ -15,6 +15,7 @@ greaterThan(QT_MAJOR_VERSION, 4) {
 
 # OSX: Xcode 7.1.x doesn't support macosx10.10 sdk
 QMAKE_MAC_SDK = macosx10.11
+QMAKE_INFO_PLIST += Info.plist #retina ready
 
 TARGET = TestLayout
 TEMPLATE = app

@@ -37,7 +37,7 @@ void IconWidget::paintEvent(QPaintEvent *){
 void IconWidget::setIcon(QIcon icon, int iconSize){
 
     int_iconSize = iconSize;
-    pxm_icon = icon.pixmap(icon.actualSize(QSize(int_iconSize, int_iconSize)));
+    pxm_icon = icon.pixmap(icon.actualSize(QSize(int_iconSize*devicePixelRatio(), int_iconSize*devicePixelRatio())));
 
     setFixedSize(iconSize, iconSize);
     update();

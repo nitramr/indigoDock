@@ -110,6 +110,8 @@ private:
    bool bool_allowDrag;
    bool bool_enableTooltip;
    QPoint pnt_dragPosition;
+   QPoint pnt_mouseDown;
+   int int_dragTolerance;
    int int_realIndex;
    int int_dragIndex;
    int int_minDimension;

@@ -41,6 +41,15 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+
+#ifdef Q_OS_MAC
+    qDebug() << "detect Mac OSX" << endl;
+#else
+
+    qDebug() << "detect non Mac OS" << endl;
+#endif
+
+
     ui->setupUi(this);
 
     qApp->setStyle(QStyleFactory::create("Fusion"));
@@ -67,25 +76,13 @@ MainWindow::MainWindow(QWidget *parent) :
      *
      ******************/
 
+    wdg_indigoDock_r = new IndigoDock();
 
     // Setup IndigoDockManager
 
     wdg_indigoDockManager = new IndigoDockManager(this);
     wdg_indigoDockManager->setMinimumPanelSize(QSize(180,100));
-
-    wdg_indigoDock_r = new IndigoDock();
-    wdg_indigoDock_l = new IndigoDock();
-   // wdg_indigoDock_f = new IndigoDock();
-
-
-    /* Setup IndigoDocks in Manager */
-    wdg_indigoDockManager->addIndigoDock(wdg_indigoDock_l, Qt::LeftDockWidgetArea );
     wdg_indigoDockManager->addIndigoDock(wdg_indigoDock_r, Qt::RightDockWidgetArea );
-    // wdg_indigoDockManager->addIndigoDock(wdg_indigoDock_f, Qt::RightDockWidgetArea );
-
-
-    // Update Size for left panel (test case only)
-    //wdg_indigoDock_l->setMinimumPanelWidth(150);
 
 
     /*****************
@@ -96,7 +93,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     IndigoPanel *pan_content = new IndigoPanel("Content",QIcon(str_iconPath + "pan-content.png"));
-    wdg_indigoDockManager->addIndigoPanel(pan_content, IndigoPanel::Floating);
+    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_r, pan_content);
 
     IndigoPanel *pan_alignment = new IndigoPanel("Alignment",QIcon(str_iconPath + "pan-alignment.png"));
     wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_r,pan_alignment);
@@ -107,8 +104,8 @@ MainWindow::MainWindow(QWidget *parent) :
     IndigoPanel *pan_page = new IndigoPanel("Page",QIcon(str_iconPath + "pan-page.png"));
     wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_r,pan_page);
 
-   // IndigoPanel *pan_group = new IndigoPanel("Groups",QIcon(str_iconPath + "pan-image.png"));
-   // wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_r,pan_group);
+    IndigoPanel *pan_group = new IndigoPanel("Groups",QIcon(str_iconPath + "pan-image.png"));
+    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_r,pan_group);
 
     IndigoPanel *pan_line = new IndigoPanel("Line",QIcon(str_iconPath + "pan-lines.png"));
     wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_r,pan_line);
@@ -125,40 +122,24 @@ MainWindow::MainWindow(QWidget *parent) :
     IndigoPanel *pan_outlines = new IndigoPanel("Outlines",QIcon(str_iconPath + "pan-outline.png"));
     wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_r,pan_outlines);
 
-    /* IndigoPanel *pan_bookmarks = new IndigoPanel("PanBookmarks",indigoDock_r);
-    pan_bookmarks ->setCaption("Bookmarks");
-    pan_bookmarks ->setIcon(QIcon(str_iconPath + "pan-image.png"));
-    indigoDock_r->addIndigoPanel(pan_bookmarks);
+     IndigoPanel *pan_bookmarks = new IndigoPanel("Bookmarks",QIcon(str_iconPath + "pan-image.png"));
+    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_r,pan_bookmarks);
 
-    IndigoPanel *pan_scrapbook = new IndigoPanel("PanScrapbook",indigoDock_r);
-    pan_scrapbook ->setCaption("Scrapbook");
-    pan_scrapbook ->setIcon(QIcon(str_iconPath + "pan-image.png"));
-    indigoDock_r->addIndigoPanel(pan_scrapbook);
+    IndigoPanel *pan_scrapbook = new IndigoPanel("Scrapbook",QIcon(str_iconPath + "pan-image.png"));
+    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_r,pan_scrapbook);
 
-    IndigoPanel *pan_symbols = new IndigoPanel("PanSymbols",indigoDock_r);
-    pan_symbols ->setCaption("Symbols");
-    pan_symbols ->setIcon(QIcon(str_iconPath + "pan-image.png"));
-    indigoDock_r->addIndigoPanel(pan_symbols);
+    IndigoPanel *pan_symbols = new IndigoPanel("Symbols",QIcon(str_iconPath + "pan-image.png"));
+    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_r,pan_symbols);
 
-    IndigoPanel *pan_inlineitems = new IndigoPanel("PanInlineItems",indigoDock_r);
-    pan_inlineitems ->setCaption("Inline Items");
-    pan_inlineitems ->setIcon(QIcon(str_iconPath + "pan-image.png"));
-    indigoDock_r->addIndigoPanel(pan_inlineitems);*/
-
-
-
-    /*****************
-     *
-     * Left Dock
-     *
-     * **************/
+    IndigoPanel *pan_inlineitems = new IndigoPanel("Inline Items",QIcon(str_iconPath + "pan-image.png"));
+    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_r,pan_inlineitems);
 
 
     IndigoPanel *pan_test = new IndigoPanel("Test",QIcon(str_iconPath + "pan-image.png"));
-    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_l,pan_test );
+    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_r,pan_test );
 
     IndigoPanel *pan_geometry = new IndigoPanel("Geometry",QIcon(str_iconPath + "pan-frame.png"));
-    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_l,pan_geometry);
+    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_r,pan_geometry);
 
 
 
@@ -184,8 +165,6 @@ MainWindow::MainWindow(QWidget *parent) :
      *
      * ***************/
 
-    //ui->mainToolBar->addAction("Light");
-
     QAction *tb_light = new QAction("Light",this);
     ui->mainToolBar->addAction(tb_light);
     connect(tb_light, SIGNAL(triggered()), this, SLOT(loadLightTheme()));
@@ -199,18 +178,15 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QAction *tb_img = new QAction("Geometry",this);
     ui->mainToolBar->addAction(tb_img);
-   // connect(tb_img, SIGNAL(triggered()), pan_geometry, SLOT(show()));
     connect(tb_img, SIGNAL(triggered()), this, SLOT(scrollToGeometry()));
 
     QAction *tb_text = new QAction("Content",this);
     ui->mainToolBar->addAction(tb_text);
-    //connect(tb_text, SIGNAL(triggered()), pan_content, SLOT(show()));
     connect(tb_text, SIGNAL(triggered()), this, SLOT(scrollToContent()));
 
 
     QAction *tb_page = new QAction("Page",this);
     ui->mainToolBar->addAction(tb_page);
-    //connect(tb_page, SIGNAL(triggered()), pan_page, SLOT(show()));
     connect(tb_page, SIGNAL(triggered()), this, SLOT(scrollToPage()));
 
     ui->mainToolBar->addSeparator();
@@ -222,6 +198,32 @@ MainWindow::MainWindow(QWidget *parent) :
     QAction *tb_saveWS = new QAction("Save Workspace",this);
     ui->mainToolBar->addAction(tb_saveWS);
     connect(tb_saveWS, SIGNAL(triggered()), this, SLOT(saveWorkspace()));
+
+
+
+    QAction *tb_tool1 = new QAction(QIcon(str_iconPath + "pan-image.png"), "Tool",this);
+    ui->toolBar->addAction(tb_tool1);
+
+    QAction *tb_tool2 = new QAction(QIcon(str_iconPath + "pan-image.png"), "Tool",this);
+    ui->toolBar->addAction(tb_tool2);
+
+    QAction *tb_tool3 = new QAction(QIcon(str_iconPath + "pan-image.png"), "Tool",this);
+    ui->toolBar->addAction(tb_tool3);
+
+    QAction *tb_tool4 = new QAction(QIcon(str_iconPath + "pan-image.png"), "Tool",this);
+    ui->toolBar->addAction(tb_tool4);
+
+    QAction *tb_tool5 = new QAction(QIcon(str_iconPath + "pan-image.png"), "Tool",this);
+    ui->toolBar->addAction(tb_tool5);
+
+    QAction *tb_tool6 = new QAction(QIcon(str_iconPath + "pan-image.png"), "Tool",this);
+    ui->toolBar->addAction(tb_tool6);
+
+    QAction *tb_tool7 = new QAction(QIcon(str_iconPath + "pan-image.png"), "Tool",this);
+    ui->toolBar->addAction(tb_tool7);
+
+    QAction *tb_tool8 = new QAction(QIcon(str_iconPath + "pan-image.png"), "Tool",this);
+    ui->toolBar->addAction(tb_tool8);
 
 
     /******************
@@ -240,13 +242,20 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(wdg_textbox, SIGNAL(mouseDoubleClick()), this, SLOT(scrollToContent()));
 
 
+    QScrollArea * documentScroll = new QScrollArea();
+    documentScroll->setWidget(wdg_textbox);
+    documentScroll->setAlignment(Qt::AlignCenter);
+    //documentScroll->setWidgetResizable(true);
+
     QHBoxLayout *lyt_tbsim = new QHBoxLayout();
-    lyt_tbsim->setMargin(20);
-    lyt_tbsim->addWidget(wdg_textbox);
+    lyt_tbsim->setContentsMargins(20,20,0,0);
+    lyt_tbsim->addWidget(documentScroll);
+
+
 
     wdg_document = new QWidget;
     wdg_document->setAutoFillBackground(true);
-    wdg_document->setBackgroundRole(QPalette::Light);
+    wdg_document->setBackgroundRole(QPalette::Dark);
     wdg_document->setLayout(lyt_tbsim);
     this->setCentralWidget(wdg_document);
 
@@ -286,93 +295,12 @@ MainWindow::~MainWindow()
 
 void MainWindow::textPanel(IndigoPanel *parent){
 
-    /*IndigoExpanderGroup *grFont = new IndigoExpanderGroup();
-    IndigoExpanderGroup *grAlignment = new IndigoExpanderGroup();
-    IndigoExpanderGroup *grStyles = new IndigoExpanderGroup(false);
-    IndigoExpanderGroup *grChars = new IndigoExpanderGroup(false);
-    IndigoExpanderGroup *grParagraph = new IndigoExpanderGroup(false);
-    IndigoExpanderGroup *grLists = new IndigoExpanderGroup(false);
-    IndigoExpanderGroup *grColumns = new IndigoExpanderGroup(false);
-
-    grFont->setCaption("Font");
-    grAlignment->setCaption("Alignment");
-    grStyles->setCaption("Styles");
-    grChars->setCaption("Character");
-    grParagraph->setCaption("Paragraph");
-    grLists->setCaption("Lists & Effects");
-    grColumns->setCaption("Columns & Distances");
-
-    // Font
-    QComboBox *comboFont = new QComboBox(0);
-    comboFont->addItem("Ubuntu");
-
-    AnglePicker * anglePicker = new AnglePicker();
-    ColorSwatch * colorSwatch = new ColorSwatch();
-
-    grFont->addWidget(comboFont);
-    grAlignment->addWidget(anglePicker);
-    grStyles->addWidget(colorSwatch);
-
-    // Spacer
-     QWidget * spacer = new QWidget();
-    QVBoxLayout *layoutSpacer = new QVBoxLayout();
-    layoutSpacer->addStretch(1);
-    spacer->setLayout(layoutSpacer);*
-
-
-    parent->addWidgetNormal(grFont);
-    parent->addWidgetNormal(grAlignment);
-    parent->addWidgetNormal(grStyles);
-    parent->addWidgetNormal(grChars);
-    parent->addWidgetNormal(grParagraph);
-    parent->addWidgetNormal(grLists);
-    parent->addWidgetNormal(grColumns);
-    //parent->addWidgetNormal(spacer);*/
-
-
-    /* IndigoLabelControl *ilcTest = new IndigoLabelControl();
-    ilcTest->setLabel(QIcon(str_iconPath + "pan-image.png"));
-    QLineEdit *textBox = new QLineEdit("Icon Test");
-    ilcTest->setWidget(textBox);
-    parent->addWidgetNormal(ilcTest);
-
-
-    IndigoLabelControl *ilcTest2 = new IndigoLabelControl();
-    ilcTest2->setLabel("b:");
-    QLineEdit *textBox2 = new QLineEdit("String Test");
-    ilcTest2->setWidget(textBox2);
-    parent->addWidgetNormal(ilcTest2);
-
-
-    IndigoLabelControl *ilcTest4 = new IndigoLabelControl();
-    ilcTest4->setLabel(QIcon(str_iconPath + "pan-image.png"));
-    QLineEdit *textBox4 = new QLineEdit("Col left");
-    ilcTest4->setWidget(textBox4);
-    IndigoLabelControl *ilcTest5 = new IndigoLabelControl();
-    ilcTest5->setLabel(QIcon(str_iconPath + "pan-image.png"));
-    QLineEdit *textBox5 = new QLineEdit("Col right");
-    ilcTest5->setWidget(textBox5);
-    QHBoxLayout *hbox = new QHBoxLayout();
-    hbox->addWidget(ilcTest4);
-    hbox->addWidget(ilcTest5);
-    hbox->setMargin(0);
-    parent->addWidgetNormal(hbox);
-
-
-    ColorSwatch * cPicker = new ColorSwatch();
-    IndigoLabelControl *ilcTest6 = new IndigoLabelControl();
-    ilcTest6->setLabel("Rect Colour:", 100);
-    ilcTest6->setWidget(cPicker, cPicker->width());
-    parent->addWidgetNormal(ilcTest6);*/
-
-
-
-
 
     IconWidget *wdg_icon = new IconWidget(str_iconPath + "pan-image.png", 22);
 
     QLineEdit *textBox = new QLineEdit("Icon Test");
     QLineEdit *textBox2 = new QLineEdit("135 °");
+    QTextEdit *textEdit1 = new QTextEdit("Example");
     AnglePicker * aPicker = new AnglePicker(135);
     QLabel * lbl_ext1 = new QLabel("Extended Features 1");
     QLabel * lbl_ext2 = new QLabel("Extended Features 2");
@@ -385,6 +313,7 @@ void MainWindow::textPanel(IndigoPanel *parent){
     qfl1->addRow( wdg_icon, textBox );
     qfl1->addRow( aPicker, textBox2 );
     qfl1->addRow( lbl_ext2 );
+    qfl1->addRow( textEdit1 );
 
     parent->addWidget(qfl1);
 

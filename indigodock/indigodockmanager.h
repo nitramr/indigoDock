@@ -50,6 +50,7 @@ public:
 
 private:
     QList<IndigoDock*> lst_Docks;
+    QList<IndigoDock*> lst_removeDocks;
     QString version;
     void connectPanel(IndigoPanel *panel);  
     void removeDock(IndigoDock *dock);
@@ -57,6 +58,7 @@ private:
 
     int int_minimumPanelHeight;
     int int_minimumPanelWidth;
+    int int_fadeSpeed;
 
 
 signals:

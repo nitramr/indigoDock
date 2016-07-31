@@ -175,12 +175,6 @@ void IndigoDock::removePanel(int index){
 
     lst_PanelList.removeAt(index);
 
-
-    // if dock is empty stop update tasks
-    if(lst_PanelList.size() == 0)
-        return;
-
-
     updatePanels();
     wdg_toolbar->removeTab(index);
 }

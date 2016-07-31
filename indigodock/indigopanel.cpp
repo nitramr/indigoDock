@@ -107,7 +107,7 @@ void IndigoPanelHandle::paintEvent(QPaintEvent *event)
     {
         int labelX = int_iconSize + 4;
 
-        p.drawPixmap(QRect(0, iconY, int_iconSize,int_iconSize),ico_icon.pixmap(int_iconSize,int_iconSize));
+        p.drawPixmap(QRect(0, iconY, int_iconSize,int_iconSize),ico_icon.pixmap(int_iconSize*devicePixelRatio(),int_iconSize*devicePixelRatio()));
         p.setFont(font);
         p.drawText( QRect(labelX, 0, lbl_width, h), Qt::AlignVCenter, str_title );
     }
@@ -189,6 +189,7 @@ IndigoPanel::IndigoPanel(QString name, QWidget *dock) :
     wdg_handle->installEventFilter(this);
 
     lyt_normalArea = new FlowLayout(int_padding);
+    //lyt_normalArea->setSizeConstraint( QLayout::SetNoConstraint );
 
    // wdg_normalContainer = new QWidget;
    // lyt_normalArea = new QVBoxLayout(wdg_normalContainer);
@@ -441,6 +442,7 @@ void IndigoPanel::setIndex(int index){
 
 void IndigoPanel::addWidget(QWidget *content){
     lyt_normalArea->addWidget(content);
+
 }
 
 

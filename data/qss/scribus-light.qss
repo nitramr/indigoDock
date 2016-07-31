@@ -61,11 +61,6 @@ Palette::light {
 
 /* Regular QSS definitions */
 
-IndigoDropZone { 
-
-	background-color: palette(base);
-}
-
 IndigoDock QScrollBar:vertical {
 width: 10px;
 }

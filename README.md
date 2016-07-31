@@ -33,9 +33,10 @@ Here is how you run it:
 * drag and drop between more than one dock  
 * container highlighting by panel hovering  
 * application has a theme switcher (dark/light)  
-* setting will saved in a settings file  
+* workspace can saved in a settings file  
 * auto scroll to active panel by click on link icon  
 * panel stack float horizontal or vertical based on dock orientation  
+* drop of a floating panel outside of a dock creates a new dock  
 
 
 ## Issues:

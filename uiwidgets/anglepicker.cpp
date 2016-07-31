@@ -47,11 +47,11 @@ AnglePicker::AnglePicker(double angle, QWidget *parent)
 
 void AnglePicker::init(){
 
-    int_diameter = 32;
+    int_diameter = 24;
     pnt_center = QPoint(this->int_diameter/2, this->int_diameter/2);
     pnt_pointer = QPoint(this->int_diameter/2, 0);
-    int_lineThickness = 2;
-    int_angle = 0;
+    int_lineThickness = 1;
+    dbl_angle = 0;
     dbl_transparency = 0.55; // 10%
 
     rct_circleFrame = QRect(1,1,this->int_diameter-int_lineThickness - 1, this->int_diameter-int_lineThickness -1);
@@ -82,7 +82,7 @@ void AnglePicker::paintEvent(QPaintEvent*) {
     painter.save();
     painter.setPen(Qt::NoPen);
     painter.setBrush(brush);
-    painter.drawPie(rct_circleFrame, 0, 6000 / 360 * int_angle);
+    painter.drawPie(rct_circleFrame, 0, 6000 / 360 * dbl_angle);
     painter.restore();
 
     painter.setPen(pen);     
@@ -93,7 +93,7 @@ void AnglePicker::paintEvent(QPaintEvent*) {
     // draw angle line
     painter.save();
     painter.translate(pnt_center.x(), pnt_center.y());
-    painter.rotate(-int_angle);
+    painter.rotate(-dbl_angle);
     painter.drawLine(0, 0, int_diameter/2 - int_lineThickness - 1, 0);
     painter.restore();
 
@@ -117,7 +117,7 @@ void AnglePicker::mouseMoveEvent(QMouseEvent *event) {
        // if (angle > 0) angle -= 360;
 
         // invert counter direction
-        int_angle = angle;
+        dbl_angle = angle;
 
         update();
 
@@ -139,7 +139,7 @@ void AnglePicker::mouseMoveEvent(QMouseEvent *event) {
 
 double AnglePicker::Angle() {
 
-    return int_angle;
+    return dbl_angle;
 }
 
 
@@ -149,7 +149,7 @@ void AnglePicker::setAngle(double degree){
     if (degree < 0) degree = 0;
     if (degree > 360) degree = 360;
 
-    int_angle = degree;
+    dbl_angle = degree;
     update();
 
 }
