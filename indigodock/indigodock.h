@@ -29,10 +29,22 @@
 #include <QSplitter>
 #include <QtGui>
 #include <QList>
+#include <QDockWidget>
+#include <QScrollArea>
+#include <QPropertyAnimation>
+#include <QScrollBar>
 
 #include "indigopanel.h"
 #include "indigotabbar.h"
-#include "helper.h"
+
+
+/*#####################
+ #
+ #
+ # IndigoDock
+ #
+ #
+ #####################*/
 
 
 class IndigoDock : public QDockWidget
@@ -42,7 +54,6 @@ class IndigoDock : public QDockWidget
 public:
 
     IndigoDock(QWidget *parent = 0);
-    ~IndigoDock();
 
     void addIndigoPanel(IndigoPanel *panel, IndigoPanel::IndigoDockState dockState = IndigoPanel::Docked, int tabIndex = -1);
     void hoverDock(IndigoPanel *pan);
@@ -70,10 +81,9 @@ private:
 
     QList<IndigoPanel*> lst_PanelList;
     QBoxLayout * lyt_dropzone;
-
+   // QWidget * wdg_spacer;
     IndigoTabBar * wdg_toolbar;
     QSplitter *wdg_mainSplitter;
-    QSplitter *wdg_panelSplitter;
     QScrollArea * wdg_scrollArea_dz;
     QScrollArea * wdg_scrollArea_tb;
     QWidget *wdg_dropzone;
@@ -90,6 +100,8 @@ private:
 
     bool bool_singleMode;
 
+    void addWidget(QWidget *widget);
+    void insertWidget(int index, QWidget *widget);
     void updatePanels();
     void addPlaceholder (int index = -1);
     void removePlaceholder ();
@@ -103,7 +115,7 @@ protected:
     void resizeEvent(QResizeEvent *e);
     bool eventFilter(QObject *object, QEvent *event);
 
-signals:  
+signals:
 
     void panelDropped(int index);
     void singleMode(bool);

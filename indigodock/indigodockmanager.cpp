@@ -23,6 +23,11 @@
 
 #include "indigodockmanager.h"
 #include <QDomDocument>
+#include <QXmlStreamWriter>
+#include <QMainWindow>
+#include <QMessageBox>
+#include <QPropertyAnimation>
+#include <QStyle>
 
 IndigoDockManager::IndigoDockManager(QMainWindow *parent) : QWidget(parent){
 

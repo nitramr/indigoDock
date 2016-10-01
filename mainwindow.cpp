@@ -33,7 +33,7 @@
 #include "uiwidgets/anglepicker.h"
 #include "uiwidgets/flowlayout.h"
 
-#include "stylefactory.h"
+#include "themefactory.h"
 #include "configmanager.h"
 
 
@@ -76,13 +76,13 @@ MainWindow::MainWindow(QWidget *parent) :
      *
      ******************/
 
-    wdg_indigoDock_r = new IndigoDock();
+    wdg_indigoDock = new IndigoDock();
 
     // Setup IndigoDockManager
 
     wdg_indigoDockManager = new IndigoDockManager(this);
     wdg_indigoDockManager->setMinimumPanelSize(QSize(180,100));
-    wdg_indigoDockManager->addIndigoDock(wdg_indigoDock_r, Qt::RightDockWidgetArea );
+    wdg_indigoDockManager->addIndigoDock(wdg_indigoDock, Qt::RightDockWidgetArea );
 
 
     /*****************
@@ -92,54 +92,55 @@ MainWindow::MainWindow(QWidget *parent) :
      * **************/
 
 
-    IndigoPanel *pan_content = new IndigoPanel("Content",QIcon(str_iconPath + "pan-content.png"));
-    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_r, pan_content);
+    IndigoPanel *pan_content = new IndigoPanel("Content", NULL/*QIcon(str_iconPath + "pan-content.png")*/);
+  //  pan_content->setGripColor(Qt::red);
+    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock, pan_content);
 
     IndigoPanel *pan_alignment = new IndigoPanel("Alignment",QIcon(str_iconPath + "pan-alignment.png"));
-    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_r,pan_alignment);
+    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock,pan_alignment);
 
     IndigoPanel *pan_colours = new IndigoPanel("Colours",QIcon(str_iconPath + "pan-colour.png"));
-    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_r,pan_colours);
+    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock,pan_colours);
 
     IndigoPanel *pan_page = new IndigoPanel("Page",QIcon(str_iconPath + "pan-page.png"));
-    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_r,pan_page);
+    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock,pan_page);
 
     IndigoPanel *pan_group = new IndigoPanel("Groups",QIcon(str_iconPath + "pan-image.png"));
-    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_r,pan_group);
+    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock,pan_group);
 
     IndigoPanel *pan_line = new IndigoPanel("Line",QIcon(str_iconPath + "pan-lines.png"));
-    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_r,pan_line);
+    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock,pan_line);
 
     IndigoPanel *pan_transparency = new IndigoPanel("Transparency",QIcon(str_iconPath + "pan-transparency.png"));
-    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_r,pan_transparency);
+    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock,pan_transparency);
 
     IndigoPanel *pan_table = new IndigoPanel("Table",QIcon(str_iconPath + "pan-table.png"));
-    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_r,pan_table);
+    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock,pan_table);
 
     IndigoPanel *pan_layers = new IndigoPanel("Layer", QIcon(str_iconPath + "pan-layer.png"));
-    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_r,pan_layers);
+    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock,pan_layers);
 
     IndigoPanel *pan_outlines = new IndigoPanel("Outlines",QIcon(str_iconPath + "pan-outline.png"));
-    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_r,pan_outlines);
+    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock,pan_outlines);
 
      IndigoPanel *pan_bookmarks = new IndigoPanel("Bookmarks",QIcon(str_iconPath + "pan-image.png"));
-    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_r,pan_bookmarks);
+    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock,pan_bookmarks);
 
     IndigoPanel *pan_scrapbook = new IndigoPanel("Scrapbook",QIcon(str_iconPath + "pan-image.png"));
-    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_r,pan_scrapbook);
+    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock,pan_scrapbook);
 
     IndigoPanel *pan_symbols = new IndigoPanel("Symbols",QIcon(str_iconPath + "pan-image.png"));
-    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_r,pan_symbols);
+    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock,pan_symbols);
 
     IndigoPanel *pan_inlineitems = new IndigoPanel("Inline Items",QIcon(str_iconPath + "pan-image.png"));
-    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_r,pan_inlineitems);
+    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock,pan_inlineitems);
 
 
     IndigoPanel *pan_test = new IndigoPanel("Test",QIcon(str_iconPath + "pan-image.png"));
-    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_r,pan_test );
+    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock,pan_test );
 
     IndigoPanel *pan_geometry = new IndigoPanel("Geometry",QIcon(str_iconPath + "pan-frame.png"));
-    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock_r,pan_geometry);
+    wdg_indigoDockManager->addIndigoPanel(wdg_indigoDock,pan_geometry);
 
 
 
@@ -296,11 +297,13 @@ MainWindow::~MainWindow()
 void MainWindow::textPanel(IndigoPanel *parent){
 
 
-    IconWidget *wdg_icon = new IconWidget(str_iconPath + "pan-image.png", 22);
+
+
+    QTextEdit *textEdit1 = new QTextEdit("Example");
 
     QLineEdit *textBox = new QLineEdit("Icon Test");
     QLineEdit *textBox2 = new QLineEdit("135 °");
-    QTextEdit *textEdit1 = new QTextEdit("Example");
+    IconWidget *wdg_icon = new IconWidget(str_iconPath + "pan-image.png", 22);
     AnglePicker * aPicker = new AnglePicker(135);
     QLabel * lbl_ext1 = new QLabel("Extended Features 1");
     QLabel * lbl_ext2 = new QLabel("Extended Features 2");
@@ -413,7 +416,7 @@ void MainWindow::loadTheme(){
 
         QString style = ts.readAll();
 
-        StyleFactory *sf = new StyleFactory();
+        ThemeFactory *sf = new ThemeFactory();
         sf->parseString(style);
 
         qApp->setPalette(sf->palette());

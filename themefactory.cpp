@@ -25,13 +25,13 @@
  */
 
 
-#include "stylefactory.h"
+#include "themefactory.h"
 #include <QDebug>
 #include <QMetaEnum>
 #include <QtMath>
 
 
-StyleFactory::StyleFactory()
+ThemeFactory::ThemeFactory()
 {
     str_theme = "";
 
@@ -73,13 +73,13 @@ StyleFactory::StyleFactory()
 
 
 
-QString StyleFactory::getTheme(){
+QString ThemeFactory::getTheme(){
     return str_theme;
 }
 
 
 
-void StyleFactory::parseString(QString &StyleString){
+void ThemeFactory::parseString(QString &StyleString){
 
 
     if (StyleString.isEmpty())
@@ -131,7 +131,7 @@ void StyleFactory::parseString(QString &StyleString){
 
 
 
-void StyleFactory::builtPalette(QString group, QString role, QString color){
+void ThemeFactory::builtPalette(QString group, QString role, QString color){
 
     QPalette::ColorGroup cg;
     QPalette::ColorRole cr;
@@ -164,7 +164,7 @@ void StyleFactory::builtPalette(QString group, QString role, QString color){
 
 
 
-QColor StyleFactory::parseColor(const QString str)
+QColor ThemeFactory::parseColor(const QString str)
 {
     if (str.startsWith("rgba")) {
         QRegExp rx_rgba("\\(\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*\\)");
@@ -235,7 +235,7 @@ QColor StyleFactory::parseColor(const QString str)
 
 
 
-qreal StyleFactory::colorRange(qreal value, qreal min, qreal max){
+qreal ThemeFactory::colorRange(qreal value, qreal min, qreal max){
 
     if(value < min) value = min;
     if(value > max) value = max;

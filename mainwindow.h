@@ -60,9 +60,8 @@ public:
     };
 
     IndigoDockManager * wdg_indigoDockManager;
-    IndigoDock *wdg_indigoDock_r;
-    IndigoDock *wdg_indigoDock_l;
-    IndigoDock *wdg_indigoDock_f;
+    IndigoDock *wdg_indigoDock;
+
     QWidget *wdg_document;
     TextBoxSimulator *wdg_textbox;
 

@@ -25,6 +25,12 @@
 #define INDIGODOCKMANAGER_H
 
 #include <QWidget>
+#include <QMainWindow>
+#include <QList>
+#include <QString>
+#include <QByteArray>
+#include <QSize>
+#include <QStyle>
 #include "indigodock.h"
 
 class IndigoDockManager: public QWidget

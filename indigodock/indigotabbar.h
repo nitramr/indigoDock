@@ -24,9 +24,12 @@
 #ifndef INDIGOTABBAR_H
 #define INDIGOTABBAR_H
 
-#include <QtWidgets>
 #include <QWidget>
 #include <QIcon>
+#include <QList>
+#include <QEvent>
+#include <QMouseEvent>
+#include <QPainter>
 
 
 //

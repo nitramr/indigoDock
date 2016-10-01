@@ -25,18 +25,19 @@
  */
 
 
-#ifndef STYLEFACTORY_H
-#define STYLEFACTORY_H
+#ifndef THEMEFACTORY_H
+#define THEMEFACTORY_H
 #include <QString>
 #include <QStyle>
+#include <QPalette>
 
 
-class StyleFactory
+class ThemeFactory
 {
 
 
 public:
-    StyleFactory();
+    ThemeFactory();
 
     inline QPalette palette() const { return pal_palette; }
 
@@ -61,4 +62,4 @@ signals:
 public slots:
 };
 
-#endif // STYLEFACTORY_H
+#endif // THEMEFACTORY_H

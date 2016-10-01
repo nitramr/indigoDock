@@ -40,8 +40,8 @@ IndigoDock::IndigoDock(QWidget *parent) : QDockWidget(parent)
     int_minHeight = int_minPanelHeight + 2*int_padding;
     int_minWidth = int_minPanelWidth + 2*int_padding;
     int_scrollSpeed = 150; // milliseconds
-
     bool_singleMode = false;
+
 
     wdg_toolbar = new IndigoTabBar;
 
@@ -51,16 +51,9 @@ IndigoDock::IndigoDock(QWidget *parent) : QDockWidget(parent)
     wdg_placeholder->setBackgroundRole(QPalette::Highlight);
 
 
-    wdg_panelSplitter = new QSplitter();
-    wdg_panelSplitter->setHandleWidth(int_padding);
-    wdg_panelSplitter->setOrientation(Qt::Vertical);
-    wdg_panelSplitter->installEventFilter(this);
-
-
     lyt_dropzone = new QBoxLayout(QBoxLayout::TopToBottom);
     lyt_dropzone->setContentsMargins(int_padding, int_padding, int_padding, int_padding);
-    lyt_dropzone->setSpacing(0);
-    lyt_dropzone->addWidget(wdg_panelSplitter);
+    lyt_dropzone->setSpacing(int_padding);
     lyt_dropzone->addStretch(1);
 
 
@@ -69,7 +62,6 @@ IndigoDock::IndigoDock(QWidget *parent) : QDockWidget(parent)
     wdg_dropzone->setMinimumWidth(int_minWidth);
     wdg_dropzone->setMinimumHeight(int_minHeight);
     wdg_dropzone->setBackgroundRole(QPalette::Base);
-   // wdg_dropzone->setBackgroundRole(QPalette::Highlight); // control color
 
 
     wdg_scrollArea_dz = new QScrollArea;
@@ -113,15 +105,6 @@ IndigoDock::IndigoDock(QWidget *parent) : QDockWidget(parent)
 
 
 
-IndigoDock::~IndigoDock(){
-
-    disconnect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(updateTabPosition(Qt::DockWidgetArea)));
-    disconnect(wdg_toolbar, SIGNAL(tabMoved(int,int)), this, SLOT(movePanel(int,int)));
-    disconnect(wdg_toolbar, SIGNAL(tabClicked(int)), this, SLOT(scrollToPanel(int)));
-}
-
-
-
 void IndigoDock::hideTab(int index){
     wdg_toolbar->hideTab(index);
 }
@@ -132,6 +115,30 @@ void IndigoDock::showTab(int index){
     wdg_toolbar->showTab(index);
 }
 
+
+
+void IndigoDock::addWidget(QWidget *widget){
+
+    insertWidget(-1,widget);
+
+}
+
+
+
+void IndigoDock::insertWidget(int index, QWidget *widget){
+
+    int count = lyt_dropzone->count();
+
+    if(count > 0){
+
+        if(index < 0 || index > count -1) index = count -1;
+
+        lyt_dropzone->insertWidget(index, widget); // index fix because stretch element as last object
+    }else{
+        lyt_dropzone->addWidget(widget); // should never happen because of spacer widget
+    }
+
+}
 
 
 /**
@@ -148,20 +155,18 @@ void IndigoDock::addIndigoPanel (IndigoPanel *panel, IndigoPanel::IndigoDockStat
 
 
     // add panel to DropZone
-    if(tabIndex == -1){
-        wdg_panelSplitter->addWidget(panel);
-        wdg_panelSplitter->setCollapsible(wdg_panelSplitter->count()-1, false);
+    insertWidget(tabIndex, panel);
 
-    }else{
-        wdg_panelSplitter->insertWidget(tabIndex, panel);
-        wdg_panelSplitter->setCollapsible(tabIndex, false);
-    }
 
+    // Panel settings
     if(dockState == IndigoPanel::Docked || dockState == IndigoPanel::HiddenDocked){
         panel->setDockState(dockState);
     }else panel->setDockState(IndigoPanel::Docked);
 
-   // panel->setMinimumSize(QSize(int_minPanelWidth, int_minPanelHeight));
+    panel->installEventFilter(this);
+    panel->setOrientation(m_orientation);
+    // panel->setMinimumSize(QSize(int_minPanelWidth, int_minPanelHeight));
+
 
     updatePanels();
 
@@ -212,8 +217,8 @@ void IndigoDock::updateMinHeight(){
 
     int i = 0;
     int int_hiddenPanels = 0;
-    int lastPanelDimension = 0;
-    int allPanelDimension = 0;
+    int lastPanelSize = 0;
+    int totalPanelSize = 0;
 
 
     IndigoPanel * panel;
@@ -225,12 +230,12 @@ void IndigoDock::updateMinHeight(){
 
             switch(m_orientation){
             case Qt::Vertical:
-                lastPanelDimension = panel->height();
-                allPanelDimension += panel->height() + wdg_panelSplitter->handleWidth();
+                lastPanelSize = panel->height() + int_padding;
+                totalPanelSize += panel->height() + int_padding;
                 break;
             case Qt::Horizontal:
-                lastPanelDimension = panel->width();
-                allPanelDimension += panel->width() + wdg_panelSplitter->handleWidth();
+                lastPanelSize = panel->width() + int_padding;
+                totalPanelSize += panel->width() + int_padding;
                 break;
             }
 
@@ -257,31 +262,31 @@ void IndigoDock::updateMinHeight(){
     }else{
 
 
-        int minDimension = 0;
+        int minSize = 0;
         int spacer = 0;
 
         switch(m_orientation){
         case Qt::Vertical:
 
-            minDimension = wdg_panelSplitter->height();
-            spacer = wdg_scrollArea_dz->height() - lastPanelDimension;
+            minSize = totalPanelSize;
+            spacer = wdg_scrollArea_dz->height() - lastPanelSize;
 
-            if(minDimension < lastPanelDimension) minDimension = lastPanelDimension;
+            if(spacer < 0) spacer = 0;
 
             // set fixed height based on content
             wdg_dropzone->setMaximumWidth(QWIDGETSIZE_MAX);
-            wdg_dropzone->setFixedHeight(minDimension + spacer);
+            wdg_dropzone->setFixedHeight(minSize + spacer);
 
             break;
         case Qt::Horizontal:
 
-            minDimension = wdg_panelSplitter->width();
-            spacer = wdg_scrollArea_dz->width() - lastPanelDimension;
+            minSize = totalPanelSize;
+            spacer = wdg_scrollArea_dz->width() - lastPanelSize;
 
-            if(minDimension < lastPanelDimension) minDimension = lastPanelDimension;
+            if(spacer < 0) spacer = 0;
 
             // set fixed width based on content
-            wdg_dropzone->setFixedWidth(minDimension + spacer);
+            wdg_dropzone->setFixedWidth(minSize + spacer);
             wdg_dropzone->setMaximumHeight(QWIDGETSIZE_MAX);
 
 
@@ -307,20 +312,10 @@ void IndigoDock::toggleSingleMode(){
         bool_singleMode = true;
         wdg_scrollArea_tb->hide();
 
-        if(m_orientation == Qt::Horizontal && isFloating()){
-            lyt_dropzone->setContentsMargins(int_padding, 0, 0, 0);
-
-        }else if(m_orientation == Qt::Vertical && isFloating()){
-            lyt_dropzone->setContentsMargins(0, int_padding, 0, 0);
-
-        }else lyt_dropzone->setContentsMargins(int_padding, int_padding, int_padding, int_padding);
-
-
     }else{
 
         bool_singleMode = false;
-        wdg_scrollArea_tb->show();
-        lyt_dropzone->setContentsMargins(int_padding, int_padding, int_padding, int_padding);
+        wdg_scrollArea_tb->show();     
 
     }
 
@@ -340,7 +335,7 @@ void IndigoDock::movePanel(int oldIndex, int newIndex){
 
     // Put in
     lst_PanelList.insert(newIndex, pan);
-    wdg_panelSplitter->insertWidget(newIndex, pan);
+    insertWidget(newIndex, pan);
 
     // update panels
     updatePanels();
@@ -422,16 +417,11 @@ void IndigoDock::addPlaceholder (int index){
         break;
     }
 
+    if(index == -1) index = lyt_dropzone->count()-2;
 
+    insertWidget(index, wdg_placeholder);
 
-    if(index == -1){
-        wdg_panelSplitter->addWidget(wdg_placeholder);
-        wdg_panelSplitter->setCollapsible(wdg_panelSplitter->count()-1, false);
-
-    }else{
-        wdg_panelSplitter->insertWidget(index, wdg_placeholder);
-        wdg_panelSplitter->setCollapsible(index, false);
-    }
+    wdg_placeholder->show();
 
 }
 
@@ -440,6 +430,7 @@ void IndigoDock::addPlaceholder (int index){
 void IndigoDock::removePlaceholder (){
 
     wdg_placeholder->setParent(this);
+    wdg_placeholder->hide();
 
 }
 
@@ -529,15 +520,10 @@ void IndigoDock::calculateSize(){
         wdg_scrollArea_tb->setMinimumSize(QSize(wdg_toolbar->width(), wdg_toolbar->width()));
         wdg_scrollArea_tb->setMaximumSize(wdg_toolbar->maximumSize());
 
-        // Panel Splitter
-        wdg_panelSplitter->setOrientation(m_orientation);
-
         lyt_dropzone->setDirection(QBoxLayout::TopToBottom);
 
         wdg_scrollArea_dz->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         wdg_scrollArea_dz->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-
-
 
         break;
 
@@ -552,16 +538,10 @@ void IndigoDock::calculateSize(){
         wdg_scrollArea_tb->setMinimumSize(QSize(wdg_toolbar->height(), wdg_toolbar->height()));
         wdg_scrollArea_tb->setMaximumSize(wdg_toolbar->maximumSize());
 
-        // Panel Splitter
-        wdg_panelSplitter->setOrientation(m_orientation);
-
-
         lyt_dropzone->setDirection(QBoxLayout::LeftToRight);
 
         wdg_scrollArea_dz->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
         wdg_scrollArea_dz->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
-
 
         break;
 
@@ -569,6 +549,12 @@ void IndigoDock::calculateSize(){
         break;
 
 
+    }
+
+
+    foreach(IndigoPanel *pan, lst_PanelList)
+    {
+        pan->setOrientation(m_orientation);
     }
 
     // qDebug() << "Toolbar Size: Height" << wdg_toolbar->height() << "Width" << wdg_toolbar->width() << "MaxSize"<< wdg_toolbar->maximumSize()<< endl;
@@ -619,7 +605,7 @@ void IndigoDock::hoverDock(IndigoPanel * pan){
             this->addPlaceholder(index);
 
     }else{
-        this->removePlaceholder();      
+        this->removePlaceholder();
     }
 
 
@@ -689,16 +675,11 @@ bool IndigoDock::eventFilter(QObject *object, QEvent *event)
 
     switch( event->type() )
     {
+    case QEvent::Hide:
     case QEvent::Resize:
     {
-        // trigger sizeUpdate if splitters resize event was triggered
-        if(object == wdg_panelSplitter){
-            updateMinHeight();
-
-        }
-
+        updateMinHeight();
         break;
-
     }
 
     default:
@@ -793,6 +774,9 @@ bool IndigoDock::movableTabs(){
 void IndigoDock::setPanelPadding(int padding){
 
     int_padding = padding;
+
+    lyt_dropzone->setSpacing(int_padding);
+    lyt_dropzone->setContentsMargins(int_padding, int_padding, int_padding, int_padding);
 
 }
 

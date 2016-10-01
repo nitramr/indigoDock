@@ -23,9 +23,7 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \    
-    stylefactory.cpp \
     configmanager.cpp \
-    helper.cpp \    
     textboxsimulator.cpp \
     indigodock/indigodock.cpp \
     indigodock/indigopanel.cpp \
@@ -36,10 +34,11 @@ SOURCES += main.cpp\
     uiwidgets/iconwidget.cpp \
     uiwidgets/expandergroup.cpp \
     indigodock/indigodockmanager.cpp \
-    uiwidgets/flowlayout.cpp
+    uiwidgets/flowlayout.cpp \
+    themefactory.cpp \
+    indigo-helper.cpp
 
 HEADERS  += mainwindow.h \    
-    stylefactory.h \
     configmanager.h \
     helper.h \    
     textboxsimulator.h \
@@ -52,7 +51,8 @@ HEADERS  += mainwindow.h \
     uiwidgets/iconwidget.h \
     uiwidgets/expandergroup.h \
     indigodock/indigodockmanager.h \
-    uiwidgets/flowlayout.h
+    uiwidgets/flowlayout.h \
+    themefactory.h
 
 FORMS    += mainwindow.ui
 

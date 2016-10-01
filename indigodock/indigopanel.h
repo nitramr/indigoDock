@@ -31,7 +31,11 @@
 #include <QLabel>
 #include <QToolButton>
 #include <QScrollArea>
-#include "uiwidgets/flowlayout.h"
+#include <QString>
+#include <QIcon>
+#include <QVBoxLayout>
+#include <QBoxLayout>
+//#include "uiwidgets/flowlayout.h"
 
 class IndigoPanelHandle : public QWidget
 {
@@ -89,6 +93,9 @@ public:
     IndigoPanel(QString name, QIcon icon, int iconSize = 22, QWidget* dock = 0);
     void addWidget(QWidget *content);
     void addWidget(QLayout *content);
+    void setWidget(QWidget * widget);
+
+    QWidget *widget() const;
 
     IndigoPanelHandle * wdg_handle;
 
@@ -109,16 +116,30 @@ public:
     void setExpanderState(IndigoPanelHandle::IndigoExpanderState expanderState);
     void setExpanderState(int expanderState);
 
+    void setOrientation(Qt::Orientation orientation);
+    void setHandleWidth(int width);
+    void setGripColor(QColor color);
+    void setWindowTitle(const QString &title);
+
 protected:   
     bool eventFilter(QObject *object, QEvent *e);
+    void paintEvent(QPaintEvent *event);
+    void mousePressEvent(QMouseEvent*event);
+    void mouseReleaseEvent(QMouseEvent*event);
+    void leaveEvent(QEvent *);
+    void mouseMoveEvent(QMouseEvent*event);
+    bool mouseInGrip(QPoint mousePos);
 
-private:   
-   // QWidget *wdg_normalContainer;
-   // QVBoxLayout *lyt_normalArea;
-    FlowLayout * lyt_normalArea;
-    QVBoxLayout *lyt_main;
+
+private:
+    QWidget * wdg_grip;
+    QColor col_grip;
+    QVBoxLayout *lyt_normalArea;
+   // FlowLayout * lyt_normalArea;
+    QBoxLayout *lyt_main;
     QScrollArea * wdg_scrollArea;
 
+    QWidget * wdg_widget;
 
     QPoint pnt_relativeOffset;
     QIcon ico_icon;    
@@ -126,6 +147,12 @@ private:
     IndigoDockState m_state;
     IndigoPanelHandle::IndigoExpanderState m_expander;
    // QSpacerItem *wdg_spacer;
+
+    Qt::Orientation m_orientation;
+    int int_handleWidth;
+    bool resizing;
+    QPoint oldPos;
+
 
 signals:
     void mouseReleased();
