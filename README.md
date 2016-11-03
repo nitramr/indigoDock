@@ -2,6 +2,23 @@
 # indigoDock 
 Experimental Qt Docking extension written for Scribus1.5>=  
 
+## Update ##
+
+I decided to stop developing of IndigoDock as single project as seen on https://github.com/nitramr/indigoDock. My code doesn't fit well in current Scribus code base.
+
+Now, I'm full focused on integration of IndigoDock in Scribus and all necessary optimizations and upgrades. In short words: I'm developing a special version of IndigoDock which fits perfectly in Scribus code base directly in the Scribus code. Later I will put back the improvements and useful upgrades to the original separate project that others can use it for their application.
+
+Working Scribus Version which uses IndigoDock you can find here: https://github.com/nitramr/scribus-indigo
+
+### Work in progress
+Currently I'm on restoring the panel and dock settings for workspace saving. And I'm on fixing some UX issues. But basic integration was successfully and the dock is usable. ;)
+
+Thank you guys for waiting so long time for real results.
+
+greets,
+@nitramar
+
+
 ## Proposal Mockups
 ![scribus_ui_fullhd](https://cloud.githubusercontent.com/assets/4140247/10866901/27f00cba-8014-11e5-91f8-8894712e08ce.png)
 
