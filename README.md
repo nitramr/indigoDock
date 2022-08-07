@@ -1,3 +1,9 @@
+
+# Project is no longer maintained
+I found a well maintained framework that match all needs. See here: https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System
+Check latest status here to see it in action: [Scribus-IndigoUI-Mockup](https://github.com/nitramr/Scribus-IndigoUI-Mockup)
+
+
 [![Join the chat at https://gitter.im/nitramr/indigoDock](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/nitramr/indigoDock?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 # indigoDock 
 Experimental Qt Docking extension written for Scribus1.5>=  
@@ -16,7 +22,7 @@ Currently I'm on restoring the panel and dock settings for workspace saving. And
 Thank you guys for waiting so long time for real results.
 
 greets,
-@nitramar
+@nitramr
 
 
 ## Proposal Mockups
